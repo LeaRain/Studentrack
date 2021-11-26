@@ -1,12 +1,18 @@
 package com.example.Studentrack.persistence.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
 public class Student extends User {
     private int ects;
     boolean isPremiumUser;
+    @OneToMany(mappedBy="student")
+    private Collection<Grade> grades;
+    @OneToMany(mappedBy="owner")
+    private Collection<TimeOrder> timeOrders;
 
     public Student(int ects, boolean isPremiumUser) {
         this.ects = ects;

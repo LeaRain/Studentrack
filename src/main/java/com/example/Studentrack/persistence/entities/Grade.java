@@ -3,16 +3,30 @@ package com.example.Studentrack.persistence.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
 public class Grade {
+    public Grade(double value, String description, int tryNumber, Module module, Student student) {
+        this.value = value;
+        this.description = description;
+        this.tryNumber = tryNumber;
+        this.module = module;
+        this.student = student;
+    }
+
     @Id
     @GeneratedValue
     private long gradeId;
     double value;
     String description;
     int tryNumber;
+    @ManyToOne
+    private Module module;
+    @ManyToOne
+    private Student student;
+
 
     public long getGradeId() {
         return gradeId;
@@ -46,26 +60,8 @@ public class Grade {
         this.tryNumber = tryNumber;
     }
 
-    public Grade(double value, String description, int tryNumber) {
-        this.value = value;
-        this.description = description;
-        this.tryNumber = tryNumber;
-    }
-
     public Grade() {
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Grade grade = (Grade) o;
-        return gradeId == grade.gradeId && Double.compare(grade.value, value) == 0 && tryNumber == grade.tryNumber && Objects.equals(description, grade.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(gradeId, value, description, tryNumber);
     }
 
     @Override
@@ -75,6 +71,25 @@ public class Grade {
                 ", value=" + value +
                 ", description='" + description + '\'' +
                 ", tryNumber=" + tryNumber +
+                ", module=" + module +
+                ", student=" + student +
                 '}';
     }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
 }

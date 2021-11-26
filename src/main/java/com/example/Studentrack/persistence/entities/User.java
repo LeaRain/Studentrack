@@ -3,6 +3,7 @@ package com.example.Studentrack.persistence.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 import java.util.Objects;
 
@@ -16,6 +17,8 @@ public abstract class User extends SingleIdEntity<Long>{
     private String password;
     private String mailAddress;
     private Date membershipStart;
+    @ManyToOne
+    private Faculty faculty;
 
 
     public User() {

@@ -1,8 +1,7 @@
 package com.example.Studentrack.persistence.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class Faculty extends SingleIdEntity<Long>{
@@ -10,9 +9,47 @@ public class Faculty extends SingleIdEntity<Long>{
     @GeneratedValue
     private long facultyId;
     private String name;
+    @OneToMany(mappedBy="faculty")
+    Collection<Major> majors;
+    @OneToOne
+    private Lecturer dean;
+    @OneToMany(mappedBy="faculty")
+    private Collection<User> members;
 
-    public Faculty(String name) {
+    public Collection<Major> getMajors() {
+        return majors;
+    }
+
+    public void setMajors(Collection<Major> majors) {
+        this.majors = majors;
+    }
+
+    @Override
+    public String toString() {
+        return "Faculty{" +
+                "facultyId=" + facultyId +
+                ", name='" + name + '\'' +
+                ", majors=" + majors +
+                ", dean=" + dean +
+                '}';
+    }
+
+    public Lecturer getDean() {
+        return dean;
+    }
+
+    public void setDean(Lecturer dean) {
+        this.dean = dean;
+    }
+
+    public Faculty(String name, Collection<Major> majors, Lecturer dean) {
         this.name = name;
+        this.majors = majors;
+        this.dean = dean;
+    }
+
+    public Faculty() {
+
     }
 
 

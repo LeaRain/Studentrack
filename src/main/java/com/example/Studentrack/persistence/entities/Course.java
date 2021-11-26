@@ -3,6 +3,7 @@ package com.example.Studentrack.persistence.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 @Entity
@@ -10,12 +11,27 @@ public class Course extends SingleIdEntity<Long>{
     @Id
     @GeneratedValue
     private long courseId;
-    Date startDate;
-    Date endDate;
+    private Date startDate;
+    private Date endDate;
+    @ManyToOne
+    private Module module;
 
-    public Course(Date startDate, Date endDate) {
+    public Course(Date startDate, Date endDate, Module module) {
         this.startDate = startDate;
         this.endDate = endDate;
+        this.module = module;
+    }
+
+    public Course() {
+
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
     }
 
     public long getCourseId() {
@@ -42,12 +58,8 @@ public class Course extends SingleIdEntity<Long>{
         this.endDate = endDate;
     }
 
-    public Course() {
-
-    }
-
     @Override
     public Long getId() {
-        return null;
+        return getCourseId();
     }
 }

@@ -3,6 +3,7 @@ package com.example.Studentrack.persistence.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
@@ -10,8 +11,10 @@ public class Major {
     @Id
     @GeneratedValue
     private long majorId;
-    String academicTitle;
+    private String academicTitle;
     int studentNumber;
+    @ManyToOne
+    private Faculty faculty;
 
     public Major(String academicTitle, int studentNumber) {
         this.academicTitle = academicTitle;
