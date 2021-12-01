@@ -1,10 +1,9 @@
-package com.example.Studentrack.persistence.entities;
+package sw.laux.Studentrack.persistence.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.util.Objects;
 
 @Entity
 public class Grade {

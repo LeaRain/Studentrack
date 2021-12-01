@@ -1,7 +1,6 @@
-package com.example.Studentrack.persistence.entities;
+package sw.laux.Studentrack.persistence.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.Collection;

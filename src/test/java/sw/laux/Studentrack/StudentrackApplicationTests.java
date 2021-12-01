@@ -1,4 +1,4 @@
-package com.example.Studentrack;
+package sw.laux.Studentrack;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,6 +1,6 @@
-package com.example.Studentrack.persistence.repository;
+package sw.laux.Studentrack.persistence.repository;
 
-import com.example.Studentrack.persistence.entities.User;
+import sw.laux.Studentrack.persistence.entities.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.example.Studentrack.persistence.entities;
+package sw.laux.Studentrack.persistence.entities;
 
 import javax.persistence.*;
 import java.util.Collection;

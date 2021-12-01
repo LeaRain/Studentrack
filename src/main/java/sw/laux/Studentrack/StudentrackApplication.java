@@ -1,16 +1,11 @@
-package com.example.Studentrack;
+package sw.laux.Studentrack;
 
-import com.example.Studentrack.persistence.entities.Student;
-import com.example.Studentrack.persistence.entities.User;
-import com.example.Studentrack.persistence.repository.UserRepository;
+import sw.laux.Studentrack.persistence.entities.Student;
+import sw.laux.Studentrack.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 
 @SpringBootApplication
