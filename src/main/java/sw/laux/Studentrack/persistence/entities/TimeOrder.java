@@ -1,9 +1,8 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import sw.laux.Studentrack.application.services.TimeInvest;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -17,25 +16,35 @@ public class TimeOrder extends SingleIdEntity<Long>{
     private Course course;
     @ManyToOne
     private Student owner;
+    @OneToOne
+    private TimeInvest timeInvest;
 
-    public TimeOrder(Timestamp start, Timestamp end, Course course) {
+    public Student getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Student owner) {
+        this.owner = owner;
+    }
+
+    public TimeInvest getTimeInvest() {
+        return timeInvest;
+    }
+
+    public void setTimeInvest(TimeInvest timeInvest) {
+        this.timeInvest = timeInvest;
+    }
+
+    public TimeOrder(Timestamp start, Timestamp end, Course course, Student owner, TimeInvest timeInvest) {
         this.start = start;
         this.end = end;
         this.course = course;
+        this.owner = owner;
+        this.timeInvest = timeInvest;
     }
 
     public long getTimeOrderId() {
         return timeOrderId;
-    }
-
-    @Override
-    public String toString() {
-        return "TimeOrder{" +
-                "timeOrderId=" + timeOrderId +
-                ", start=" + start +
-                ", end=" + end +
-                ", course=" + course +
-                '}';
     }
 
     public void setTimeOrderId(long timeOrderId) {
@@ -73,5 +82,17 @@ public class TimeOrder extends SingleIdEntity<Long>{
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    @Override
+    public String toString() {
+        return "TimeOrder{" +
+                "timeOrderId=" + timeOrderId +
+                ", start=" + start +
+                ", end=" + end +
+                ", course=" + course +
+                ", owner=" + owner +
+                ", timeInvest=" + timeInvest +
+                '}';
     }
 }
