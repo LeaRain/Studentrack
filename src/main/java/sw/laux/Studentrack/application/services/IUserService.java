@@ -1,7 +1,10 @@
 package sw.laux.Studentrack.application.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import sw.laux.Studentrack.persistence.entities.Grade;
+import sw.laux.Studentrack.persistence.entities.TimeInvest;
 import sw.laux.Studentrack.persistence.entities.User;
+import sw.laux.Studentrack.persistence.repository.IUserRepository;
 
 import java.util.Map;
 

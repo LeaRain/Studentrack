@@ -1,7 +1,5 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import sw.laux.Studentrack.application.services.TimeInvest;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 
