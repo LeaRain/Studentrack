@@ -1,4 +1,4 @@
-package sw.laux.Studentrack.application.services;
+package sw.laux.Studentrack.application.services.interfaces;
 
 import sw.laux.Studentrack.persistence.entities.Grade;
 import sw.laux.Studentrack.persistence.entities.TimeInvest;
