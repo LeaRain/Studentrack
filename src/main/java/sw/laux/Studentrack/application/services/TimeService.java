@@ -1,9 +1,11 @@
 package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import sw.laux.Studentrack.persistence.repository.ITimeRepo;
+import org.springframework.stereotype.Service;
+import sw.laux.Studentrack.persistence.repository.TimeRepository;
 
+@Service
 public class TimeService {
     @Autowired
-    private ITimeRepo timeRepo;
+    private TimeRepository timeRepo;
 }

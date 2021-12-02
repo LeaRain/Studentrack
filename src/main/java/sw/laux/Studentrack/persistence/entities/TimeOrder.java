@@ -9,6 +9,8 @@ public class TimeOrder extends SingleIdEntity<Long>{
     @GeneratedValue
     private long timeOrderId;
     private Timestamp start;
+    // Bypass reserved keyword "end"
+    @Column(name="end_time")
     private Timestamp end;
     @ManyToOne
     private Course course;

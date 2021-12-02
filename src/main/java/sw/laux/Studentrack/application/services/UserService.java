@@ -1,16 +1,18 @@
 package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.persistence.entities.Grade;
 import sw.laux.Studentrack.persistence.entities.TimeInvest;
 import sw.laux.Studentrack.persistence.entities.User;
-import sw.laux.Studentrack.persistence.repository.IUserRepository;
+import sw.laux.Studentrack.persistence.repository.UserRepository;
 
 import java.util.Map;
 
+@Service
 public class UserService implements IUserService{
     @Autowired
-    private IUserRepository userRepo;
+    private UserRepository userRepo;
 
     @Override
     public User loginUser(User user) {

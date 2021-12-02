@@ -1,12 +1,14 @@
 package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import sw.laux.Studentrack.persistence.repository.IGradeRepo;
-import sw.laux.Studentrack.persistence.repository.IModuleRepo;
+import org.springframework.stereotype.Service;
+import sw.laux.Studentrack.persistence.repository.GradeRepository;
+import sw.laux.Studentrack.persistence.repository.ModuleRepository;
 
+@Service
 public class ModuleService {
     @Autowired
-    private IModuleRepo moduleRepo;
+    private ModuleRepository moduleRepo;
     @Autowired
-    private IGradeRepo gradeRepo;
+    private GradeRepository gradeRepo;
 }

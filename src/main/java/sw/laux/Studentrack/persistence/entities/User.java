@@ -1,13 +1,12 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
+// Bypass reserved keyword "user"
+@Table(name="users")
 public abstract class User extends SingleIdEntity<Long>{
     @Id
     @GeneratedValue
