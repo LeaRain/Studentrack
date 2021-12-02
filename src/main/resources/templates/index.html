@@ -3,9 +3,63 @@
 
 <head th:replace="common/header :: header"/>
 
-<body>
+<body class style>
 <div th:replace="common/navigation :: navigation"/>
-<h1>Hi</h1>
 
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>Welcome to Studentrack!</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="bs-docs-section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="bs-component">
+                    <h2>New at Studentrack?</h2>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Our Advantages</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-primary">
+                                <th scope="row">For Students: Track the time you spent for your modules</th>
+                            </tr>
+                            <tr class="table-info">
+                                <th scope="row">For Lecturers: Add your courses to the time tracks</th>
+                            </tr>
+                            <tr class="table-primary">
+                                <th scope="row">Get access to the time and course data</th>
+                            </tr>
+                            <tr class="table-info">
+                                <th scope="row">Register (for) courses and administrate grades</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-lg btn-primary" type="button">Take me to the registration!</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="bs-component">
+                    <h2>Repeat Offender?</h2>
+                    <p>Just take me to the login page!</p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-lg btn-info" type="button">Log me in!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/footer :: footer"/>
 </body>
 </html>
