@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head th:replace="common/header :: header(title='Registration')"/>
+
+<body class style>
+<div th:replace="common/navigation :: navigation"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>Register for Studentrack</h1>
+            <form>
+                <fieldset>
+                    <div class="form-group row">
+                        <fieldset class="form-group">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1">
+                                    Student
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
+                                    Lecturer
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div th:replace="common/footer :: footer"/>
+</body>
+</html>
