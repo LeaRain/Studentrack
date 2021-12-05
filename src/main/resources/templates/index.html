@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="www.thymeleaf.org">
 
-<head th:replace="common/header :: header"/>
+<head th:replace="common/header :: header(title='Studentrack')"/>
 
 <body class style>
 <div th:replace="common/navigation :: navigation"/>
@@ -42,7 +42,9 @@
                         </tbody>
                     </table>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-lg btn-primary" type="button">Take me to the registration!</button>
+                        <form action="registration" method="get">
+                            <button class="btn btn-lg btn-primary col-12" type="submit">Take me to the registration!</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -52,7 +54,9 @@
                     <h2>Repeat Offender?</h2>
                     <p>Just take me to the login page!</p>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-lg btn-info" type="button">Log me in!</button>
+                        <form action="login" method="get">
+                            <button class="btn btn-lg btn-primary col-12" type="submit">Log me in!</button>
+                        </form>
                     </div>
                 </div>
             </div>
