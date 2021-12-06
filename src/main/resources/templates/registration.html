@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="www.thymeleaf.org">
 <head th:replace="common/header :: header(title='Registration')"/>
+<script type="text/javascript" src="js/registerValidation.js"></script>
 
-<body class style>
+<body class style onload="validateRegistration()">
 <div th:replace="common/navigation :: navigation"/>
 
 <div class="container">
@@ -15,18 +16,18 @@
                         <fieldset class="form-group">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionUserTypeRadioStudent" value="student" checked="">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="radioUserStudent" value="student" checked="">
                                     Student
                                 </label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="optionsRadios" id="optionUserTypeRadioLecturer" value="lecturer">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="radioUserLecturer" value="lecturer">
                                     Lecturer
                                 </label>
                             </div>
                         </fieldset>
-                        <div class="form-group">
+                        <div class="form-group" id="formGroupAcademicTitle">
                             <label class="col-form-label mt-4" for="inputAcademicTitle">Academic Title</label>
                             <input type="text" class="form-control" id="inputAcademicTitle" placeholder="Enter Academic Title">
                         </div>
