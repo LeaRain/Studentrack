@@ -43,24 +43,18 @@
                             <label for="inputEmail" class="form-label mt-4">Email address</label>
                             <input type="email" class="form-control" id="inputEmail" placeholder="Enter Email address">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="formGroupFaculty">
                             <label for="selectFaculty" class="form-label mt-4">Faculty</label>
                             <select class="form-select" id="selectFaculty">
-                                <option>Dummy 1</option>
-                                <option>Dummy 2</option>
-                                <option>Dummy 3</option>
-                                <option>Dummy 4</option>
-                                <option>Dummy 5</option>
+                                <option th:each="faculty : ${faculties}" th:text="${faculty.name}"></option>
                             </select>
                         </div>
                         <div class="form-group" id="formGroupMajor">
                             <label for="selectMajor" class="form-label mt-4">Major</label>
                             <select class="form-select" id="selectMajor">
-                                <option>Dummy 1</option>
-                                <option>Dummy 2</option>
-                                <option>Dummy 3</option>
-                                <option>Dummy 4</option>
-                                <option>Dummy 5</option>
+                                <optgroup th:each="faculty:${faculties}" th:label="${faculty.name}">
+                                    <option th:each="major : ${faculty.majors}" th:text="${major.majorName} + ' ' + ${major.academicTitle}"></option>
+                                </optgroup>
                             </select>
                         </div>
                         <div class="form-group">

@@ -13,7 +13,8 @@ public class RegistrationController {
 
     @RequestMapping("registration")
     public String registration(Model model) {
-        System.out.println(moduleService.getAllMajors());
+        var faculties = moduleService.getAllFaculties();
+        model.addAttribute("faculties", faculties);
         return "registration";
     }
 }

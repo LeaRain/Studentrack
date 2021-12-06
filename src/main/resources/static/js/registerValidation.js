@@ -21,6 +21,7 @@ function updateUserTypeFormFields() {
     let studentRadioButton = document.getElementById("radioUserStudent");
     let academicTitleFormGroup = document.getElementById("formGroupAcademicTitle");
     let majorFormGroup = document.getElementById("formGroupMajor");
+    let facultyFormGroup = document.getElementById("formGroupFaculty")
 
     // studentRadioButton checked means lecturerRadioButtonUnchecked.
     let studentChecked = studentRadioButton.checked;
@@ -28,6 +29,8 @@ function updateUserTypeFormFields() {
     academicTitleFormGroup.hidden = studentChecked;
     // Major is for students.
     majorFormGroup.hidden = !studentChecked;
+    // Faculty is for lecturers.
+    facultyFormGroup.hidden = studentChecked;
 }
 
 function checkPasswordEquality() {
