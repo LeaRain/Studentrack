@@ -20,15 +20,24 @@ public abstract class User extends SingleIdEntity<Long>{
     private Faculty faculty;
 
 
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
+    }
+
     public User() {
     }
 
-    public User(String firstName, String lastName, String password, String mailAddress, Date membershipStart) {
+    public User(String firstName, String lastName, String password, String mailAddress, Date membershipStart, Faculty faculty) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.mailAddress = mailAddress;
         this.membershipStart = membershipStart;
+        this.faculty = faculty;
     }
 
     public long getUserId() {
@@ -101,6 +110,7 @@ public abstract class User extends SingleIdEntity<Long>{
                 ", password='" + password + '\'' +
                 ", mailAddress='" + mailAddress + '\'' +
                 ", membershipStart=" + membershipStart +
+                ", faculty=" + faculty +
                 '}';
     }
 }

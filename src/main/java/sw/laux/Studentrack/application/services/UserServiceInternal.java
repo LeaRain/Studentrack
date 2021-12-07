@@ -1,6 +1,7 @@
 package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.Grade;
 import sw.laux.Studentrack.persistence.entities.TimeInvest;
@@ -9,6 +10,7 @@ import sw.laux.Studentrack.persistence.repository.UserRepository;
 
 import java.util.Map;
 
+@Service
 public class UserServiceInternal implements IUserServiceInternal {
     @Autowired
     private UserRepository userRepo;

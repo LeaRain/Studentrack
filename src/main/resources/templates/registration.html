@@ -10,56 +10,56 @@
     <div class="row">
         <div class="col-lg-8 col-md-7 col-sm-6">
             <h1>Register for Studentrack</h1>
-            <form>
+            <form method="post" th:action="@{/registration/check}" th:object="${userShell}">
                 <fieldset>
                     <div class="form-group row">
                         <fieldset class="form-group">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="optionsRadios" id="radioUserStudent" value="student" checked="">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="radioUserStudent" value=1 checked="" th:field="*{isStudent}">
                                     Student
                                 </label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="optionsRadios" id="radioUserLecturer" value="lecturer">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="radioUserLecturer" value=0 th:field="*{isStudent}">
                                     Lecturer
                                 </label>
                             </div>
                         </fieldset>
-                        <div class="form-group" id="formGroupAcademicTitle">
+                        <div class="form-group" id="formGroupAcademicTitle" th:object="${lecturer}">
                             <label class="col-form-label mt-4" for="inputAcademicTitle">Academic Title</label>
-                            <input type="text" class="form-control" id="inputAcademicTitle" placeholder="Enter Academic Title">
+                            <input type="text" class="form-control" id="inputAcademicTitle" placeholder="Enter Academic Title" th:field="${lecturer.title}">
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputFirstName">First Name</label>
-                            <input type="text" class="form-control" id="inputFirstName" placeholder="Enter First Name">
+                            <input type="text" class="form-control" id="inputFirstName" placeholder="Enter First Name" th:field="*{firstName}">
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputLastName">Last Name</label>
-                            <input type="text" class="form-control" id="inputLastName" placeholder="Enter Last Name">
+                            <input type="text" class="form-control" id="inputLastName" placeholder="Enter Last Name" th:field="*{lastName}">
                         </div>
                         <div class="form-group">
                             <label for="inputEmail" class="form-label mt-4">Email address</label>
-                            <input type="email" class="form-control" id="inputEmail" placeholder="Enter Email address">
+                            <input type="email" class="form-control" id="inputEmail" placeholder="Enter Email address" th:field="*{mailAddress}">
                         </div>
                         <div class="form-group" id="formGroupFaculty">
                             <label for="selectFaculty" class="form-label mt-4">Faculty</label>
-                            <select class="form-select" id="selectFaculty">
-                                <option th:each="faculty : ${faculties}" th:text="${faculty.name}"></option>
+                            <select class="form-select" id="selectFaculty" th:field="*{facultyName}">
+                                <option th:each="faculty : ${faculties}" th:text="${faculty.name}" th:value="${faculty}"></option>
                             </select>
                         </div>
-                        <div class="form-group" id="formGroupMajor">
+                        <div class="form-group" id="formGroupMajor" th:object="${major}">
                             <label for="selectMajor" class="form-label mt-4">Major</label>
-                            <select class="form-select" id="selectMajor">
+                            <select class="form-select" id="selectMajor" th:field="${student.major}">
                                 <optgroup th:each="faculty:${faculties}" th:label="${faculty.name}">
-                                    <option th:each="major : ${faculty.majors}" th:text="${major.majorName} + ' ' + ${major.academicTitle}"></option>
+                                    <option th:each="major : ${faculty.majors}" th:text="${major.majorName} + ' ' + ${major.academicTitle}" th:value="${major.majorId}"></option>
                                 </optgroup>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="inputPassword" class="form-label mt-4">Password</label>
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Password" th:field="*{password}">
                         </div>
                         <div class="form-group">
                             <label for="inputPasswordConfirm" class="form-label mt-4">Confirm Password</label>

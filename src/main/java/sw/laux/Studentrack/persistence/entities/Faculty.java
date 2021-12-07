@@ -29,8 +29,6 @@ public class Faculty extends SingleIdEntity<Long>{
         return "Faculty{" +
                 "facultyId=" + facultyId +
                 ", name='" + name + '\'' +
-                ", majors=" + majors +
-                ", dean=" + dean +
                 '}';
     }
 

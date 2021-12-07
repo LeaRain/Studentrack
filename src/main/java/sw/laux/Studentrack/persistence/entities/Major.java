@@ -17,6 +17,15 @@ public class Major {
     @ManyToOne
     private Faculty faculty;
 
+    @Override
+    public String toString() {
+        return "Major{" +
+                "majorId=" + majorId +
+                ", majorName='" + majorName + '\'' +
+                ", academicTitle='" + academicTitle + '\'' +
+                '}';
+    }
+
     public Major() {
 
     }

@@ -14,8 +14,8 @@ public class Lecturer extends User {
     @OneToMany(mappedBy="responsibleLecturer")
     private Collection<Module> modules;
 
-    public Lecturer(String firstName, String lastName, String password, String mailAddress, Date membershipStart, String title) {
-        super(firstName, lastName, password, mailAddress, membershipStart);
+    public Lecturer(String firstName, String lastName, String password, String mailAddress, Date membershipStart, String title, Faculty faculty) {
+        super(firstName, lastName, password, mailAddress, membershipStart, faculty);
         this.title = title;
     }
 
