@@ -27,9 +27,9 @@
                                 </label>
                             </div>
                         </fieldset>
-                        <div class="form-group" id="formGroupAcademicTitle" th:object="${lecturer}">
+                        <div class="form-group" id="formGroupAcademicTitle">
                             <label class="col-form-label mt-4" for="inputAcademicTitle">Academic Title</label>
-                            <input type="text" class="form-control" id="inputAcademicTitle" placeholder="Enter Academic Title" th:field="${lecturer.title}">
+                            <input type="text" class="form-control" id="inputAcademicTitle" placeholder="Enter Academic Title" th:field="*{lecturer.title}" >
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputFirstName">First Name</label>
@@ -45,13 +45,13 @@
                         </div>
                         <div class="form-group" id="formGroupFaculty">
                             <label for="selectFaculty" class="form-label mt-4">Faculty</label>
-                            <select class="form-select" id="selectFaculty" th:field="*{facultyName}">
-                                <option th:each="faculty : ${faculties}" th:text="${faculty.name}" th:value="${faculty}"></option>
+                            <select class="form-select" id="selectFaculty" th:field="*{faculty}">
+                                <option th:each="faculty : ${faculties}" th:text="${faculty.name}" th:value="${faculty.facultyId}"></option>
                             </select>
                         </div>
-                        <div class="form-group" id="formGroupMajor" th:object="${major}">
+                        <div class="form-group" id="formGroupMajor">
                             <label for="selectMajor" class="form-label mt-4">Major</label>
-                            <select class="form-select" id="selectMajor" th:field="${student.major}">
+                            <select class="form-select" id="selectMajor" th:field="*{student.major}">
                                 <optgroup th:each="faculty:${faculties}" th:label="${faculty.name}">
                                     <option th:each="major : ${faculty.majors}" th:text="${major.majorName} + ' ' + ${major.academicTitle}" th:value="${major.majorId}"></option>
                                 </optgroup>

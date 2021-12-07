@@ -20,14 +20,13 @@ public class RegistrationController {
     @RequestMapping("registration")
     public String registration(Model model) {
         var userShell = new UserWebShell();
-        //userShell.setStudent(new Student());
-        //userShell.setLecturer(new Lecturer());
+        var student = new Student();
+        student.setMajor(new Major());
+        userShell.setStudent(student);
         userShell.setIsStudent(true);
+        var lecturer = new Lecturer();
+        userShell.setLecturer(lecturer);
         model.addAttribute("userShell", userShell);
-        var major = new Major();
-        model.addAttribute("major", major);
-        model.addAttribute("student", new Student());
-        model.addAttribute("lecturer", new Lecturer());
         var faculties = moduleService.getAllFaculties();
         model.addAttribute("faculties", faculties);
         return "registration";
@@ -35,13 +34,10 @@ public class RegistrationController {
 
     @RequestMapping(value = "/registration/check", method = RequestMethod.POST) // th:action="@{/login}"
     public String doRegistration(Model model,
-                                 @ModelAttribute("userShell") UserWebShell userShell,
-                                 @ModelAttribute("student") Student student,
-                                 @ModelAttribute("lecturer") Lecturer lecturer
+                                 @ModelAttribute("userShell") UserWebShell userShell
                                  ) {
         System.out.println(userShell);
-        System.out.println(student);
-        System.out.println(lecturer);
+        System.out.println(userShell.getStudent());
         return "index";
     }
 

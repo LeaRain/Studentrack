@@ -7,7 +7,6 @@ import java.util.Date;
 @Entity
 public class UserWebShell extends User{
     private boolean isStudent;
-    private String facultyName;
     private String academicTitle;
     @OneToOne
     private Student student;
@@ -21,14 +20,6 @@ public class UserWebShell extends User{
     @Override
     public Long getId() {
         return getUserId();
-    }
-
-    public String getFacultyName() {
-        return facultyName;
-    }
-
-    public void setFacultyName(String facultyName) {
-        this.facultyName = facultyName;
     }
 
     // Usage of getIsStudent and setIsStudent for NotReadablePropertyException of Spring for invalid getter and setter.
