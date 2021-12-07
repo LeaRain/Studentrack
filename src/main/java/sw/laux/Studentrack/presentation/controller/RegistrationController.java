@@ -55,7 +55,7 @@ public class RegistrationController {
         user.setMailAddress(userShell.getMailAddress());
         user.setPassword(userShell.getPassword());
 
-        // TODO: Success and error 
+        // TODO: Success and error
         System.out.println(userService.registerUser(user));
         return "index";
     }
