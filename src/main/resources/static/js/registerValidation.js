@@ -54,6 +54,6 @@ function checkPasswordEquality() {
 function updateRequiredTagBasedOnRadioButton() {
     let academicTitleInput = document.getElementById("inputAcademicTitle");
     let studentRadioButton = document.getElementById("radioUserStudent");
-    
+
     academicTitleInput.required = !studentRadioButton.checked;
 }

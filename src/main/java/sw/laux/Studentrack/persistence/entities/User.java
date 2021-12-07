@@ -14,6 +14,7 @@ public abstract class User extends SingleIdEntity<Long>{
     private String firstName;
     private String lastName;
     private String password;
+    @Column(unique=true)
     private String mailAddress;
     private Date membershipStart;
     @ManyToOne

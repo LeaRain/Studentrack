@@ -39,4 +39,16 @@ public class UserServiceInternal implements IUserServiceInternal {
     public TimeInvest getTimeInvest(User user, Module module) {
         return null;
     }
+
+    @Override
+    public User registerUser(User user) {
+        var mailAddressUser = userRepo.findByMailAddress(user.getMailAddress());
+
+        // TODO: Throw exception for not null
+        if (mailAddressUser == null) {
+            return userRepo.save(user);
+        }
+
+        return null;
+    }
 }

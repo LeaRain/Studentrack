@@ -7,15 +7,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sw.laux.Studentrack.application.services.ModuleService;
-import sw.laux.Studentrack.persistence.entities.Lecturer;
-import sw.laux.Studentrack.persistence.entities.Major;
-import sw.laux.Studentrack.persistence.entities.Student;
-import sw.laux.Studentrack.persistence.entities.UserWebShell;
+import sw.laux.Studentrack.application.services.UserService;
+import sw.laux.Studentrack.application.services.UserServiceInternal;
+import sw.laux.Studentrack.persistence.entities.*;
 
 @Controller
 public class RegistrationController {
     @Autowired
     private ModuleService moduleService;
+    @Autowired
+    private UserServiceInternal userService;
 
     @RequestMapping("registration")
     public String registration(Model model) {
@@ -32,12 +33,30 @@ public class RegistrationController {
         return "registration";
     }
 
-    @RequestMapping(value = "/registration/check", method = RequestMethod.POST) // th:action="@{/login}"
+    @RequestMapping(value = "/registration/check", method = RequestMethod.POST)
     public String doRegistration(Model model,
                                  @ModelAttribute("userShell") UserWebShell userShell
                                  ) {
-        System.out.println(userShell);
-        System.out.println(userShell.getStudent());
+
+        User user = null;
+
+        if (userShell.getIsStudent()) {
+            user = userShell.getStudent();
+            // Harmless cast, check for student in if condition
+            user.setFaculty(((Student) user).getMajor().getFaculty());
+        }
+
+        else {
+            user = userShell.getLecturer();
+        }
+
+        user.setFirstName(userShell.getFirstName());
+        user.setLastName(userShell.getLastName());
+        user.setMailAddress(userShell.getMailAddress());
+        user.setPassword(userShell.getPassword());
+
+        // TODO: Success and error 
+        System.out.println(userService.registerUser(user));
         return "index";
     }
 
