@@ -33,15 +33,15 @@
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputFirstName">First Name</label>
-                            <input type="text" class="form-control" id="inputFirstName" placeholder="Enter First Name" th:field="*{firstName}">
+                            <input type="text" class="form-control" id="inputFirstName" placeholder="Enter First Name" th:field="*{firstName}" required>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputLastName">Last Name</label>
-                            <input type="text" class="form-control" id="inputLastName" placeholder="Enter Last Name" th:field="*{lastName}">
+                            <input type="text" class="form-control" id="inputLastName" placeholder="Enter Last Name" th:field="*{lastName}" required>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail" class="form-label mt-4">Email address</label>
-                            <input type="email" class="form-control" id="inputEmail" placeholder="Enter Email address" th:field="*{mailAddress}">
+                            <input type="email" class="form-control" id="inputEmail" placeholder="Enter Email address" th:field="*{mailAddress}" required>
                         </div>
                         <div class="form-group" id="formGroupFaculty">
                             <label for="selectFaculty" class="form-label mt-4">Faculty</label>
@@ -59,11 +59,11 @@
                         </div>
                         <div class="form-group">
                             <label for="inputPassword" class="form-label mt-4">Password</label>
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Password" th:field="*{password}">
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Password" th:field="*{password}" required>
                         </div>
                         <div class="form-group">
                             <label for="inputPasswordConfirm" class="form-label mt-4">Confirm Password</label>
-                            <input type="password" class="form-control" id="inputPasswordConfirm" placeholder="Password">
+                            <input type="password" class="form-control" id="inputPasswordConfirm" placeholder="Password" required>
                         </div>
                     </div>
                 </fieldset>

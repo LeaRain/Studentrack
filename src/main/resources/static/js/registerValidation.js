@@ -11,7 +11,9 @@ function registerEventListener() {
     let passwordConfirmInput = document.getElementById("inputPasswordConfirm");
 
     studentRadioButton.addEventListener("click", updateUserTypeFormFields);
+    studentRadioButton.addEventListener("click", updateRequiredTagBasedOnRadioButton)
     lecturerRadioButton.addEventListener("click", updateUserTypeFormFields);
+    lecturerRadioButton.addEventListener("click", updateRequiredTagBasedOnRadioButton)
     passwordInput.addEventListener("keyup", checkPasswordEquality);
     passwordConfirmInput.addEventListener("keyup", checkPasswordEquality);
 }
@@ -47,4 +49,11 @@ function checkPasswordEquality() {
         passwordInput.className = "form-control is-valid";
         passwordConfirmInput.className = "form-control is-valid";
     }
+}
+
+function updateRequiredTagBasedOnRadioButton() {
+    let academicTitleInput = document.getElementById("inputAcademicTitle");
+    let studentRadioButton = document.getElementById("radioUserStudent");
+    
+    academicTitleInput.required = !studentRadioButton.checked;
 }
