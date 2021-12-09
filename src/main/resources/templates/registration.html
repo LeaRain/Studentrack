@@ -7,23 +7,20 @@
 <body class style onload="validateRegistration();configureSuccessErrorElements()">
 <div th:replace="common/navigation :: navigation"/>
 
-<div class="container" id="errorMessage" th:if="${errorMessage != null}" hidden>
-    <div class="bs-docs-section">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="bs-component">
-                    <div class="alert alert-dismissible alert-danger" th:text="${errorMessage}" id="errorMessageText">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-7 col-sm-6">
             <h1>Register for Studentrack</h1>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/statusmessage :: status(errorMessage=${errorMessage})"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-6">
             <form method="post" th:action="@{/registration/check}" th:object="${userShell}">
                 <fieldset>
                     <div class="form-group row">

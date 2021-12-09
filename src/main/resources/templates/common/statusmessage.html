@@ -1,0 +1,12 @@
+<div class="container" id="statusMessage" th:if="${errorMessage != null || successMessage != null}" hidden th:fragment="status">
+    <div class="bs-docs-section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="bs-component">
+                    <div class="alert alert-dismissible alert-danger" th:if="${errorMessage}" th:text="${errorMessage}" id="errorMessageText"></div>
+                    <div class="alert alert-dismissible alert-success" th:if="${successMessage}" th:text="${successMessage}" id="successMessageText"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

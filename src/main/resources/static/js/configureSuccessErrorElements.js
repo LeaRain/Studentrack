@@ -1,22 +1,20 @@
 function configureSuccessErrorElements() {
-    setSuccessMessageVisibility();
-    setErrorMessageVisibility();
+    setMessageVisibility();
 }
 
-function setSuccessMessageVisibility() {
-    let successMessageContainer = document.getElementById("successMessage");
+function setMessageVisibility() {
+    let messageContainer = document.getElementById( "statusMessage");
+    let errorMessageText = document.getElementById("errorMessageText");
     let successMessageText = document.getElementById("successMessageText");
 
-    if (successMessageContainer != null && successMessageText.textContent !== "") {
-        successMessageContainer.hidden = false;
-    }
-}
-
-function setErrorMessageVisibility() {
-    let errorMessageContainer = document.getElementById("errorMessage");
-    let errorMessageText = document.getElementById("errorMessageText");
-
-    if (errorMessageContainer != null && errorMessageText.textContent !== "") {
-        errorMessageContainer.hidden = false;
+    // Message Container must exist
+    if (messageContainer != null && (
+        // Error message must exist and is not allowed to be empty OR
+        (errorMessageText != null && errorMessageText.textContent !== "")  ||
+        // Success message must exist and is not allowed to be empty
+        (successMessageText != null && successMessageText.textContent !== "")
+    )
+    ) {
+        messageContainer.hidden = false;
     }
 }
