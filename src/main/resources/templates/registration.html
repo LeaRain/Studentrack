@@ -2,9 +2,23 @@
 <html lang="en" xmlns:th="www.thymeleaf.org">
 <head th:replace="common/header :: header(title='Registration')"/>
 <script type="text/javascript" src="js/registerValidation.js"></script>
+<script type="text/javascript" src="js/configureSuccessErrorElements.js"></script>
 
-<body class style onload="validateRegistration()">
+<body class style onload="validateRegistration();configureSuccessErrorElements()">
 <div th:replace="common/navigation :: navigation"/>
+
+<div class="container" id="errorMessage" th:if="${errorMessage != null}" hidden>
+    <div class="bs-docs-section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="bs-component">
+                    <div class="alert alert-dismissible alert-danger" th:text="${errorMessage}" id="errorMessageText">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="row">

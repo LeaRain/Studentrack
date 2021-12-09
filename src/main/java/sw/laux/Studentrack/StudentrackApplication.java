@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 public class StudentrackApplication {
+	// TODO: Logger (for producer method)
 
 	public static void main(String[] args) {
 		SpringApplication.run(StudentrackApplication.class, args);

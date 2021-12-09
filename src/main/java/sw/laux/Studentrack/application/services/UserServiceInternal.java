@@ -2,6 +2,7 @@ package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sw.laux.Studentrack.application.exceptions.UserAlreadyRegisteredException;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.Grade;
 import sw.laux.Studentrack.persistence.entities.TimeInvest;
@@ -41,7 +42,7 @@ public class UserServiceInternal implements IUserServiceInternal {
     }
 
     @Override
-    public User registerUser(User user) {
+    public User registerUser(User user) throws UserAlreadyRegisteredException {
         var mailAddressUser = userRepo.findByMailAddress(user.getMailAddress());
 
         // TODO: Throw exception for not null
@@ -49,6 +50,8 @@ public class UserServiceInternal implements IUserServiceInternal {
             return userRepo.save(user);
         }
 
-        return null;
+        else {
+            throw new UserAlreadyRegisteredException("User with mail address " + user.getMailAddress() + " already exists!");
+        }
     }
 }

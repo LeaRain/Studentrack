@@ -3,7 +3,9 @@
 
 <head th:replace="common/header :: header(title='Studentrack')"/>
 
-<body class style>
+<script type="text/javascript" src="js/configureSuccessErrorElements.js"></script>
+
+<body class style onload="configureSuccessErrorElements()">
 <div th:replace="common/navigation :: navigation"/>
 
 <div class="container">
@@ -13,6 +15,20 @@
         </div>
     </div>
 </div>
+
+<div class="container" id="successMessage" th:if="${successMessage != null}" hidden>
+    <div class="bs-docs-section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="bs-component">
+                    <div class="alert alert-dismissible alert-success" th:text="${successMessage}" id="successMessageText">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="container">
     <div class="bs-docs-section">
