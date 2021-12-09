@@ -3,7 +3,7 @@ function configureSuccessErrorElements() {
 }
 
 function setMessageVisibility() {
-    let messageContainer = document.getElementById( "statusMessage");
+    let messageContainer = document.getElementById("statusMessage");
     let errorMessageText = document.getElementById("errorMessageText");
     let successMessageText = document.getElementById("successMessageText");
 

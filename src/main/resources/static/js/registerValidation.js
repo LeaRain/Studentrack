@@ -41,20 +41,17 @@ function checkPasswordEquality() {
     let passwordInput = document.getElementById("inputPassword");
     let passwordConfirmInput = document.getElementById("inputPasswordConfirm");
     let submitButton = document.getElementById("submitButtonRegistration");
-    let invalidPasswordFeedback = document.getElementById("invalidFeedbackPassword");
 
     if (passwordInput.value !== passwordConfirmInput.value) {
         passwordInput.className = "form-control is-invalid";
         passwordConfirmInput.className = "form-control is-invalid";
         submitButton.disabled = true;
-        invalidPasswordFeedback.hidden = false;
     }
 
     else {
         passwordInput.className = "form-control is-valid";
         passwordConfirmInput.className = "form-control is-valid";
         submitButton.disabled = false;
-        invalidPasswordFeedback.hidden = true;
     }
 }
 

@@ -45,7 +45,6 @@ public class UserServiceInternal implements IUserServiceInternal {
     public User registerUser(User user) throws UserAlreadyRegisteredException {
         var mailAddressUser = userRepo.findByMailAddress(user.getMailAddress());
 
-        // TODO: Throw exception for not null
         if (mailAddressUser == null) {
             return userRepo.save(user);
         }
