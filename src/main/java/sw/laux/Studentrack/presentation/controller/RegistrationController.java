@@ -65,11 +65,11 @@ public class RegistrationController {
 
         try {
             userService.registerUser(user);
-            redirectAttributes.addAttribute("successMessage", "Registration for user " + user.getMailAddress() + " was successful!");
+            redirectAttributes.addFlashAttribute("successMessage", "Registration for user " + user.getMailAddress() + " was successful!");
             return "redirect:/";
         }
         catch (UserAlreadyRegisteredException exception) {
-            redirectAttributes.addAttribute("errorMessage", exception.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             return "redirect:/registration";
         }
 
