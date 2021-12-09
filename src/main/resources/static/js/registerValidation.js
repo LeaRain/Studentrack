@@ -35,6 +35,7 @@ function updateUserTypeFormFields() {
     facultyFormGroup.hidden = studentChecked;
 }
 
+// Inspired by myself, two years ago, also available on GitHub: https://github.com/LeaRain/DeepSpaceBooks/blob/master/views/js/fieldcheck.js
 function checkPasswordEquality() {
     // Check the two password fields for equality.
     let passwordInput = document.getElementById("inputPassword");
