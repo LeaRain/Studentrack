@@ -2,10 +2,9 @@ package sw.laux.Studentrack.persistence.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import java.util.Date;
 
 @Entity
-public class UserWebShell extends User{
+public class UserWebShell extends User {
     private boolean isStudent;
     private String academicTitle;
     @OneToOne
