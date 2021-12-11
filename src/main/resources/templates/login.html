@@ -20,15 +20,15 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-7 col-sm-6">
-            <form method="post" th:action="@{/login/check}" th:object="${user}">
+            <form method="post" th:action="@{/login}">
                 <fieldset>
                     <div class="form-group">
-                        <label for="inputEmail" class="form-label mt-4">Email address</label>
-                        <input type="email" class="form-control" id="inputEmail" placeholder="Enter Email address" th:field="*{mailAddress}" required>
+                        <label for="username" class="form-label mt-4">Email address</label>
+                        <input type="email" class="form-control" id="username" name="username" placeholder="Enter Email address" required>
                     </div>
                     <div class="form-group">
-                        <label for="inputPassword" class="form-label mt-4">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" placeholder="Password" th:field="*{password}" required>
+                        <label for="password" class="form-label mt-4">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                     </div>
                 </fieldset>
                 <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButtonLogin">Login!</button>

@@ -1,6 +1,10 @@
 package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.UserAlreadyRegisteredException;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
@@ -15,6 +19,10 @@ import java.util.Map;
 public class UserServiceInternal implements IUserServiceInternal {
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
 
     @Override
     public User loginUser(User user) {
@@ -45,12 +53,25 @@ public class UserServiceInternal implements IUserServiceInternal {
     public User registerUser(User user) throws UserAlreadyRegisteredException {
         var mailAddressUser = userRepo.findByMailAddress(user.getMailAddress());
 
-        if (mailAddressUser == null) {
+        if (mailAddressUser.isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            System.out.println(user);
             return userRepo.save(user);
         }
 
         else {
             throw new UserAlreadyRegisteredException("User with mail address " + user.getMailAddress() + " already exists!");
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        var user = userRepo.findByMailAddress(s);
+
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User with mail address " + s + " not found!");
+        }
+
+        return user.get();
     }
 }

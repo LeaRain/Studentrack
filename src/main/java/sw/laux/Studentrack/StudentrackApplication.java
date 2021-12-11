@@ -13,6 +13,7 @@ public class StudentrackApplication {
 	// TODO: Logger (for producer method)
 
 	public static void main(String[] args) {
+		var student = new Student();
 		SpringApplication.run(StudentrackApplication.class, args);
 	}
 	/*

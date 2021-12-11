@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 public class Student extends User {
     private int ects;
-    boolean isPremiumUser;
+    private boolean isPremiumUser;
     @OneToMany(mappedBy="student")
     private Collection<Grade> grades;
     @OneToMany(mappedBy="owner")

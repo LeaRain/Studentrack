@@ -1,13 +1,19 @@
 package sw.laux.Studentrack.persistence.entities;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import sw.laux.Studentrack.security.Authority;
+
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 // Bypass reserved keyword "user"
 @Table(name="users")
-public abstract class User extends SingleIdEntity<Long>{
+public abstract class User extends SingleIdEntity<Long> implements UserDetails {
     @Id
     @GeneratedValue
     private long userId;
@@ -58,6 +64,11 @@ public abstract class User extends SingleIdEntity<Long>{
     }
 
     @Override
+    public Long getId() {
+        return null;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(userId, firstName);
     }
@@ -78,8 +89,38 @@ public abstract class User extends SingleIdEntity<Long>{
         this.lastName = lastName;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new Authority(this.getClass().getSimpleName()));
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return mailAddress;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {

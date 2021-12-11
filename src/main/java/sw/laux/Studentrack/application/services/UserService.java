@@ -1,6 +1,8 @@
 package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.Grade;
@@ -37,6 +39,11 @@ public class UserService implements IUserService {
 
     @Override
     public TimeInvest getTimeInvest(User user, Module module) {
+        return null;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return null;
     }
 }

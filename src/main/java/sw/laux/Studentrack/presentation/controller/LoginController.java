@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sw.laux.Studentrack.application.services.UserServiceInternal;
+import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.UserImplementation;
 import sw.laux.Studentrack.persistence.entities.UserWebShell;
 
 @Controller
 public class LoginController {
     @Autowired
-    UserServiceInternal userService;
+    private IUserServiceInternal userService;
 
     @RequestMapping("login")
     public String login(Model model) {
@@ -23,11 +24,10 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = "login/check", method = RequestMethod.POST)
-    public String doLogin(Model model,
-                          @ModelAttribute("user") UserImplementation user) {
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public String doLogin() {
 
-        return "redirect:/home";
+        return "home";
 
     }
 
