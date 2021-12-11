@@ -12,7 +12,7 @@
             <h1>Error</h1>
             <h2>More Information:</h2>
             <div class="alert alert-danger">
-                <table>
+                <table th:if="${status} != 999">
                     <tr>
                         <td>Date</td>
                         <td th:text="${timestamp}"/>
@@ -30,12 +30,19 @@
                         <td th:text="${status}"/>
                     </tr>
                 </table>
+                <div th:unless="${status} != 999">
+                    <p>Wrong mail address or password!</p>
+                </div>
             </div>
             <p>We are sorry for any inconveniences. Please contact us for any consisting errors.</p>
         </div>
         <div class="d-grid gap-2">
-            <form action="/" method="get">
+            <form action="/" method="get" th:if="${status} != 999">
                 <button class="btn btn-lg btn-primary col-12" type="submit">Home</button>
+            </form>
+
+            <form action="/login" method="get" th:unless="${status} != 999">
+                <button class="btn btn-lg btn-primary col-12" type="submit">Back to Login</button>
             </form>
         </div>
     </div>
