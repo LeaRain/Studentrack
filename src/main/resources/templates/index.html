@@ -16,7 +16,14 @@
     </div>
 </div>
 
-<div th:replace="common/statusmessage :: status(successMessage=${successMessage})"></div>
+<div th:if="${successMessage} != ''">
+    <div th:replace="common/statusmessage :: status(successMessage=${successMessage})"></div>
+</div>
+
+
+<div th:if="${param.logout}">
+    <div th:replace="common/statusmessage :: status(successMessage='Logout successful!')"></div>
+</div>
 
 <div class="container">
     <div class="bs-docs-section">

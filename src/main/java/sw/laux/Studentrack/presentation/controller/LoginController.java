@@ -16,23 +16,4 @@ public class LoginController {
     @Autowired
     private IUserServiceInternal userService;
 
-    @RequestMapping("login")
-    public String login(Model model) {
-        var user = new UserImplementation();
-        model.addAttribute("user", user);
-
-        return "login";
-    }
-
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public String doLogin() {
-
-        return "home";
-
-    }
-
-    @RequestMapping(value = "home")
-    public String home(Model model) {
-        return "home";
-    }
 }

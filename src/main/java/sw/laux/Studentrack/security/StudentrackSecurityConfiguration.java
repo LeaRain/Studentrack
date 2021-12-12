@@ -41,7 +41,7 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .formLogin()
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/home")
-                .failureUrl("/error")
+                .failureUrl("/login-error")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/?logout")

@@ -3,8 +3,10 @@
 
 <head th:replace="common/header :: header(title='Login')"/>
 
+<script type="text/javascript" src="js/configureSuccessErrorElements.js"></script>
 
-<body class style>
+
+<body class style onload="configureSuccessErrorElements()">
 <div th:replace="common/navigation :: navigation"/>
 
 
@@ -14,6 +16,11 @@
             <h1>Login</h1>
         </div>
     </div>
+</div>
+
+
+<div th:if="${errorMessage}">
+    <div th:replace="common/statusmessage :: status(errorMessage=${errorMessage})"></div>
 </div>
 
 
