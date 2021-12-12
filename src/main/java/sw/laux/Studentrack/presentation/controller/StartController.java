@@ -30,7 +30,7 @@ public class StartController {
         if (!Objects.equals(successMessage, "")) {
             model.addAttribute("successMessage", successMessage);
         }
-        
+
         return "index";
     }
 
@@ -78,11 +78,14 @@ public class StartController {
 
         try {
             userService.registerUser(user);
-            redirectAttributes.addFlashAttribute("successMessage", "Registration for user " + user.getMailAddress() + " was successful!");
+            var successMessage = "Registration for user " + user.getMailAddress() + " was successful!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+            logger.info(successMessage);
             return "redirect:/";
         }
         catch (UserAlreadyRegisteredException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+            logger.info("Attempt to register user " + user + "failed: " + exception.getMessage());
             return "redirect:/registration";
         }
 
