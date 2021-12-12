@@ -93,14 +93,11 @@ public class StartController {
 
     @GetMapping("login")
     public String login(Model model) {
+        var user = new UserImplementation();
+        model.addAttribute("user", user);
         return "login";
     }
 
-    @PostMapping("login")
-    public String doLogin() {
-        return "home";
-
-    }
 
     @GetMapping("home")
     public String home(Model model) {
