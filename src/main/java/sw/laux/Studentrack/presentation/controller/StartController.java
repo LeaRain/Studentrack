@@ -1,16 +1,17 @@
 package sw.laux.Studentrack.presentation.controller;
 
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.UserAlreadyRegisteredException;
 import sw.laux.Studentrack.application.services.ModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
@@ -21,16 +22,19 @@ public class StartController {
     @Autowired
     private IUserServiceInternal userService;
 
-    @RequestMapping("/")
+    private final Logger logger = LogManager.getLogger(this.getClass());
+
+    @GetMapping("/")
     public String index(Model model,
                         @ModelAttribute("successMessage") String successMessage) {
         if (!Objects.equals(successMessage, "")) {
             model.addAttribute("successMessage", successMessage);
         }
+        
         return "index";
     }
 
-    @RequestMapping("registration")
+    @GetMapping("registration")
     public String registration(Model model,
                                @ModelAttribute("errorMessage") String errorMessage) {
 
@@ -51,7 +55,7 @@ public class StartController {
         return "registration";
     }
 
-    @RequestMapping(value = "/registration/check", method = RequestMethod.POST)
+    @PostMapping("/registration/check")
     public String doRegistration(Model model,
                                  @ModelAttribute("userShell") UserWebShell userShell,
                                  RedirectAttributes redirectAttributes
@@ -84,23 +88,23 @@ public class StartController {
 
     }
 
-    @RequestMapping("login")
+    @GetMapping("login")
     public String login(Model model) {
         return "login";
     }
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
+    @PostMapping("login")
     public String doLogin() {
         return "home";
 
     }
 
-    @RequestMapping(value = "home")
+    @GetMapping("home")
     public String home(Model model) {
         return "home";
     }
 
-    @RequestMapping(value = "login-error")
+    @GetMapping("login-error")
     public String loginError(Model model) {
         model.addAttribute("errorMessage", "Combination of mail address and password invalid!");
         return "login";
