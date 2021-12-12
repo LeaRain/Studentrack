@@ -13,6 +13,7 @@ import sw.laux.Studentrack.persistence.entities.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.security.Principal;
 import java.util.Objects;
 
 @Controller
@@ -26,7 +27,12 @@ public class StartController {
 
     @GetMapping("/")
     public String index(Model model,
-                        @ModelAttribute("successMessage") String successMessage) {
+                        @ModelAttribute("successMessage") String successMessage,
+                        Principal principal) {
+        if (principal != null) {
+            return "redirect:/home";
+        }
+
         if (!Objects.equals(successMessage, "")) {
             model.addAttribute("successMessage", successMessage);
         }
@@ -100,7 +106,9 @@ public class StartController {
 
 
     @GetMapping("home")
-    public String home(Model model) {
+    public String home(Model model, Principal principal) {
+        var user = (User) userService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", user);
         return "home";
     }
 

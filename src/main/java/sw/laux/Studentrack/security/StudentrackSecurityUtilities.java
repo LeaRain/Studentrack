@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 
 @Configuration
 public class StudentrackSecurityUtilities {
-    //@Value("#{environment.PASSWORD_SALT}")
+    @Value("#{environment.PASSWORD_SALT}")
     private final String salt = "Test Salt";
 
     @Bean

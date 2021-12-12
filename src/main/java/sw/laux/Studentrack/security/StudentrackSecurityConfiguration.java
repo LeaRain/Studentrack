@@ -58,7 +58,7 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
                         var userDetails = (UserDetails) authentication.getPrincipal();
-                        logger.info("User with mail address " + userDetails.getUsername() + "logged in.");
+                        logger.info("User with mail address " + userDetails.getUsername() + " logged in.");
                         httpServletResponse.sendRedirect("home");
                     }
                 })
@@ -74,12 +74,13 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/?logout")
-                .deleteCookies("remember-me")
+                .deleteCookies("remember-me", "JSESSIONID")
                 .permitAll()
                 .and()
                 .rememberMe();
         // Cross-Site Request Forgery ausschalten
         http.csrf().disable();
+        http.rememberMe();
     }
 
     @Autowired
