@@ -1,0 +1,102 @@
+<div th:fragment="studenthome">
+    <div class="container">
+        <div class="bs-docs-section">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="bs-component">
+                        <legend>Courses</legend>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Your Courses</th>
+                                    <th scope="col">Total Time Invest</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-primary">
+                                    <th scope="row">Course 1</th>
+                                    <th scope="row">Invest 1</th>
+                                </tr>
+                                <tr class="table-info">
+                                    <th scope="row">Course 2</th>
+                                    <th scope="row">Invest 2</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-grid gap-2">
+                            <form action="courseadministration" method="get">
+                                <button class="btn btn-lg btn-primary col-12" type="submit">Administrate Courses</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="bs-component">
+                        <form>
+                            <fieldset>
+                                <legend>Start New Time Order</legend>
+                                <fieldset>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="exampleSelect1" class="form-label mt-4">Example select</label>
+                                            <select class="form-select" id="exampleSelect1">
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-lg btn-info col-12 mt-4">Submit</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <form action="timeorderadministration" method="get">
+                            <button class="btn btn-lg btn-primary col-12 mt-4" type="submit">Administrate Time Orders</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="bs-component">
+                        <legend>Statistics</legend>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Working Hours</th>
+                                <th scope="col">Time Range</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="table-primary">
+                                <th scope="row">Today</th>
+                                <th scope="row">5:32</th>
+                            </tr>
+                            <tr class="table-info">
+                                <th scope="row">This Week</th>
+                                <th scope="row">17:34</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-grid gap-2">
+                            <form action="statistics" method="get">
+                                <button class="btn btn-lg btn-primary col-12" type="submit">More</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div class="container">
+        <div class="bs-docs-section">
+            <div class="row">
+
+            </div>
+        </div>
+    </div>
+</div>
