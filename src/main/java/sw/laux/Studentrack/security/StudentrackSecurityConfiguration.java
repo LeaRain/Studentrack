@@ -1,7 +1,7 @@
 package sw.laux.Studentrack.security;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +36,7 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
     @Autowired
     private StudentrackSecurityUtilities securityUtilities;
 
-    private final Logger logger = LogManager.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private BCryptPasswordEncoder passwordEncoder() {
         return securityUtilities.passwordEncoder();

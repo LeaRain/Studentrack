@@ -1,6 +1,5 @@
 package sw.laux.Studentrack.presentation.controller;
 
-import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +9,8 @@ import sw.laux.Studentrack.application.exceptions.UserAlreadyRegisteredException
 import sw.laux.Studentrack.application.services.ModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.Principal;
 import java.util.Objects;
@@ -23,7 +22,7 @@ public class StartController {
     @Autowired
     private IUserServiceInternal userService;
 
-    private final Logger logger = LogManager.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/")
     public String index(Model model,

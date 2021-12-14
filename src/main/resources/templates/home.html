@@ -14,8 +14,9 @@
     </div>
 </div>
 
-<div sec:authorize="hasAuthority('Student')" th:replace="common/studenthome :: studenthome">
-</div>
+<div sec:authorize="hasAuthority('Student')" th:replace="common/studenthome :: studenthome"></div>
+
+<div sec:authorize="hasAuthority('Lecturer')" th:replace="common/lecturerhome :: lecturerhome"></div>
 
 <div th:replace="common/footer :: footer"/>
 

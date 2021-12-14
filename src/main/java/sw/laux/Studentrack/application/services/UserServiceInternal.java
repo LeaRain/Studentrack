@@ -55,7 +55,6 @@ public class UserServiceInternal implements IUserServiceInternal {
 
         if (mailAddressUser.isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            System.out.println(user);
             return userRepo.save(user);
         }
 
