@@ -2,17 +2,15 @@ package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sw.laux.Studentrack.persistence.entities.Faculty;
-import sw.laux.Studentrack.persistence.entities.Major;
-import sw.laux.Studentrack.persistence.repository.FacultyRepository;
-import sw.laux.Studentrack.persistence.repository.GradeRepository;
-import sw.laux.Studentrack.persistence.repository.MajorRepository;
-import sw.laux.Studentrack.persistence.repository.ModuleRepository;
+import sw.laux.Studentrack.application.services.interfaces.IModuleService;
+import sw.laux.Studentrack.persistence.entities.*;
+import sw.laux.Studentrack.persistence.entities.Module;
+import sw.laux.Studentrack.persistence.repository.*;
 
 import java.util.Collection;
 
 @Service
-public class ModuleService {
+public class ModuleService implements IModuleService {
     @Autowired
     private ModuleRepository moduleRepo;
     @Autowired
@@ -21,6 +19,8 @@ public class ModuleService {
     private MajorRepository majorRepo;
     @Autowired
     private FacultyRepository facultyRepo;
+    @Autowired
+    private CourseRepository courseRepository;
 
     public Collection<Major> getAllMajors() {
         return (Collection<Major>) majorRepo.findAll();
@@ -29,5 +29,11 @@ public class ModuleService {
     public Collection<Faculty> getAllFaculties() {
         return (Collection<Faculty>) facultyRepo.findAll();
     }
+
+    @Override
+    public Iterable<Course> getAllCoursesByLecturer(Lecturer lecturer) {
+        return courseRepository.findByModulesResponsibleLecturer(lecturer);
+    }
+
 
 }

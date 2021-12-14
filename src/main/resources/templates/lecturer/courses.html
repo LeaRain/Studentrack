@@ -1,0 +1,42 @@
+<div th:fragment="lecturercourses">
+    <div class="container">
+        <div class="bs-docs-section">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="bs-component">
+                        <legend>Your Courses</legend>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Module</th>
+                                <th scope="col">Start</th>
+                                <th scope="col">End</th>
+                                <th scope="col">ECTS</th>
+                                <th scope="col">Credit Hours</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="course, iStat: ${courses}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                                <th scope="row" th:text="${course.module.name}"/>
+                                <td th:text="${course.startDate}"/>
+                                <td th:text="${course.endDate}"/>
+                                <td th:text="${course.module.ects}"/>
+                                <td th:text="${course.module.creditHours}"/>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <legend>Wanna do something new?</legend>
+                    <div class="d-grid gap-2 mt-5">
+                        <button class="btn btn-lg btn-primary" type="button">New Course</button>
+                    </div>
+                    <div class="d-grid gap-2 mt-5">
+                        <button class="btn btn-lg btn-info" type="button">Edit Course</button>
+                    </div>
+                </div>
+        </div>
+        </div>
+    </div>
+</div>

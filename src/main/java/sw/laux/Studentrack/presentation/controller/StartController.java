@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.UserAlreadyRegisteredException;
 import sw.laux.Studentrack.application.services.ModuleService;
+import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ import java.util.Objects;
 @Controller
 public class StartController {
     @Autowired
-    private ModuleService moduleService;
+    private IModuleService moduleService;
     @Autowired
     private IUserServiceInternal userService;
 
