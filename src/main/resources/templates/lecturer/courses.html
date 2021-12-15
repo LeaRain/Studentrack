@@ -2,6 +2,12 @@
     <div class="container">
         <div class="bs-docs-section">
             <div class="row">
+                <div class="col-lg-12">
+                    <h3 th:text="'Your faculty: ' + ${faculty}"></h3>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-6">
                     <div class="bs-component">
                         <legend>Your Courses</legend>
@@ -29,14 +35,26 @@
                 </div>
                 <div class="col-lg-6">
                     <legend>Wanna do something new?</legend>
-                    <div class="d-grid gap-2 mt-5">
-                        <button class="btn btn-lg btn-primary" type="button">New Module</button>
+                    <div class="d-grid gap-2 mt-4">
+                        <form action="courses/new">
+                            <button class="btn btn-lg btn-primary col-12" type="submit">New Course</button>
+                        </form>
                     </div>
-                    <div class="d-grid gap-2 mt-5">
-                        <button class="btn btn-lg btn-info" type="button">New Course</button>
+                    <div class="d-grid gap-2 mt-4">
+                        <form action="editcourse">
+                            <button class="btn btn-lg btn-info col-12" type="submit">Edit Course</button>
+                        </form>
                     </div>
-                    <div class="d-grid gap-2 mt-5">
-                        <button class="btn btn-lg btn-primary" type="button">Edit Course</button>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <form action="newmodule">
+                            <button class="btn btn-lg btn-primary col-12" type="submit">New Module</button>
+                        </form>
+                    </div>
+                    <div class="d-grid gap-2 mt-4">
+                        <form action="editmodule">
+                            <button class="btn btn-lg btn-info col-12" type="submit">Edit Module</button>
+                        </form>
                     </div>
                 </div>
         </div>

@@ -11,6 +11,15 @@ public class Lecturer extends User {
     private String title;
     @OneToOne(mappedBy="dean")
     private Faculty deanOfFaculty;
+
+    public Collection<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(Collection<Module> modules) {
+        this.modules = modules;
+    }
+
     @OneToMany(mappedBy="responsibleLecturer")
     private Collection<Module> modules;
 

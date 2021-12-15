@@ -1,5 +1,7 @@
 package sw.laux.Studentrack.persistence.entities;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,7 +13,9 @@ public class Course extends SingleIdEntity<Long>{
     @Id
     @GeneratedValue
     private long courseId;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date startDate;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date endDate;
     @ManyToOne
     private Module module;

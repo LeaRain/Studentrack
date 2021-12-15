@@ -79,7 +79,6 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .permitAll()
                 .and()
                 .rememberMe();
-        // Cross-Site Request Forgery ausschalten
         http.csrf().disable();
         http.rememberMe();
     }

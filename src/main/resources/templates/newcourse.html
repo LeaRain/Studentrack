@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="common/header :: header(title='New Course')"/>
+<script type="text/javascript" src="/js/courseValidation.js"></script>
+
+<body class style onload="validateCourse()">
+<div th:replace="common/navigation :: navigation"/>
+
+
+<div sec:authorize="hasAuthority('Lecturer')" th:replace="lecturer/newcourse :: newcourse"></div>
+
+<div th:replace="common/footer :: footer"/>
+</body>
+</html>

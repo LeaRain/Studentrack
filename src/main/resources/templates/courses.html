@@ -7,10 +7,18 @@
 <body class style>
 <div th:replace="common/navigation :: navigation"/>
 
+<div th:if="${errorMessage} != ''">
+    <div th:replace="common/statusmessage :: status(errorMessage=${errorMessage})"></div>
+</div>
+
+<div th:if="${successMessage} != ''">
+    <div th:replace="common/statusmessage :: status(successMessage=${successMessage})"></div>
+</div>
 
 <div sec:authorize="hasAuthority('Student')" th:replace="student/courses :: studentcourses"></div>
 
 <div sec:authorize="hasAuthority('Lecturer')" th:replace="lecturer/courses :: lecturercourses"></div>
 
+<div th:replace="common/footer :: footer"/>
 </body>
 </html>
