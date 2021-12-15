@@ -22,8 +22,8 @@ public class StartController {
     private IModuleService moduleService;
     @Autowired
     private IUserServiceInternal userService;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private Logger logger;
 
     @GetMapping("/")
     public String index(Model model,

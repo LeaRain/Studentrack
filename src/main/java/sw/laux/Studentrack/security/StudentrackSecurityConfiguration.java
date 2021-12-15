@@ -36,7 +36,8 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
     @Autowired
     private StudentrackSecurityUtilities securityUtilities;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private Logger logger;
 
     private BCryptPasswordEncoder passwordEncoder() {
         return securityUtilities.passwordEncoder();
