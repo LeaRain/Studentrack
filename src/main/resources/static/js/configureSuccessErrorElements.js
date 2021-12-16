@@ -16,5 +16,16 @@ function setMessageVisibility() {
     )
     ) {
         messageContainer.hidden = false;
+
+        // Hide success container for empty success message
+        if (successMessageText.textContent === "") {
+            successMessageText.hidden = true;
+        }
+
+        // Hide error container for empty error message
+        if (errorMessageText.textContent === "") {
+            errorMessageText.hidden = true;
+        }
+
     }
 }

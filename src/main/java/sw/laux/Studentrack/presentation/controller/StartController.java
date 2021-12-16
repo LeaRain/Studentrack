@@ -33,9 +33,7 @@ public class StartController {
             return "redirect:/home";
         }
 
-        if (!Objects.equals(successMessage, "")) {
-            model.addAttribute("successMessage", successMessage);
-        }
+        model.addAttribute("successMessage", successMessage);
 
         return "index";
     }
@@ -44,9 +42,7 @@ public class StartController {
     public String registration(Model model,
                                @ModelAttribute("errorMessage") String errorMessage) {
 
-        if (!Objects.equals(errorMessage, "")) {
-            model.addAttribute("errorMessage", errorMessage);
-        }
+        model.addAttribute("errorMessage", errorMessage);
 
         var userShell = new UserWebShell();
         var student = new Student();

@@ -3,8 +3,10 @@
 
 <head th:replace="common/header :: header(title='Course Administration')"/>
 
+<script type="text/javascript" src="js/configureSuccessErrorElements.js"></script>
 
-<body class style>
+
+<body class style onload="configureSuccessErrorElements()">
 <div th:replace="common/navigation :: navigation"/>
 
 <div th:if="${errorMessage} != ''">
