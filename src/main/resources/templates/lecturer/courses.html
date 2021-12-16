@@ -40,10 +40,31 @@
                             <button class="btn btn-lg btn-primary col-12" type="submit">New Course</button>
                         </form>
                     </div>
+
                     <div class="d-grid gap-2 mt-4">
-                        <form action="editcourse">
-                            <button class="btn btn-lg btn-info col-12" type="submit">Edit Course</button>
-                        </form>
+                            <button class="btn btn-lg btn-info col-12" type="button" data-toggle="modal" data-target="#exampleModel" id="buttonEditCourse">Edit Course</button>
+                    </div>
+
+                    <div class="modal" id="modalEditCourse">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Choose Course</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" th:action="@{/courses/edit}" th:object="${courseShell}">
+                                        <div class="form-group" id="formGroupCourse">
+                                            <label for="selectCourse" class="form-label mt-4">Course</label>
+                                            <select class="form-select" id="selectCourse" th:field="${courseShell.courseId}">
+                                                <option th:each="course : ${courses}" th:text="${course}" th:value="${course.courseId}"></option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-4" data-dismiss="modal" id="buttonCloseEditCourseModal">Close</button>
+                                        <button type="submit" class="btn btn-info mt-4">Edit Course</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="d-grid gap-2 mt-4">

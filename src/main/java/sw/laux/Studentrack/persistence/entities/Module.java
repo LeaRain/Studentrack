@@ -22,12 +22,6 @@ public class Module extends SingleIdEntity<Long>{
         return "Module{" +
                 "moduleId=" + moduleId +
                 ", name='" + name + '\'' +
-                ", ects=" + ects +
-                ", creditHours=" + creditHours +
-                ", description='" + description + '\'' +
-                ", responsibleLecturer=" + responsibleLecturer +
-                ", resultGrades=" + resultGrades +
-                ", availableCourses=" + availableCourses +
                 '}';
     }
 

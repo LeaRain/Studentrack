@@ -6,8 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sw.laux.Studentrack.application.exceptions.CourseNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.ICourseService;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
@@ -38,7 +40,6 @@ public class CourseController {
                           @ModelAttribute("successMessage") String successMessage,
                           @ModelAttribute("errorMessage") String errorMessage) {
 
-        // TODO: Fix display of success message
         model.addAttribute("successMessage", successMessage);
         model.addAttribute("errorMessage", errorMessage);
 
@@ -52,6 +53,8 @@ public class CourseController {
         }
 
         model.addAttribute("faculty", user.getFaculty());
+        var courseShell = new Course();
+        model.addAttribute("courseShell", courseShell);
 
         return "courses";
     }
@@ -89,6 +92,65 @@ public class CourseController {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.info(exception.getMessage());
         }
+
+        return "redirect:/courses";
+    }
+
+    @PostMapping("courses/edit")
+    public String doEditCourse(Model model,
+                                    @ModelAttribute("courseShell") Course course,
+                                    RedirectAttributes redirectAttributes) {
+
+        try {
+            courseService.findCourse(course);
+
+        } catch (CourseNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.info(e.getMessage());
+            return "redirect:/courses";
+        }
+
+        return "redirect:/courses/edit/" + course.getCourseId();
+    }
+
+    @GetMapping("courses/edit/{courseId}")
+    public String doEditCourse(Model model,
+                               @PathVariable long courseId,
+                               RedirectAttributes redirectAttributes) {
+        Course course;
+
+        try {
+            course = courseService.findCourse(courseId);
+        }
+        catch (CourseNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.info(e.getMessage());
+            return "redirect:/courses";
+        }
+
+        model.addAttribute(course);
+
+        return "editcourse";
+    }
+
+
+    @PostMapping("courses/edit/check")
+    public String doEditCourseCheck(Model model,
+                               @ModelAttribute("course") Course course,
+                               RedirectAttributes redirectAttributes) {
+
+        try {
+            courseService.updateCourse(course);
+        } catch (CourseNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.info(e.getMessage());
+            return "redirect:/courses";
+        }
+
+        var successMessage = "Course " + course + " successfully updated!";
+        logger.info(successMessage);
+
+        redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
         return "redirect:/courses";
     }
