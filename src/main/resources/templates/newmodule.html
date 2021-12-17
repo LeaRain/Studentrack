@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="common/header :: header(title='New Module')"/>
+
+<script type="text/javascript" src="/js/moduleValidation.js"></script>
+
+<body class style onload="validateModule()">
+<div th:replace="common/navigation :: navigation"/>
+
+
+<div sec:authorize="hasAuthority('Lecturer')" th:replace="lecturer/newmodule :: newmodule"></div>
+
+<div th:replace="common/footer :: footer"/>
+</body>
+</html>

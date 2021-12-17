@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 @Entity
@@ -13,7 +14,7 @@ public class Lecturer extends User {
     private Faculty deanOfFaculty;
 
     public Collection<Module> getModules() {
-        return modules;
+        return Collections.unmodifiableCollection(modules);
     }
 
     public void setModules(Collection<Module> modules) {

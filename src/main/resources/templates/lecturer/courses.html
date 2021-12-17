@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="d-grid gap-2 mt-4">
-                            <button class="btn btn-lg btn-info col-12" type="button" data-toggle="modal" data-target="#exampleModel" id="buttonEditCourse">Edit Course</button>
+                            <button class="btn btn-lg btn-info col-12" type="button" data-toggle="modal" id="buttonEditCourse">Edit Course</button>
                     </div>
 
                     <div class="modal" id="modalEditCourse">
@@ -68,14 +68,35 @@
                     </div>
 
                     <div class="d-grid gap-2 mt-4">
-                        <form action="newmodule">
+                        <form action="modules/new">
                             <button class="btn btn-lg btn-primary col-12" type="submit">New Module</button>
                         </form>
                     </div>
+
                     <div class="d-grid gap-2 mt-4">
-                        <form action="editmodule">
-                            <button class="btn btn-lg btn-info col-12" type="submit">Edit Module</button>
-                        </form>
+                        <button class="btn btn-lg btn-info col-12" type="button" data-toggle="modal" id="buttonEditModule">Edit Module</button>
+                    </div>
+
+                    <div class="modal" id="modalEditModule">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Choose Module</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" th:action="@{/modules/edit}" th:object="${modules}">
+                                        <div class="form-group" id="formGroupModule">
+                                            <label for="selectCourse" class="form-label mt-4">Module</label>
+                                            <select class="form-select" id="selectModule" th:field="${moduleShell.moduleId}">
+                                                <option th:each="module : ${modules}" th:text="${module}" th:value="${module.moduleId}"></option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-4" data-dismiss="modal" id="buttonCloseEditModuleModal">Close</button>
+                                        <button type="submit" class="btn btn-info mt-4">Edit Module</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
         </div>

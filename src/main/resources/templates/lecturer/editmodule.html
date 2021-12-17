@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div th:fragment="editmodule">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <h1>Edit an existing module</h1>
+            </div>
+        </div>
+    </div>
 
-</body>
-</html>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <p th:text="${module.moduleId}"></p>
+                <form method="post" th:action="@{/modules/edit/check}" th:object="${module}">
+                    <fieldset>
+                        <input type="hidden" th:field="*{moduleId}">
+                        <input type="hidden" th:field="*{responsibleLecturer}">
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputModuleName">Module Name</label>
+                            <input type="text" class="form-control" id="inputModuleName" placeholder="Enter Module Name" th:field="*{name}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputEcts">Module ECTS</label>
+                            <input type="number" class="form-control" id="inputEcts" placeholder="Enter Module ECTS" th:field="*{ects}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputCreditHours">Credit Hours</label>
+                            <input type="text" class="form-control" id="inputCreditHours" placeholder="Enter Module Credit Hours" th:field="*{creditHours}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDescription" class="form-label mt-4">Description</label>
+                            <textarea class="form-control" id="inputDescription" rows="3" th:field="*{description}"></textarea>
+                        </div>
+                    </fieldset>
+                    <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButtonModule">Change!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6 mt-5">
+                <div class="alert alert-dismissible alert-danger">
+                    <strong>Proceed with caution!</strong> You are entering the danger zone.
+                </div>
+            </div>
+            <form>
+                <fieldset class="form-group">
+                    <legend class="mt-4">Delete Module</legend>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="checkboxDelete">
+                        <label class="form-check-label" for="checkboxDelete">
+                            Delete
+                        </label>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButtonDelete">Delete!</button>
+            </form>
+        </div>
+    </div>
+
+</div>

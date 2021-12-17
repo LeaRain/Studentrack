@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="common/header :: header(title='Edit Module')"/>
+
+<script type="text/javascript" src="/js/moduleValidation.js"></script>
+<script type="text/javascript" src="/js/configureDeleteButton.js"></script>
+
+<body class style onload="validateModule();configureDeleteButton()">
+
+<body class style>
+<div th:replace="common/navigation :: navigation"/>
+
+
+<div sec:authorize="hasAuthority('Lecturer')" th:replace="lecturer/editmodule :: editmodule"></div>
+
+<div th:replace="common/footer :: footer"/>
+</body>
+</html>

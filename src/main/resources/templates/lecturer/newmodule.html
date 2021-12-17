@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div th:fragment="newmodule">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <h1>Create a new module</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <form method="post" th:action="@{/modules/new/check}" th:object="${module}">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputModuleName">Module Name</label>
+                            <input type="text" class="form-control" id="inputModuleName" placeholder="Enter Module Name" th:field="*{name}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputEcts">Module ECTS</label>
+                            <input type="number" class="form-control" id="inputEcts" placeholder="Enter Module ECTS" th:field="*{ects}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputCreditHours">Credit Hours</label>
+                            <input type="text" class="form-control" id="inputCreditHours" placeholder="Enter Module Credit Hours" th:field="*{creditHours}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDescription" class="form-label mt-4">Description</label>
+                            <textarea class="form-control" id="inputDescription" rows="3" th:field="*{description}"></textarea>
+                        </div>
+                    </fieldset>
+                    <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButtonModule">Add!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

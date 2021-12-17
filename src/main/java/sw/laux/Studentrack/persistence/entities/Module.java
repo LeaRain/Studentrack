@@ -8,6 +8,7 @@ public class Module extends SingleIdEntity<Long>{
     @Id
     @GeneratedValue
     private long moduleId;
+    @Column(unique = true)
     private String name;
     private int ects;
     private int creditHours;
