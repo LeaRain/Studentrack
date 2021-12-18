@@ -1,4 +1,4 @@
-<div th:fragment="lecturercourses">
+<div th:fragment="lecturermodules">
     <div class="container">
         <div class="bs-docs-section">
             <div class="row">
@@ -10,24 +10,20 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="bs-component">
-                        <legend>Your Courses</legend>
+                        <legend>Your Modules</legend>
                         <table class="table table-hover">
                             <thead>
                             <tr>
                                 <th scope="col">Module</th>
-                                <th scope="col">Start</th>
-                                <th scope="col">End</th>
                                 <th scope="col">ECTS</th>
                                 <th scope="col">Credit Hours</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="course, iStat: ${courses}" th:classappend="${iStat.odd} ? table-info : table-primary">
-                                <th scope="row" th:text="${course.module.name}"/>
-                                <td th:text="${course.startDate}"/>
-                                <td th:text="${course.endDate}"/>
-                                <td th:text="${course.module.ects}"/>
-                                <td th:text="${course.module.creditHours}"/>
+                            <tr th:each="module, iStat: ${modules}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                                <th scope="row" th:text="${module.name}"/>
+                                <td th:text="${module.ects}"/>
+                                <td th:text="${module.creditHours}"/>
                             </tr>
                             </tbody>
                         </table>
@@ -35,38 +31,6 @@
                 </div>
                 <div class="col-lg-6">
                     <legend>Wanna do something new?</legend>
-                    <div class="d-grid gap-2 mt-4">
-                        <form action="courses/new">
-                            <button class="btn btn-lg btn-primary col-12" type="submit">New Course</button>
-                        </form>
-                    </div>
-
-                    <div class="d-grid gap-2 mt-4">
-                            <button class="btn btn-lg btn-info col-12" type="button" data-toggle="modal" id="buttonEditCourse">Edit Course</button>
-                    </div>
-
-                    <div class="modal" id="modalEditCourse">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Choose Course</h5>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="post" th:action="@{/courses/edit}" th:object="${courseShell}">
-                                        <div class="form-group" id="formGroupCourse">
-                                            <label for="selectCourse" class="form-label mt-4">Course</label>
-                                            <select class="form-select" id="selectCourse" th:field="${courseShell.courseId}">
-                                                <option th:each="course : ${courses}" th:text="${course}" th:value="${course.courseId}"></option>
-                                            </select>
-                                        </div>
-                                        <button type="button" class="btn btn-info mt-4" data-dismiss="modal" id="buttonCloseEditCourseModal">Close</button>
-                                        <button type="submit" class="btn btn-info mt-4">Edit Course</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="d-grid gap-2 mt-4">
                         <form action="modules/new">
                             <button class="btn btn-lg btn-primary col-12" type="submit">New Module</button>
@@ -86,7 +50,7 @@
                                 <div class="modal-body">
                                     <form method="post" th:action="@{/modules/edit}" th:object="${modules}">
                                         <div class="form-group" id="formGroupModule">
-                                            <label for="selectCourse" class="form-label mt-4">Module</label>
+                                            <label for="selectModule" class="form-label mt-4">Module</label>
                                             <select class="form-select" id="selectModule" th:field="${moduleShell.moduleId}">
                                                 <option th:each="module : ${modules}" th:text="${module}" th:value="${module.moduleId}"></option>
                                             </select>

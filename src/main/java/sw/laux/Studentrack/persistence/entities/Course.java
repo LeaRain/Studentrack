@@ -2,48 +2,24 @@ package sw.laux.Studentrack.persistence.entities;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-public class Course extends SingleIdEntity<Long>{
-    @Id
-    @GeneratedValue
-    private long courseId;
+@Embeddable
+@Table(uniqueConstraints = @UniqueConstraint(name="UniqueStartEndDate", columnNames = {"startDate", "endDate"}))
+public class Course{
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date startDate;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date endDate;
-    @ManyToOne
-    private Module module;
 
-    public Course(Date startDate, Date endDate, Module module) {
+    public Course(Date startDate, Date endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
-        this.module = module;
     }
 
     public Course() {
 
-    }
-
-    public Module getModule() {
-        return module;
-    }
-
-    public void setModule(Module module) {
-        this.module = module;
-    }
-
-    public long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(long courseId) {
-        this.courseId = courseId;
     }
 
     public Date getStartDate() {
@@ -62,8 +38,4 @@ public class Course extends SingleIdEntity<Long>{
         this.endDate = endDate;
     }
 
-    @Override
-    public Long getId() {
-        return getCourseId();
-    }
 }

@@ -15,12 +15,12 @@ public class TimeInvest extends SingleIdEntity<Long> {
     @OneToOne
     private TimeOrder timeOrder;
     @ManyToOne
-    Course course;
+    private Module module;
 
-    public TimeInvest(long duration, TimeOrder timeOrder, Course course) {
+    public TimeInvest(long duration, TimeOrder timeOrder, Module module) {
         this.duration = duration;
         this.timeOrder = timeOrder;
-        this.course = course;
+        this.module = module;
     }
 
     public TimeInvest() {
@@ -56,21 +56,20 @@ public class TimeInvest extends SingleIdEntity<Long> {
         this.timeOrder = timeOrder;
     }
 
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
     @Override
     public String toString() {
         return "TimeInvest{" +
                 "timeInvestId=" + timeInvestId +
                 ", duration=" + duration +
                 ", timeOrder=" + timeOrder +
-                ", course=" + course +
                 '}';
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
     }
 }

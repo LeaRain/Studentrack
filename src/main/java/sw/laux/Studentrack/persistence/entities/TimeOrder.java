@@ -13,7 +13,7 @@ public class TimeOrder extends SingleIdEntity<Long>{
     @Column(name="end_time")
     private Timestamp end;
     @ManyToOne
-    private Course course;
+    private Module module;
     @ManyToOne
     private Student owner;
     @OneToOne
@@ -35,10 +35,10 @@ public class TimeOrder extends SingleIdEntity<Long>{
         this.timeInvest = timeInvest;
     }
 
-    public TimeOrder(Timestamp start, Timestamp end, Course course, Student owner, TimeInvest timeInvest) {
+    public TimeOrder(Timestamp start, Timestamp end, Module module, Student owner, TimeInvest timeInvest) {
         this.start = start;
         this.end = end;
-        this.course = course;
+        this.module = module;
         this.owner = owner;
         this.timeInvest = timeInvest;
     }
@@ -76,13 +76,6 @@ public class TimeOrder extends SingleIdEntity<Long>{
         return getTimeOrderId();
     }
 
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
 
     @Override
     public String toString() {
@@ -90,9 +83,16 @@ public class TimeOrder extends SingleIdEntity<Long>{
                 "timeOrderId=" + timeOrderId +
                 ", start=" + start +
                 ", end=" + end +
-                ", course=" + course +
                 ", owner=" + owner +
                 ", timeInvest=" + timeInvest +
                 '}';
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
     }
 }

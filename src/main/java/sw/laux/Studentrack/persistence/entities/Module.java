@@ -17,6 +17,8 @@ public class Module extends SingleIdEntity<Long>{
     private Lecturer responsibleLecturer;
     @OneToMany(mappedBy="module")
     private Collection<Grade> resultGrades;
+    @ElementCollection
+    public Collection<Course> availableCourses;
 
     @Override
     public String toString() {
@@ -49,9 +51,6 @@ public class Module extends SingleIdEntity<Long>{
     public void setAvailableCourses(Collection<Course> availableCourses) {
         this.availableCourses = availableCourses;
     }
-
-    @OneToMany(mappedBy="module")
-    private Collection<Course> availableCourses;
 
     public Module(String name, int ects, int creditHours, String description, Lecturer responsibleLecturer, Collection<Grade> resultGrades, Collection<Course> availableCourses) {
         this.name = name;

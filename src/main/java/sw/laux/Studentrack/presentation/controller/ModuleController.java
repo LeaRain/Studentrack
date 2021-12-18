@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sw.laux.Studentrack.application.exceptions.CourseNotFoundException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
-import sw.laux.Studentrack.application.services.interfaces.ICourseService;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.Course;
@@ -23,7 +21,7 @@ import java.security.Principal;
 import java.util.Date;
 
 @Controller
-public class CourseController {
+public class ModuleController {
     @Autowired
     private IUserServiceInternal userService;
 
@@ -31,13 +29,10 @@ public class CourseController {
     private IModuleService moduleService;
 
     @Autowired
-    private ICourseService courseService;
-
-    @Autowired
     private Logger logger;
 
-    @GetMapping("courses")
-    public String courses(Model model, Principal principal,
+    @GetMapping("modules")
+    public String modules(Model model, Principal principal,
                           @ModelAttribute("successMessage") String successMessage,
                           @ModelAttribute("errorMessage") String errorMessage) {
 
@@ -48,9 +43,8 @@ public class CourseController {
 
         if (user instanceof Lecturer) {
             // Harmless case, because instance is checked.
-            var courses = moduleService.getAllCoursesByLecturer((Lecturer) user);
-            model.addAttribute("courses", courses);
-            model.addAttribute("modules", ((Lecturer) user).getModules());
+            var modules = moduleService.getAllModulesByLecturer((Lecturer) user);
+            model.addAttribute("modules", modules);
         }
 
         model.addAttribute("faculty", user.getFaculty());
@@ -59,106 +53,9 @@ public class CourseController {
         var moduleShell = new Module();
         model.addAttribute("moduleShell", moduleShell);
 
-        return "courses";
+        return "modules";
     }
 
-    @GetMapping("courses/new")
-    public String newCourse(Model model, Principal principal) {
-        var course = new Course();
-        course.setStartDate(new Date());
-        course.setEndDate(new Date());
-        model.addAttribute("course", course);
-
-        var user = (User) userService.loadUserByUsername(principal.getName());
-
-        if (user instanceof Lecturer) {
-            var modules = ((Lecturer) user).getModules();
-            model.addAttribute("modules", modules);
-        }
-
-        return "newcourse";
-    }
-
-    @PostMapping("courses/new/check")
-    public String doNewCourse(Model model,
-                              @ModelAttribute("course") Course course,
-                              RedirectAttributes redirectAttributes) {
-
-        try {
-            courseService.saveCourse(course);
-            var successMessage = "Successfully saved course for module " + course.getModule();
-            redirectAttributes.addFlashAttribute("successMessage", successMessage);
-            logger.info(successMessage);
-        }
-
-        catch (Exception exception) {
-            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
-            logger.info(exception.getMessage());
-        }
-
-        return "redirect:/courses";
-    }
-
-    @PostMapping("courses/edit")
-    public String doEditCourse(Model model,
-                                    @ModelAttribute("courseShell") Course course,
-                                    RedirectAttributes redirectAttributes) {
-
-        try {
-            courseService.findCourse(course);
-
-        } catch (CourseNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
-            return "redirect:/courses";
-        }
-
-        return "redirect:/courses/edit/" + course.getCourseId();
-    }
-
-    @GetMapping("courses/edit/{courseId}")
-    public String doEditCourse(Model model,
-                               @PathVariable long courseId,
-                               RedirectAttributes redirectAttributes) {
-        Course course;
-
-        try {
-            course = courseService.findCourse(courseId);
-        }
-        catch (CourseNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
-            return "redirect:/courses";
-        }
-
-        model.addAttribute(course);
-
-        return "editcourse";
-    }
-
-
-    @PostMapping("courses/edit/check")
-    public String doEditCourseCheck(Model model,
-                               @ModelAttribute("course") Course course,
-                               RedirectAttributes redirectAttributes) {
-
-        try {
-            courseService.updateCourse(course);
-        } catch (CourseNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
-            return "redirect:/courses";
-        }
-
-        var successMessage = "Course " + course + " successfully updated!";
-        redirectAttributes.addFlashAttribute("successMessage", successMessage);
-        logger.info(successMessage);
-
-        return "redirect:/courses";
-    }
-
-
-    // TODO: FIX PERSISTENCE BUG
     @GetMapping("modules/new")
     public String newModule(Model model) {
         var module = new Module();
@@ -190,7 +87,7 @@ public class CourseController {
             logger.info(exception.getMessage());
         }
 
-        return "redirect:/courses";
+        return "redirect:/modules";
     }
 
     @PostMapping("modules/edit")
@@ -206,7 +103,7 @@ public class CourseController {
         } catch (ModuleNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
-            return "redirect:/courses";
+            return "redirect:/modules";
         }
 
         return "redirect:/modules/edit/" + module.getModuleId();
@@ -224,7 +121,7 @@ public class CourseController {
         catch (ModuleNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
-            return "redirect:/courses";
+            return "redirect:/modules";
         }
 
         model.addAttribute(module);
@@ -246,14 +143,14 @@ public class CourseController {
         } catch (ModuleNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
-            return "redirect:/courses";
+            return "redirect:/modules";
         }
 
         var successMessage = "Module " + module + " successfully updated!";
         redirectAttributes.addFlashAttribute("successMessage", successMessage);
         logger.info(successMessage);
 
-        return "redirect:/courses";
+        return "redirect:/modules";
     }
 
 }

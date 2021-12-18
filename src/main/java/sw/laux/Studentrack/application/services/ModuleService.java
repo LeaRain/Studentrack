@@ -21,8 +21,6 @@ public class ModuleService implements IModuleService {
     private MajorRepository majorRepo;
     @Autowired
     private FacultyRepository facultyRepo;
-    @Autowired
-    private CourseRepository courseRepository;
 
     public Collection<Major> getAllMajors() {
         return (Collection<Major>) majorRepo.findAll();
@@ -30,11 +28,6 @@ public class ModuleService implements IModuleService {
 
     public Collection<Faculty> getAllFaculties() {
         return (Collection<Faculty>) facultyRepo.findAll();
-    }
-
-    @Override
-    public Iterable<Course> getAllCoursesByLecturer(Lecturer lecturer) {
-        return courseRepository.findByModulesResponsibleLecturer(lecturer);
     }
 
     @Override
@@ -61,6 +54,17 @@ public class ModuleService implements IModuleService {
         }
 
         return moduleOptional.get();
+    }
+
+    @Override
+    public Course saveCourse(Course course) throws ModuleNotFoundException {
+        //var module = findModule(course.getModule());
+        return null;
+    }
+
+    @Override
+    public Course findCourse(Course course) {
+        return null;
     }
 
     @Override

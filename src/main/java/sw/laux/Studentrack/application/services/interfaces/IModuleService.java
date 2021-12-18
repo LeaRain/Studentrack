@@ -10,12 +10,13 @@ import java.util.Collection;
 public interface IModuleService {
     Collection<Major> getAllMajors();
     Collection<Faculty> getAllFaculties();
-    Iterable<Course> getAllCoursesByLecturer(Lecturer lecturer);
+    Iterable<Module> getAllModulesByLecturer(Lecturer lecturer);
     Module saveModule(Module module);
     @Transactional
     Module updateModule(Module module) throws ModuleNotFoundException;
     Module findModule(Module module) throws ModuleNotFoundException;
     Module findModule(long moduleId) throws ModuleNotFoundException;
-    Iterable<Module> getAllModulesByLecturer(Lecturer lecturer);
+    Course saveCourse(Course course) throws ModuleNotFoundException;
+    Course findCourse(Course course);
 
 }
