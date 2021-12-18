@@ -14,6 +14,16 @@ public class Student extends User {
     private Collection<TimeOrder> timeOrders;
     @ManyToOne
     private Major major;
+    @ManyToMany
+    private Collection<Module> modules;
+
+    public Collection<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(Collection<Module> modules) {
+        this.modules = modules;
+    }
 
     public Student(String firstName, String lastName, String password, String mailAddress, Date membershipStart, int ects, boolean isPremiumUser, Faculty faculty, Major major) {
         super(firstName, lastName, password, mailAddress, membershipStart, faculty);

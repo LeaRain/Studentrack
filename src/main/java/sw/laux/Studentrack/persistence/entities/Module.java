@@ -8,7 +8,7 @@ public class Module extends SingleIdEntity<Long>{
     @Id
     @GeneratedValue
     private long moduleId;
-    @Column(unique = true)
+    @Column(unique=true)
     private String name;
     private int ects;
     private int creditHours;
@@ -17,8 +17,10 @@ public class Module extends SingleIdEntity<Long>{
     private Lecturer responsibleLecturer;
     @OneToMany(mappedBy="module")
     private Collection<Grade> resultGrades;
+    @ManyToMany(mappedBy="modules")
+    private Collection<Student> students;
     @ElementCollection
-    public Collection<Course> availableCourses;
+    private Collection<Course> availableCourses;
 
     @Override
     public String toString() {
@@ -111,4 +113,11 @@ public class Module extends SingleIdEntity<Long>{
         this.description = description;
     }
 
+    public Collection<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Collection<Student> students) {
+        this.students = students;
+    }
 }

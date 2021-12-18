@@ -8,7 +8,9 @@ import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ModuleService implements IModuleService {
@@ -53,6 +55,27 @@ public class ModuleService implements IModuleService {
         }
 
         return moduleOptional.get();
+    }
+
+    @Override
+    public Iterable<Module> getAllModules() {
+        return moduleRepo.findAll();
+    }
+
+    @Override
+    public Iterable<Module> getNonTakenModulesByStudent(Student student) {
+        var modules = getAllModules();
+        var studentModules = student.getModules();
+
+        var resultModules = new ArrayList<Module>();
+
+        for (Module module : modules) {
+            if (!studentModules.contains(module)) {
+                resultModules.add(module);
+            }
+        }
+
+        return resultModules;
     }
 
     @Override

@@ -12,13 +12,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
-import sw.laux.Studentrack.persistence.entities.Course;
-import sw.laux.Studentrack.persistence.entities.Lecturer;
-import sw.laux.Studentrack.persistence.entities.User;
+import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class ModuleController {
@@ -41,6 +42,13 @@ public class ModuleController {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
+        if (user instanceof Student) {
+            var major = ((Student) user).getMajor();
+            model.addAttribute("major", major);
+            var modules = ((Student) user).getModules();
+            model.addAttribute("modules", modules);
+        }
+
         if (user instanceof Lecturer) {
             // Harmless case, because instance is checked.
             var modules = moduleService.getAllModulesByLecturer((Lecturer) user);
@@ -48,16 +56,23 @@ public class ModuleController {
         }
 
         model.addAttribute("faculty", user.getFaculty());
-        var courseShell = new Course();
-        model.addAttribute("courseShell", courseShell);
-        var moduleShell = new Module();
-        model.addAttribute("moduleShell", moduleShell);
 
         return "modules";
     }
 
     @GetMapping("modules/new")
-    public String newModule(Model model) {
+    public String newModule(Model model,
+                            Principal principal) {
+
+        var user = (User) userService.loadUserByUsername(principal.getName());
+
+        if (user instanceof Student) {
+            var modules = moduleService.getNonTakenModulesByStudent((Student) user);
+
+            model.addAttribute("modules", modules);
+            model.addAttribute("faculty", user.getFaculty());
+        }
+
         var module = new Module();
         model.addAttribute("module", module);
         return "newmodule";
@@ -94,8 +109,6 @@ public class ModuleController {
     public String doEditModule(Model model,
                                @ModelAttribute("moduleShell") Module module,
                                RedirectAttributes redirectAttributes) {
-
-        System.out.println(module);
 
         try {
             moduleService.findModule(module);

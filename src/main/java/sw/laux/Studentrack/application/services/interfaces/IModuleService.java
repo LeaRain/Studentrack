@@ -16,5 +16,7 @@ public interface IModuleService {
     Module updateModule(Module module) throws ModuleNotFoundException;
     Module findModule(Module module) throws ModuleNotFoundException;
     Module findModule(long moduleId) throws ModuleNotFoundException;
+    Iterable<Module> getAllModules();
+    Iterable<Module> getNonTakenModulesByStudent(Student student);
 
 }

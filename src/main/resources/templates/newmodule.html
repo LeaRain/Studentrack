@@ -3,11 +3,10 @@
 
 <head th:replace="common/header :: header(title='New Module')"/>
 
-<script type="text/javascript" src="/js/moduleValidation.js"></script>
-
-<body class style onload="validateModule()">
+<body class style>
 <div th:replace="common/navigation :: navigation"/>
 
+<div sec:authorize="hasAuthority('Student')" th:replace="student/newmodule :: newmodule"></div>
 
 <div sec:authorize="hasAuthority('Lecturer')" th:replace="lecturer/newmodule :: newmodule"></div>
 

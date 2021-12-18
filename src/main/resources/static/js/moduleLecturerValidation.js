@@ -1,4 +1,8 @@
-function validateModule() {
+document.addEventListener("DOMContentLoaded", function(){
+    validateLecturerModule();
+});
+
+function validateLecturerModule() {
     registerEventListener();
     checkForCorrectNumericValues();
 }

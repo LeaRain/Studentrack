@@ -1,0 +1,69 @@
+<div th:fragment="newmodule">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <h1>Join a new Module</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <form method="post" th:action="@{/modules/new/check}" th:object="${modules}">
+                    <fieldset>
+                        <div class="form-group" id="formGroupModule">
+                            <label for="formGroupModule" class="form-label mt-4">Module</label>
+                            <select class="form-select" id="selectModule" th:field="${module}">
+                                <option th:each="module : ${modules}" th:text="${module.name}" th:value="${module.moduleId}"></option>
+                            </select>
+                        </div>
+                    </fieldset>
+                    <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButtonCourse">Add!</button>
+                </form>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="bs-component" th:each="module : ${modules}">
+                    <legend th:text="${module.name}" th:value="${module.moduleId}" class="module-legend"></legend>
+                    <table class="table table-hover module-table" th:value="${module.moduleId}">
+                        <thead>
+                        <tr>
+                            <th scope="col">Field</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="table-primary">
+                            <th scope="row">ECTS</th>
+                            <th scope="row" th:text="${module.ects}"></th>
+                        </tr>
+                        <tr class="table-info">
+                            <th scope="row">Credit Hours</th>
+                            <th scope="row" th:text="${module.creditHours}"></th>
+                        </tr>
+                        <tr class="table-primary">
+                            <th scope="row">Description</th>
+                            <th scope="row" th:text="${module.description}"></th>
+                        </tr>
+                        <tr class="table-info">
+                            <th scope="row">Lecturer</th>
+                            <th scope="row" th:text="${module.responsibleLecturer.firstName + ' ' + module.responsibleLecturer.lastName}"></th>
+                        </tr>
+                        <tr class="table-primary">
+                            <th scope="row">Lecturer Contact</th>
+                            <th scope="row" th:text="${module.responsibleLecturer.mailAddress}"></th>
+                        </tr>
+                        <tr class="table-info">
+                            <th scope="row">Faculty</th>
+                            <th scope="row" th:text="${module.responsibleLecturer.faculty}"></th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript" src="/js/moduleStudentValidation.js">validateStudentModule()</script>
+</div>
