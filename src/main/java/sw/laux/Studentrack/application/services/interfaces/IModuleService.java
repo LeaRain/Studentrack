@@ -16,7 +16,5 @@ public interface IModuleService {
     Module updateModule(Module module) throws ModuleNotFoundException;
     Module findModule(Module module) throws ModuleNotFoundException;
     Module findModule(long moduleId) throws ModuleNotFoundException;
-    Course saveCourse(Course course) throws ModuleNotFoundException;
-    Course findCourse(Course course);
 
 }

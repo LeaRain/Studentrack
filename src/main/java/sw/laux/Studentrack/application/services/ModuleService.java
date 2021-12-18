@@ -2,7 +2,6 @@ package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sw.laux.Studentrack.application.exceptions.CourseNotFoundException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.persistence.entities.*;
@@ -54,17 +53,6 @@ public class ModuleService implements IModuleService {
         }
 
         return moduleOptional.get();
-    }
-
-    @Override
-    public Course saveCourse(Course course) throws ModuleNotFoundException {
-        //var module = findModule(course.getModule());
-        return null;
-    }
-
-    @Override
-    public Course findCourse(Course course) {
-        return null;
     }
 
     @Override
