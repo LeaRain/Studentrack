@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
@@ -16,10 +17,6 @@ import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Controller
 public class ModuleController {
@@ -50,12 +47,19 @@ public class ModuleController {
         }
 
         if (user instanceof Lecturer) {
-            // Harmless case, because instance is checked.
-            var modules = moduleService.getAllModulesByLecturer((Lecturer) user);
+            Iterable<Module> modules = null;
+            try {
+                // Harmless case, because instance is checked.
+                modules = moduleService.getAllModulesByLecturer((Lecturer) user);
+            } catch (ModuleNotFoundException e) {
+                logger.info(e.getMessage());
+            }
             model.addAttribute("modules", modules);
         }
 
         model.addAttribute("faculty", user.getFaculty());
+        var moduleShell = new Module();
+        model.addAttribute("moduleShell", moduleShell);
 
         return "modules";
     }
@@ -74,37 +78,51 @@ public class ModuleController {
         }
 
         var module = new Module();
-        model.addAttribute("module", module);
+        model.addAttribute("moduleShell", module);
         return "newmodule";
     }
 
+    // TODO: student version
     @PostMapping("modules/new/check")
     public String doNewModule(Model model,
                               Principal principal,
-                              @ModelAttribute("module") Module module,
+                              @ModelAttribute("moduleShell") Module moduleShell,
                               RedirectAttributes redirectAttributes) {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
         if (user instanceof Lecturer) {
-            module.setResponsibleLecturer((Lecturer) user);
+            moduleShell.setResponsibleLecturer((Lecturer) user);
+            try {
+                moduleService.saveNewModule(moduleShell);
+                var successMessage = "Successfully saved module " + moduleShell;
+                redirectAttributes.addFlashAttribute("successMessage", successMessage);
+                logger.info(successMessage);
+            }
+
+            catch (ModuleAlreadyExistsException exception) {
+                redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+                logger.info(exception.getMessage());
+            }
         }
 
-        try {
-            moduleService.saveModule(module);
-            var successMessage = "Successfully saved module " + module;
-            redirectAttributes.addFlashAttribute("successMessage", successMessage);
-            logger.info(successMessage);
-        }
+        if (user instanceof Student) {
+            try {
+                var module = moduleService.enrollInModule((Student) user, moduleShell);
+                var successMessage = "Successfully enrolled " + user + " in module " + module;
+                redirectAttributes.addFlashAttribute("successMessage", successMessage);
+                logger.info(successMessage);
 
-        catch (Exception exception) {
-            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
-            logger.info(exception.getMessage());
+            } catch (ModuleAlreadyExistsException exception) {
+                redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+                logger.info(exception.getMessage());
+            }
         }
 
         return "redirect:/modules";
     }
 
+    // todo: student version / DELETE FOR student
     @PostMapping("modules/edit")
     public String doEditModule(Model model,
                                @ModelAttribute("moduleShell") Module module,
@@ -122,6 +140,7 @@ public class ModuleController {
         return "redirect:/modules/edit/" + module.getModuleId();
     }
 
+    // todo: student version
     @GetMapping("modules/edit/{moduleId}")
     public String doEditModule(Model model,
                                @PathVariable long moduleId,
@@ -143,6 +162,7 @@ public class ModuleController {
     }
 
 
+    // todo: student version
     @PostMapping("modules/edit/check")
     public String doEditModuleCheck(Model model,
                                     @ModelAttribute("module") Module module,

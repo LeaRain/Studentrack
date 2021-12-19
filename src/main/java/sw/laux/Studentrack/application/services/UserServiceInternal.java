@@ -64,6 +64,11 @@ public class UserServiceInternal implements IUserServiceInternal {
     }
 
     @Override
+    public User updateUser(User user) {
+        return userRepo.save(user);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         var user = userRepo.findByMailAddress(s);
 

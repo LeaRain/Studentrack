@@ -2,15 +2,16 @@ package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
+import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class ModuleService implements IModuleService {
@@ -22,6 +23,8 @@ public class ModuleService implements IModuleService {
     private MajorRepository majorRepo;
     @Autowired
     private FacultyRepository facultyRepo;
+    @Autowired
+    private IUserServiceInternal userService;
 
     public Collection<Major> getAllMajors() {
         return (Collection<Major>) majorRepo.findAll();
@@ -34,6 +37,11 @@ public class ModuleService implements IModuleService {
     @Override
     public Module saveModule(Module module) {
         return moduleRepo.save(module);
+    }
+
+    @Override
+    public Module saveNewModule(Module module) throws ModuleAlreadyExistsException {
+        return null;
     }
 
     @Override
@@ -79,8 +87,31 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
-    public Iterable<Module> getAllModulesByLecturer(Lecturer lecturer) {
-        return moduleRepo.findByResponsibleLecturer(lecturer);
+    public Module enrollInModule(Student student, Module module) throws ModuleAlreadyExistsException {
+        try {
+            module = findModule(module);
+        } catch (ModuleNotFoundException ignored) {
+        }
+
+        if (student.getModules().contains(module)) {
+            throw new ModuleAlreadyExistsException("Student " + student + " is already enrolled in Module " + module);
+        }
+
+        var studentModules = student.getModules();
+        studentModules.add(module);
+        module.addStudent(student);
+        moduleRepo.save(module);
+        userService.updateUser(student);
+        return module;
+    }
+
+    @Override
+    public Iterable<Module> getAllModulesByLecturer(Lecturer lecturer) throws ModuleNotFoundException {
+        var modules = moduleRepo.findByResponsibleLecturer(lecturer);
+        if (modules.isEmpty()) {
+            throw new ModuleNotFoundException("Modules for lecturer " + lecturer + "not found!");
+        }
+        return modules.get();
     }
 
 

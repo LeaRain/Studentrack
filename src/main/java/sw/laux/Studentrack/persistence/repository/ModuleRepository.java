@@ -10,8 +10,9 @@ import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.entities.Student;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface ModuleRepository extends CrudRepository<Module, Long> {
-    Iterable<Module> findByResponsibleLecturer(Lecturer responsibleLecturer);
+    Optional<Iterable<Module>> findByResponsibleLecturer(Lecturer responsibleLecturer);
 }

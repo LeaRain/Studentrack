@@ -1,7 +1,10 @@
 package sw.laux.Studentrack.persistence.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 public class Module extends SingleIdEntity<Long>{
@@ -18,7 +21,7 @@ public class Module extends SingleIdEntity<Long>{
     @OneToMany(mappedBy="module")
     private Collection<Grade> resultGrades;
     @ManyToMany(mappedBy="modules")
-    private Collection<Student> students;
+    private Collection<Student> students = new ArrayList<Student>();
     @ElementCollection
     private Collection<Course> availableCourses;
 
@@ -114,10 +117,21 @@ public class Module extends SingleIdEntity<Long>{
     }
 
     public Collection<Student> getStudents() {
-        return students;
+        return Collections.unmodifiableCollection(students);
     }
 
     public void setStudents(Collection<Student> students) {
         this.students = students;
+    }
+
+    public void addStudent(Student student) {
+        if (!students.contains(student)) {
+            students.add(student);
+        }
+    }
+
+    public void removeStudent(Student student) {
+        // If student is not in the collection, the remove method will return false and will not produce an exception.
+        students.remove(student);
     }
 }

@@ -14,7 +14,7 @@
                     <fieldset>
                         <div class="form-group" id="formGroupModule">
                             <label for="formGroupModule" class="form-label mt-4">Module</label>
-                            <select class="form-select" id="selectModule" th:field="${module}">
+                            <select class="form-select" id="selectModule" th:field="${moduleShell.moduleId}">
                                 <option th:each="module : ${modules}" th:text="${module.name}" th:value="${module.moduleId}"></option>
                             </select>
                         </div>

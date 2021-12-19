@@ -27,7 +27,7 @@
                                 <th scope="row" th:text="${module.name}"/>
                                 <td th:text="${module.ects}"/>
                                 <td th:text="${module.creditHours}"/>
-                                <td th:text="${module.responsibleLecturer.firstName + ' ' + module.responsileLecturer.lastName}"/>
+                                <td th:text="${module.responsibleLecturer.firstName + ' ' + module.responsibleLecturer.lastName}"/>
                                 <td th:text="${module.responsibleLecturer.mailAddress}"/>
                             </tr>
                             </tbody>
@@ -41,8 +41,35 @@
                             <button class="btn btn-lg btn-primary col-12" type="submit">New Module</button>
                         </form>
                     </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn btn-lg btn-info col-12" type="button" data-toggle="modal" id="buttonWithdrawModule">Withdraw from Module</button>
+                    </div>
+
+                    <div class="modal" id="modalWithdrawModule">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Choose Module</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" th:action="@{/modules/delete}" th:object="${modules}">
+                                        <div class="form-group" id="formGroupModule">
+                                            <label for="selectModule" class="form-label mt-4">Module</label>
+                                            <select class="form-select" id="selectModule" th:field="${moduleShell.moduleId}">
+                                                <option th:each="module : ${modules}" th:text="${module}" th:value="${module.moduleId}"></option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-4" data-dismiss="modal" id="buttonCloseWithdrawModuleModal">Close</button>
+                                        <button type="submit" class="btn btn-info mt-4">Withdraw from Module</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="js/configureModalDialogs.js">configureModalDialogs("Withdraw")</script>
 </div>
