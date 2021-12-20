@@ -2,6 +2,7 @@ package sw.laux.Studentrack.application.services.interfaces;
 
 import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
+import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
@@ -21,6 +22,8 @@ public interface IModuleService {
     Iterable<Module> getAllModules();
     Iterable<Module> getNonTakenModulesByStudent(Student student);
     @Transactional
-    Module enrollInModule(Student student, Module module) throws ModuleAlreadyExistsException;
+    Module enrollInModule(Student student, Module module) throws ModuleAlreadyExistsException, UserNotFoundException;
+    @Transactional
+    Module withdrawFromModule(Student student, Module module) throws ModuleNotFoundException;
 
 }

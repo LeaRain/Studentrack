@@ -7,8 +7,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.UserAlreadyRegisteredException;
+import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.Grade;
+import sw.laux.Studentrack.persistence.entities.Student;
 import sw.laux.Studentrack.persistence.entities.TimeInvest;
 import sw.laux.Studentrack.persistence.entities.User;
 import sw.laux.Studentrack.persistence.repository.UserRepository;
@@ -66,6 +68,22 @@ public class UserServiceInternal implements IUserServiceInternal {
     @Override
     public User updateUser(User user) {
         return userRepo.save(user);
+    }
+
+    @Override
+    public Student findStudent(Student student) throws UserNotFoundException {
+        return findStudent(student.getUserId());
+    }
+
+    @Override
+    public Student findStudent(Long userId) throws UserNotFoundException {
+        var userOptional = userRepo.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("User with id " + userId + " not found!");
+        }
+
+        return (Student) userOptional.get();
+
     }
 
     @Override

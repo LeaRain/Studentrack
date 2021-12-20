@@ -53,7 +53,7 @@
                                     <h5 class="modal-title">Choose Module</h5>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="post" th:action="@{/modules/delete}" th:object="${modules}">
+                                    <form method="post" th:action="@{/modules/withdraw}" th:object="${modules}">
                                         <div class="form-group" id="formGroupModule">
                                             <label for="selectModule" class="form-label mt-4">Module</label>
                                             <select class="form-select" id="selectModule" th:field="${moduleShell.moduleId}">

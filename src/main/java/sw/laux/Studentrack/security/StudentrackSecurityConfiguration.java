@@ -47,9 +47,16 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
             "/css/**", "/image/**", "/fonts/**", "/js/**", "/", "/login", "/registration", "/registration/check"
     };
 
+    private static final String[] ALLOW_ACCESS_FOR_LECTURERS = {"/modules/edit/", "/modules/edit/*"};
+    private static final String[] ALLOW_ACCESS_FOR_STUDENTS = {};
+    private static final String[] ALLOW_ACCESS_FOR_ALL = {"/home", "/modules", "/modules/new**"};
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers(ALLOW_ACCESS_FOR_STUDENTS).hasAuthority("Student")
+                .antMatchers(ALLOW_ACCESS_FOR_LECTURERS).hasAuthority("Lecturer")
+                .antMatchers(ALLOW_ACCESS_FOR_ALL).hasAnyAuthority("Student", "Lecturer")
                 .antMatchers(ALLOW_ACCESS_WITHOUT_AUTHENTICATION)
                 .permitAll().anyRequest().authenticated();
         http

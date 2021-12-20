@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
+import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
@@ -82,7 +83,6 @@ public class ModuleController {
         return "newmodule";
     }
 
-    // TODO: student version
     @PostMapping("modules/new/check")
     public String doNewModule(Model model,
                               Principal principal,
@@ -113,7 +113,7 @@ public class ModuleController {
                 redirectAttributes.addFlashAttribute("successMessage", successMessage);
                 logger.info(successMessage);
 
-            } catch (ModuleAlreadyExistsException exception) {
+            } catch (ModuleAlreadyExistsException | UserNotFoundException exception) {
                 redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
                 logger.info(exception.getMessage());
             }
@@ -122,7 +122,6 @@ public class ModuleController {
         return "redirect:/modules";
     }
 
-    // todo: student version / DELETE FOR student
     @PostMapping("modules/edit")
     public String doEditModule(Model model,
                                @ModelAttribute("moduleShell") Module module,
@@ -140,7 +139,6 @@ public class ModuleController {
         return "redirect:/modules/edit/" + module.getModuleId();
     }
 
-    // todo: student version
     @GetMapping("modules/edit/{moduleId}")
     public String doEditModule(Model model,
                                @PathVariable long moduleId,
@@ -161,14 +159,10 @@ public class ModuleController {
         return "editmodule";
     }
 
-
-    // todo: student version
     @PostMapping("modules/edit/check")
     public String doEditModuleCheck(Model model,
                                     @ModelAttribute("module") Module module,
                                     RedirectAttributes redirectAttributes) {
-
-        System.out.println(module);
 
         try {
             moduleService.updateModule(module);
@@ -182,6 +176,29 @@ public class ModuleController {
         var successMessage = "Module " + module + " successfully updated!";
         redirectAttributes.addFlashAttribute("successMessage", successMessage);
         logger.info(successMessage);
+
+        return "redirect:/modules";
+    }
+
+    @PostMapping("modules/withdraw")
+    public String doWithdrawModule(Model model,
+                               Principal principal,
+                               @ModelAttribute("moduleShell") Module module,
+                               RedirectAttributes redirectAttributes) {
+
+        var user = (User) userService.loadUserByUsername(principal.getName());
+
+        try {
+            // Cast possible due to check for authorities with Spring Security and access only for Students
+            module = moduleService.withdrawFromModule((Student) user, module);
+            var successMessage = "Successfully withdrawn from module " + module;
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+        } catch (ModuleNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.info(e.getMessage());
+            return "redirect:/modules";
+        }
 
         return "redirect:/modules";
     }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
+import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
@@ -87,11 +88,13 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
-    public Module enrollInModule(Student student, Module module) throws ModuleAlreadyExistsException {
+    public Module enrollInModule(Student student, Module module) throws ModuleAlreadyExistsException, UserNotFoundException {
         try {
             module = findModule(module);
         } catch (ModuleNotFoundException ignored) {
         }
+
+        student = userService.findStudent(student);
 
         if (student.getModules().contains(module)) {
             throw new ModuleAlreadyExistsException("Student " + student + " is already enrolled in Module " + module);
@@ -101,6 +104,19 @@ public class ModuleService implements IModuleService {
         studentModules.add(module);
         module.addStudent(student);
         moduleRepo.save(module);
+        userService.updateUser(student);
+        return module;
+    }
+
+    @Override
+    public Module withdrawFromModule(Student student, Module module) throws ModuleNotFoundException {
+        module = findModule(module);
+        var studentModules = student.getModules();
+        var removeSuccess = studentModules.remove(module);
+        if (!removeSuccess) {
+            throw new ModuleNotFoundException("Student cannot be withdrawn from module " + module + ", because the module cannot be found.");
+        }
+        module.removeStudent(student);
         userService.updateUser(student);
         return module;
     }
