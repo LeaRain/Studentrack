@@ -47,8 +47,6 @@ public class Lecturer extends User {
 
     @Override
     public String toString() {
-        return "Lecturer{" +
-                "title='" + title + '\'' +
-                '}';
+        return title + " " + getFirstName() + " " + getLastName();
     }
 }

@@ -19,11 +19,7 @@ public class Major {
 
     @Override
     public String toString() {
-        return "Major{" +
-                "majorId=" + majorId +
-                ", majorName='" + majorName + '\'' +
-                ", academicTitle='" + academicTitle + '\'' +
-                '}';
+        return majorName + " (" + academicTitle + ")";
     }
 
     public Major() {

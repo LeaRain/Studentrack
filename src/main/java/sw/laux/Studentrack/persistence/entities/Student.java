@@ -84,12 +84,6 @@ public class Student extends User {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "ects=" + ects +
-                ", isPremiumUser=" + isPremiumUser +
-                ", grades=" + grades +
-                ", timeOrders=" + timeOrders +
-                ", major=" + major +
-                '}';
+        return getFirstName() + " " + getLastName();
     }
 }

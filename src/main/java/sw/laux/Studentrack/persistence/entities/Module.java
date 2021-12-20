@@ -27,10 +27,7 @@ public class Module extends SingleIdEntity<Long>{
 
     @Override
     public String toString() {
-        return "Module{" +
-                "moduleId=" + moduleId +
-                ", name='" + name + '\'' +
-                '}';
+        return name;
     }
 
     public Lecturer getResponsibleLecturer() {

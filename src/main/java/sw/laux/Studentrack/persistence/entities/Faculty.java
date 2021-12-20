@@ -26,10 +26,7 @@ public class Faculty extends SingleIdEntity<Long>{
 
     @Override
     public String toString() {
-        return "Faculty{" +
-                "facultyId=" + facultyId +
-                ", name='" + name + '\'' +
-                '}';
+        return name;
     }
 
     public Lecturer getDean() {
