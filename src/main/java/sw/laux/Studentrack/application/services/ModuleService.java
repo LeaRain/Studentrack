@@ -110,8 +110,6 @@ public class ModuleService implements IModuleService {
 
         var studentModules = student.getModules();
         studentModules.add(module);
-        module.addStudent(student);
-        moduleRepo.save(module);
         userService.updateUser(student);
         return module;
     }
@@ -124,7 +122,6 @@ public class ModuleService implements IModuleService {
         if (!removeSuccess) {
             throw new ModuleNotFoundException("Student cannot be withdrawn from module " + module + ", because the module cannot be found.");
         }
-        module.removeStudent(student);
         userService.updateUser(student);
         return module;
     }

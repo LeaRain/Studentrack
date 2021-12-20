@@ -14,7 +14,7 @@ public class Student extends User {
     private Collection<TimeOrder> timeOrders;
     @ManyToOne
     private Major major;
-    @ManyToMany
+    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.DETACH})
     private Collection<Module> modules;
 
     public Collection<Module> getModules() {
