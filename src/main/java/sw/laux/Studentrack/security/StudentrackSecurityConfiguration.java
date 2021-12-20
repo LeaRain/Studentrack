@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.ServletException;
@@ -62,26 +63,25 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
         http
                 .formLogin()
                 .loginPage("/login").permitAll()
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                        var userDetails = (UserDetails) authentication.getPrincipal();
-                        logger.info("User with mail address " + userDetails.getUsername() + " logged in.");
-                        httpServletResponse.sendRedirect("home");
-                    }
+                .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                    var userDetails = (UserDetails) authentication.getPrincipal();
+                    logger.info("User with mail address " + userDetails.getUsername() + " logged in.");
+                    httpServletResponse.sendRedirect("home");
                 })
-                .failureHandler(new AuthenticationFailureHandler() {
-                    @Override
-                    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                        var username = httpServletRequest.getParameter("username");
-                        logger.info("Failed login try for " + username);
-                        httpServletResponse.sendRedirect("login-error");
-                    }
+                .failureHandler((httpServletRequest, httpServletResponse, e) -> {
+                    var username = httpServletRequest.getParameter("username");
+                    logger.info("Failed login try for " + username);
+                    httpServletResponse.sendRedirect("login-error");
                 })
                 .failureUrl("/login-error")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/?logout")
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                    var userDetails = (UserDetails) authentication.getPrincipal();
+                    logger.info("Logout for " + userDetails.getUsername());
+                    httpServletResponse.sendRedirect("/?logout");
+                })
                 .deleteCookies("remember-me", "JSESSIONID")
                 .permitAll()
                 .and()
