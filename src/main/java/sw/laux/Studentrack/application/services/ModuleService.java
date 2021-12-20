@@ -3,6 +3,7 @@ package sw.laux.Studentrack.application.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
+import sw.laux.Studentrack.application.exceptions.ModuleCannotBeDeletedException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
 import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
@@ -42,7 +43,14 @@ public class ModuleService implements IModuleService {
 
     @Override
     public Module saveNewModule(Module module) throws ModuleAlreadyExistsException {
-        return null;
+        try {
+            findModule(module);
+            throw new ModuleAlreadyExistsException("Module " + module + " already exists!");
+        } catch (ModuleNotFoundException ignored) {
+
+        }
+
+        return saveModule(module);
     }
 
     @Override
@@ -119,6 +127,15 @@ public class ModuleService implements IModuleService {
         module.removeStudent(student);
         userService.updateUser(student);
         return module;
+    }
+
+    @Override
+    public void deleteModule(Module module) throws ModuleNotFoundException, ModuleCannotBeDeletedException {
+        module = findModule(module);
+        if (!module.getStudents().isEmpty()) {
+            throw new ModuleCannotBeDeletedException("Module " + module + " cannot be deleted, because students are enrolled in the module.");
+        }
+        moduleRepo.delete(module);
     }
 
     @Override

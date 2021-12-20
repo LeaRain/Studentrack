@@ -44,8 +44,10 @@
                     <strong>Proceed with caution!</strong> You are entering the danger zone.
                 </div>
             </div>
-            <form>
+            <form method="post" th:action="@{/modules/delete}" th:object="${module}">
                 <fieldset class="form-group">
+                    <input type="hidden" th:field="*{moduleId}">
+                    <input type="hidden" th:field="*{name}">
                     <legend class="mt-4">Delete Module</legend>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="checkboxDelete">

@@ -4,12 +4,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
+import sw.laux.Studentrack.application.exceptions.ModuleCannotBeDeletedException;
 import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
 import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
@@ -154,7 +152,7 @@ public class ModuleController {
             return "redirect:/modules";
         }
 
-        model.addAttribute(module);
+        model.addAttribute("module", module);
 
         return "editmodule";
     }
@@ -192,6 +190,7 @@ public class ModuleController {
             // Cast possible due to check for authorities with Spring Security and access only for Students
             module = moduleService.withdrawFromModule((Student) user, module);
             var successMessage = "Successfully withdrawn from module " + module;
+            logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
         } catch (ModuleNotFoundException e) {
@@ -200,6 +199,24 @@ public class ModuleController {
             return "redirect:/modules";
         }
 
+        return "redirect:/modules";
+    }
+
+    @PostMapping("modules/delete")
+    public String doDeleteModule(Model model,
+                                 @ModelAttribute("module") Module module,
+                                 RedirectAttributes redirectAttributes) {
+
+        try {
+            moduleService.deleteModule(module);
+            var successMessage = "Successfully deleted module " + module;
+            logger.info(successMessage);
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+        } catch (ModuleNotFoundException | ModuleCannotBeDeletedException exception) {
+            logger.info(exception.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+        }
         return "redirect:/modules";
     }
 

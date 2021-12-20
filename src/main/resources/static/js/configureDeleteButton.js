@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", function() {
+    configureDeleteButton();
+})
+
 function configureDeleteButton() {
     setDeleteButtonEnabling();
     registerCheckboxEventListener();
