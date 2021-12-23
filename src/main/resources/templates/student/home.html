@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="bs-component" th:if="${timeOrder == null}">
-                        <form method="post" th:action="@{/timeorders/new}" th:object="${modules}">
+                        <form method="post" th:action="@{/timeorders/start}" th:object="${modules}">
                             <div class="form-group" id="formGroupModule">
                                 <label for="selectModule" class="form-label mt-4">Module</label>
                                 <select class="form-select" id="selectModule" th:field="${moduleShell.moduleId}">

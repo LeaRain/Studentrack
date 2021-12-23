@@ -1,0 +1,28 @@
+<div th:fragment="studenttimeorders">
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="bs-component">
+                <legend>Your Time order</legend>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Module</th>
+                        <th scope="col">Start</th>
+                        <th scope="col">End</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="timeorder, iStat: ${timeorders}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                        <th scope="row" th:text="${timeorder.module.name}"/>
+                        <td th:text="${timeorder.start}"/>
+                        <td th:text="${timeorder.end}"/>
+                        <td th:text="${timeorder.timeInvest}"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", function(){
+    configureSuccessErrorElements();
+});
+
 function configureSuccessErrorElements() {
     setMessageVisibility();
 }

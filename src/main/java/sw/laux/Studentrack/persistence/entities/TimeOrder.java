@@ -80,13 +80,9 @@ public class TimeOrder extends SingleIdEntity<Long>{
 
     @Override
     public String toString() {
-        return "TimeOrder{" +
-                "timeOrderId=" + timeOrderId +
-                ", start=" + start +
-                ", end=" + end +
-                ", owner=" + owner +
-                ", timeInvest=" + timeInvest +
-                '}';
+        return "TimeOrder:" +
+                " start: " + start +
+                " end: " + end;
     }
 
     public Module getModule() {

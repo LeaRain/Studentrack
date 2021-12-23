@@ -35,7 +35,7 @@ public class TimeController {
     private IUserServiceInternal userService;
 
 
-    @PostMapping("/timeorders/new")
+    @PostMapping("/timeorders/start")
     public String startNewTimeOrder(Model model,
                                     @ModelAttribute("moduleShell") Module module,
                                     Principal principal,

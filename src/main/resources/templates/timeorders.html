@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 
-<head th:replace="common/header :: header(title='Module Administration')"/>
+<head th:replace="common/header :: header(title='Time Order Administration')"/>
 
 <body class style>
 <div th:replace="common/navigation :: navigation"/>
@@ -14,13 +14,12 @@
     <div th:replace="common/statusmessage :: status(successMessage=${successMessage})"></div>
 </div>
 
-<div sec:authorize="hasAuthority('Student')" th:replace="student/modules :: studentmodules"></div>
+<div sec:authorize="hasAuthority('Student')" th:replace="student/timeorders :: studenttimeorders"></div>
 
-<div sec:authorize="hasAuthority('Lecturer')" th:replace="lecturer/modules :: lecturermodules"></div>
+<div sec:authorize="hasAuthority('Lecturer')" th:replace="lecturer/timeorders :: lecturertimeorders"></div>
 
 <div th:replace="common/footer :: footer"/>
 
-<script type="text/javascript" src="js/configureModalDialogs.js"></script>
 <script type="text/javascript" src="js/configureSuccessErrorElements.js"></script>
 </body>
 </html>
