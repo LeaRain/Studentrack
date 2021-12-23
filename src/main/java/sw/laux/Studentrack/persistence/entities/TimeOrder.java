@@ -2,16 +2,17 @@ package sw.laux.Studentrack.persistence.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 public class TimeOrder extends SingleIdEntity<Long>{
     @Id
     @GeneratedValue
     private long timeOrderId;
-    private Timestamp start;
+    private Date start;
     // Bypass reserved keyword "end"
     @Column(name="end_time")
-    private Timestamp end;
+    private Date end;
     @ManyToOne
     private Module module;
     @ManyToOne
@@ -55,19 +56,19 @@ public class TimeOrder extends SingleIdEntity<Long>{
 
     }
 
-    public Timestamp getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(Timestamp start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public Timestamp getEnd() {
+    public Date getEnd() {
         return end;
     }
 
-    public void setEnd(Timestamp end) {
+    public void setEnd(Date end) {
         this.end = end;
     }
 

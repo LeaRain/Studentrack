@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
+import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
+import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import org.slf4j.Logger;
@@ -22,6 +24,8 @@ public class StartController {
     private IUserServiceInternal userService;
     @Autowired
     private Logger logger;
+    @Autowired
+    private ITimeService timeService;
 
     @GetMapping("/")
     public String index(Model model,
@@ -106,6 +110,11 @@ public class StartController {
         if (user instanceof Student) {
             model.addAttribute("modules", ((Student) user).getModules());
             model.addAttribute("moduleShell", new Module());
+            try {
+                var timeOrder = timeService.findOpenTimeOrderForStudent((Student) user);
+                model.addAttribute("timeOrder", timeOrder);
+            } catch (StudentrackObjectNotFoundException ignored) {
+            }
         }
 
         model.addAttribute("user", user);
