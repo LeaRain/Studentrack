@@ -5,16 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sw.laux.Studentrack.application.exceptions.UserAlreadyRegisteredException;
-import sw.laux.Studentrack.application.services.ModuleService;
+import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
-import java.util.Objects;
 
 @Controller
 public class StartController {
@@ -85,7 +83,7 @@ public class StartController {
             logger.info(successMessage);
             return "redirect:/";
         }
-        catch (UserAlreadyRegisteredException exception) {
+        catch (StudentrackObjectAlreadyExistsException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.info("Attempt to register user " + user + "failed: " + exception.getMessage());
             return "redirect:/registration";
@@ -104,6 +102,12 @@ public class StartController {
     @GetMapping("home")
     public String home(Model model, Principal principal) {
         var user = (User) userService.loadUserByUsername(principal.getName());
+
+        if (user instanceof Student) {
+            model.addAttribute("modules", ((Student) user).getModules());
+            model.addAttribute("moduleShell", new Module());
+        }
+
         model.addAttribute("user", user);
         return "home";
     }

@@ -6,10 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
-import sw.laux.Studentrack.application.exceptions.ModuleCannotBeDeletedException;
-import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
-import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
+import sw.laux.Studentrack.application.exceptions.*;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
@@ -50,7 +47,7 @@ public class ModuleController {
             try {
                 // Harmless case, because instance is checked.
                 modules = moduleService.getAllModulesByLecturer((Lecturer) user);
-            } catch (ModuleNotFoundException e) {
+            } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
             model.addAttribute("modules", modules);
@@ -98,7 +95,7 @@ public class ModuleController {
                 logger.info(successMessage);
             }
 
-            catch (ModuleAlreadyExistsException exception) {
+            catch (StudentrackObjectAlreadyExistsException exception) {
                 redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
                 logger.info(exception.getMessage());
             }
@@ -111,7 +108,7 @@ public class ModuleController {
                 redirectAttributes.addFlashAttribute("successMessage", successMessage);
                 logger.info(successMessage);
 
-            } catch (ModuleAlreadyExistsException | UserNotFoundException exception) {
+            } catch (StudentrackObjectAlreadyExistsException | StudentrackObjectNotFoundException exception) {
                 redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
                 logger.info(exception.getMessage());
             }
@@ -128,7 +125,7 @@ public class ModuleController {
         try {
             moduleService.findModule(module);
 
-        } catch (ModuleNotFoundException e) {
+        } catch (StudentrackObjectNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
             return "redirect:/modules";
@@ -146,7 +143,7 @@ public class ModuleController {
         try {
             module = moduleService.findModule(moduleId);
         }
-        catch (ModuleNotFoundException e) {
+        catch (StudentrackObjectNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
             return "redirect:/modules";
@@ -165,7 +162,7 @@ public class ModuleController {
         try {
             moduleService.updateModule(module);
 
-        } catch (ModuleNotFoundException e) {
+        } catch (StudentrackObjectNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
             return "redirect:/modules";
@@ -193,7 +190,7 @@ public class ModuleController {
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
-        } catch (ModuleNotFoundException e) {
+        } catch (StudentrackObjectNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
             return "redirect:/modules";
@@ -213,7 +210,7 @@ public class ModuleController {
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
-        } catch (ModuleNotFoundException | ModuleCannotBeDeletedException exception) {
+        } catch (StudentrackObjectCannotBeDeletedException | StudentrackObjectNotFoundException exception) {
             logger.info(exception.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
         }

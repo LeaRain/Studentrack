@@ -1,13 +1,12 @@
 package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import sw.laux.Studentrack.application.exceptions.UserAlreadyRegisteredException;
-import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
+import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.Grade;
 import sw.laux.Studentrack.persistence.entities.Student;
@@ -52,7 +51,7 @@ public class UserServiceInternal implements IUserServiceInternal {
     }
 
     @Override
-    public User registerUser(User user) throws UserAlreadyRegisteredException {
+    public User registerUser(User user) throws StudentrackObjectAlreadyExistsException {
         var mailAddressUser = userRepo.findByMailAddress(user.getMailAddress());
 
         if (mailAddressUser.isEmpty()) {
@@ -61,7 +60,7 @@ public class UserServiceInternal implements IUserServiceInternal {
         }
 
         else {
-            throw new UserAlreadyRegisteredException("User with mail address " + user.getMailAddress() + " already exists!");
+            throw new StudentrackObjectAlreadyExistsException(user.getClass(), user);
         }
     }
 
@@ -71,15 +70,15 @@ public class UserServiceInternal implements IUserServiceInternal {
     }
 
     @Override
-    public Student findStudent(Student student) throws UserNotFoundException {
+    public Student findStudent(Student student) throws StudentrackObjectNotFoundException {
         return findStudent(student.getUserId());
     }
 
     @Override
-    public Student findStudent(Long userId) throws UserNotFoundException {
+    public Student findStudent(Long userId) throws StudentrackObjectNotFoundException {
         var userOptional = userRepo.findById(userId);
         if (userOptional.isEmpty()) {
-            throw new UserNotFoundException("User with id " + userId + " not found!");
+            throw new StudentrackObjectNotFoundException(Student.class, userId);
         }
 
         return (Student) userOptional.get();
@@ -91,6 +90,7 @@ public class UserServiceInternal implements IUserServiceInternal {
         var user = userRepo.findByMailAddress(s);
 
         if (user.isEmpty()) {
+            // Exception defined by Spring Security, not Studentrack
             throw new UsernameNotFoundException("User with mail address " + s + " not found!");
         }
 

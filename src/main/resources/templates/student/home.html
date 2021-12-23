@@ -32,24 +32,14 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="bs-component">
-                        <form>
-                            <fieldset>
-                                <legend>Start New Time Order</legend>
-                                <fieldset>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="exampleSelect1" class="form-label mt-4">Example select</label>
-                                            <select class="form-select" id="exampleSelect1">
-                                                <option>1</option>
-                                                <option>2</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-lg btn-info col-12 mt-4">Submit</button>
-                                </div>
-                            </fieldset>
+                        <form method="post" th:action="@{/timeorders/new}" th:object="${modules}">
+                            <div class="form-group" id="formGroupModule">
+                                <label for="selectModule" class="form-label mt-4">Module</label>
+                                <select class="form-select" id="selectModule" th:field="${moduleShell.name}">
+                                    <option th:each="module : ${modules}" th:text="${module}" th:value="${module.moduleId}"></option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-info mt-4">Start New Time Order Now</button>
                         </form>
                     </div>
                     <div class="d-grid gap-2">

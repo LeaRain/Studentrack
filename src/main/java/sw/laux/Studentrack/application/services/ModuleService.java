@@ -2,10 +2,7 @@ package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sw.laux.Studentrack.application.exceptions.ModuleAlreadyExistsException;
-import sw.laux.Studentrack.application.exceptions.ModuleCannotBeDeletedException;
-import sw.laux.Studentrack.application.exceptions.ModuleNotFoundException;
-import sw.laux.Studentrack.application.exceptions.UserNotFoundException;
+import sw.laux.Studentrack.application.exceptions.*;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
@@ -42,11 +39,11 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
-    public Module saveNewModule(Module module) throws ModuleAlreadyExistsException {
+    public Module saveNewModule(Module module) throws StudentrackObjectAlreadyExistsException {
         try {
             findModule(module);
-            throw new ModuleAlreadyExistsException("Module " + module + " already exists!");
-        } catch (ModuleNotFoundException ignored) {
+            throw new StudentrackObjectAlreadyExistsException(module.getClass(), module);
+        } catch (StudentrackObjectNotFoundException ignored) {
 
         }
 
@@ -54,21 +51,21 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
-    public Module updateModule(Module module) throws ModuleNotFoundException {
+    public Module updateModule(Module module) throws StudentrackObjectNotFoundException {
         findModule(module);
         return saveModule(module);
     }
 
     @Override
-    public Module findModule(Module module) throws ModuleNotFoundException {
+    public Module findModule(Module module) throws StudentrackObjectNotFoundException {
         return findModule(module.getModuleId());
     }
 
     @Override
-    public Module findModule(long moduleId) throws ModuleNotFoundException {
+    public Module findModule(long moduleId) throws StudentrackObjectNotFoundException {
         var moduleOptional = moduleRepo.findById(moduleId);
         if (moduleOptional.isEmpty()) {
-            throw new ModuleNotFoundException("Module with id " + moduleId + " not found!");
+            throw new StudentrackObjectNotFoundException(Module.class, moduleId);
         }
 
         return moduleOptional.get();
@@ -96,16 +93,16 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
-    public Module enrollInModule(Student student, Module module) throws ModuleAlreadyExistsException, UserNotFoundException {
+    public Module enrollInModule(Student student, Module module) throws StudentrackObjectAlreadyExistsException, StudentrackObjectNotFoundException{
         try {
             module = findModule(module);
-        } catch (ModuleNotFoundException ignored) {
+        } catch (StudentrackObjectNotFoundException ignored) {
         }
 
         student = userService.findStudent(student);
 
         if (student.getModules().contains(module)) {
-            throw new ModuleAlreadyExistsException("Student " + student + " is already enrolled in Module " + module);
+            throw new StudentrackObjectAlreadyExistsException(module.getClass(), module);
         }
 
         var studentModules = student.getModules();
@@ -115,31 +112,31 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
-    public Module withdrawFromModule(Student student, Module module) throws ModuleNotFoundException {
+    public Module withdrawFromModule(Student student, Module module) throws StudentrackObjectNotFoundException {
         module = findModule(module);
         var studentModules = student.getModules();
         var removeSuccess = studentModules.remove(module);
         if (!removeSuccess) {
-            throw new ModuleNotFoundException("Student cannot be withdrawn from module " + module + ", because the module cannot be found.");
+            throw new StudentrackObjectNotFoundException(module.getClass(), module);
         }
         userService.updateUser(student);
         return module;
     }
 
     @Override
-    public void deleteModule(Module module) throws ModuleNotFoundException, ModuleCannotBeDeletedException {
+    public void deleteModule(Module module) throws StudentrackObjectNotFoundException, StudentrackObjectCannotBeDeletedException {
         module = findModule(module);
         if (!module.getStudents().isEmpty()) {
-            throw new ModuleCannotBeDeletedException("Module " + module + " cannot be deleted, because students are enrolled in the module.");
+            throw new StudentrackObjectCannotBeDeletedException(module.getClass(), module);
         }
         moduleRepo.delete(module);
     }
 
     @Override
-    public Iterable<Module> getAllModulesByLecturer(Lecturer lecturer) throws ModuleNotFoundException {
+    public Iterable<Module> getAllModulesByLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException {
         var modules = moduleRepo.findByResponsibleLecturer(lecturer);
         if (modules.isEmpty()) {
-            throw new ModuleNotFoundException("Modules for lecturer " + lecturer + "not found!");
+            throw new StudentrackObjectNotFoundException(Iterable.class, lecturer);
         }
         return modules.get();
     }
