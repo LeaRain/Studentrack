@@ -31,6 +31,12 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
+                    <div class="card border-info mb-3" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">Current Time</h4>
+                            <p class="card-text" id="paragraphClock"></p>
+                        </div>
+                    </div>
                     <div class="bs-component" th:if="${timeOrder == null}">
                         <form method="post" th:action="@{/timeorders/start}" th:object="${modules}">
                             <div class="form-group" id="formGroupModule">
@@ -63,7 +69,7 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        <form action="timeorders" method="get">
+                        <form th:action="@{/timeorders}" method="get">
                             <button class="btn btn-lg btn-primary col-12 mt-4" type="submit">Administrate Time Orders</button>
                         </form>
                     </div>
@@ -99,4 +105,5 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="js/showClock.js"></script>
 </div>
