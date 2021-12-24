@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="common/header :: header(title='New Course')"/>
+
+<body class style>
+<div th:replace="common/navigation :: navigation"/>
+
+
+<div th:if="${errorMessage} != ''">
+    <div th:replace="common/statusmessage :: status(errorMessage=${errorMessage})"></div>
+</div>
+
+<div th:if="${successMessage} != ''">
+    <div th:replace="common/statusmessage :: status(successMessage=${successMessage})"></div>
+</div>
+
+<div sec:authorize="hasAuthority('Student')" th:replace="student/newtimeorder :: newtimeorder"></div>
+
+<div th:replace="common/footer :: footer"/>
+
+<script type="text/javascript" src="js/configureSuccessErrorElements.js"></script>
+
+</body>
+</html>

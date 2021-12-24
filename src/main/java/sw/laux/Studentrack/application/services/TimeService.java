@@ -60,5 +60,26 @@ public class TimeService implements ITimeService {
 
     }
 
+    @Override
+    public TimeOrder saveTimeOrder(TimeOrder timeOrder) {
+        return timeRepo.save(timeOrder);
+    }
+
+    @Override
+    public TimeOrder findTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException {
+        return findTimeOrder(timeOrder.getTimeOrderId());
+    }
+
+    @Override
+    public TimeOrder findTimeOrder(long timeOrderId) throws StudentrackObjectNotFoundException {
+        var timeOrderOptional = timeRepo.findById(timeOrderId);
+
+        if (timeOrderOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, timeOrderId);
+        }
+
+        return timeOrderOptional.get();
+    }
+
 
 }
