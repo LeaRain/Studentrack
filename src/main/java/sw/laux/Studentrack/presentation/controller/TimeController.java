@@ -106,7 +106,7 @@ public class TimeController {
             return "redirect:/home";
         }
 
-        var successMessage = "Successfully updated Time Order " + timeOrder;
+        var successMessage = "Successfully updated Time Order " + timeOrder + " for " + timeOrder.getModule() + " for student " + user;
         logger.info(successMessage);
         redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
@@ -114,7 +114,30 @@ public class TimeController {
     }
 
     @GetMapping("timeorders")
-    public String timeorders(Model model) {
+    public String timeorders(Model model,
+                             Principal principal,
+                             RedirectAttributes redirectAttributes) {
+
+        var user = userService.loadUserByUsername(principal.getName());
+
+        if (!(user instanceof Student)) {
+            var errorMessage = "Wrong user type for " + user;
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/home";
+        }
+
+        Iterable<TimeOrder> timeOrders = null;
+
+        try {
+            timeOrders = timeService.getAllTimeOrdersForStudent((Student) user);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        model.addAttribute("timeorders", timeOrders);
+        model.addAttribute("timeorderShell", new TimeOrder());
+
         return "timeorders";
     }
 }

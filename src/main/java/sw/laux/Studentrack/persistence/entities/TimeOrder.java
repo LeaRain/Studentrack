@@ -2,16 +2,20 @@ package sw.laux.Studentrack.persistence.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.Period;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public class TimeOrder extends SingleIdEntity<Long>{
     @Id
     @GeneratedValue
     private long timeOrderId;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date start;
     // Bypass reserved keyword "end"
     @Column(name="end_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date end;
     @ManyToOne
     private Module module;
@@ -19,6 +23,22 @@ public class TimeOrder extends SingleIdEntity<Long>{
     private Student owner;
     @OneToOne
     private TimeInvest timeInvest;
+    @Transient
+    private TimeOrderDuration duration;
+
+    public TimeOrderDuration getDuration() {
+        // Calculate the latest value
+        setDuration();
+        return duration;
+    }
+
+    public void setDuration() {
+        if (start != null && end != null) {
+            var durationInMilliSeconds = end.getTime() - start.getTime();
+            duration = new TimeOrderDuration();
+            duration.setDuration(durationInMilliSeconds);
+        }
+    }
 
     public Student getOwner() {
         return owner;

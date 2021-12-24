@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface TimeRepository extends CrudRepository<TimeOrder, Long> {
     Optional<TimeOrder> findByEndIsNullAndOwner(Student owner);
+    Optional<Iterable<TimeOrder>> findAllByOwner(Student owner);
 }

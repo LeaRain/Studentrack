@@ -9,4 +9,5 @@ public interface ITimeService {
     TimeOrder findOpenTimeOrderForStudent(Student student) throws StudentrackObjectNotFoundException;
     TimeOrder createOpenTimeOrder(TimeOrder timeOrder) throws StudentrackObjectAlreadyExistsException;
     TimeOrder closeOpenTimeOrderForStudent(TimeOrder timeOrder, Student student) throws StudentrackObjectNotFoundException;
+    Iterable<TimeOrder> getAllTimeOrdersForStudent(Student student) throws StudentrackObjectNotFoundException;
 }

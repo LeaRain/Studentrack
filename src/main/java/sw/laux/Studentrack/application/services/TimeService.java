@@ -48,5 +48,17 @@ public class TimeService implements ITimeService {
         return timeRepo.save(expectedOpenTimeOrder);
     }
 
+    @Override
+    public Iterable<TimeOrder> getAllTimeOrdersForStudent(Student student) throws StudentrackObjectNotFoundException {
+        var timeOrdersOptional = timeRepo.findAllByOwner(student);
+
+        if (timeOrdersOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, student);
+        }
+
+        return timeOrdersOptional.get();
+
+    }
+
 
 }

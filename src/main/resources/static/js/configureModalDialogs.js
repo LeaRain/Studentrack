@@ -18,7 +18,6 @@ function configureModalDialogs (type) {
 
 function registerEventListener(type) {
     let editModuleButton = document.getElementById("button" + type +"Module");
-    console.log(editModuleButton);
     let closeModuleButton = document.getElementById("buttonClose" + type + "ModuleModal");
     editModuleButton.addEventListener("click", function() {
         showModalModuleDialog(type);
