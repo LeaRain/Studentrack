@@ -81,5 +81,17 @@ public class TimeService implements ITimeService {
         return timeOrderOptional.get();
     }
 
+    @Override
+    public TimeOrder updateTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException {
+        findTimeOrder(timeOrder);
+        return timeRepo.save(timeOrder);
+    }
+
+    @Override
+    public void deleteTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException {
+        findTimeOrder(timeOrder);
+        timeRepo.delete(timeOrder);
+    }
+
 
 }

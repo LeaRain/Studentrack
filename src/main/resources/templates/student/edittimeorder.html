@@ -24,6 +24,7 @@
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputEnd">End</label>
                             <input type="datetime-local" class="form-control" id="inputEnd" placeholder="Enter Time Order End" th:field="*{endString}" required>
+
                         </div>
                     </fieldset>
                     <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButton">Change!</button>
@@ -39,9 +40,9 @@
                     <strong>Proceed with caution!</strong> You are entering the danger zone.
                 </div>
             </div>
-            <form method="post" th:action="@{/timeorder/delete}" th:object="${timeOrder}">
+            <form method="post" th:action="@{/timeorders/delete}" th:object="${timeOrder}">
                 <fieldset class="form-group">
-                    <input type="hidden" th:field="*{timeOrderId}">
+                    <input type="hidden" th:field="*{timeOrder.timeOrderId}">
                     <legend class="mt-4">Delete Time Order</legend>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="checkboxDelete">

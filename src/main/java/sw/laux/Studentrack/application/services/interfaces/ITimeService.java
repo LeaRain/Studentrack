@@ -13,4 +13,6 @@ public interface ITimeService {
     TimeOrder saveTimeOrder(TimeOrder timeOrder);
     TimeOrder findTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException;
     TimeOrder findTimeOrder(long timeOrderId) throws StudentrackObjectNotFoundException;
+    TimeOrder updateTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException;
+    void deleteTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException;
 }

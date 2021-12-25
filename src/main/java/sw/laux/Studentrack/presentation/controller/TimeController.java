@@ -18,6 +18,8 @@ import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -61,7 +63,7 @@ public class TimeController {
         }
 
         var timeOrder = new TimeOrder();
-        timeOrder.setStart(new Date());
+        timeOrder.setStart(getCurrentDateTime());
         timeOrder.setOwner((Student) user);
         timeOrder.setModule(module);
 
@@ -97,7 +99,7 @@ public class TimeController {
             return "redirect:/home";
         }
 
-        timeOrder.setEnd(new Date());
+        timeOrder.setEnd(getCurrentDateTime());
 
         try {
             timeOrder = timeService.closeOpenTimeOrderForStudent(timeOrder, (Student) user);
@@ -166,18 +168,8 @@ public class TimeController {
                               @ModelAttribute("timeOrderShell") TimeOrderWebShell timeOrderShell,
                               RedirectAttributes redirectAttributes) {
 
-        // Inspiration by https://www.baeldung.com/java-date-to-localdate-and-localdatetime
-        var startDate = Date.from(
-                LocalDateTime.parse(timeOrderShell.getStartString())
-                .atZone(ZoneId.systemDefault())
-                .toInstant()
-        );
-
-        var endDate = Date.from(
-                LocalDateTime.parse(timeOrderShell.getEndString())
-                        .atZone(ZoneId.systemDefault())
-                        .toInstant()
-        );
+        var startDate = frontendDateStringToDate(timeOrderShell.getStartString());
+        var endDate = frontendDateStringToDate(timeOrderShell.getEndString());
 
         var timeOrder = timeOrderShell.getTimeOrder();
         timeOrder.setStart(startDate);
@@ -226,16 +218,12 @@ public class TimeController {
 
         var timeOrderShell = new TimeOrderWebShell();
         timeOrderShell.setTimeOrder(timeOrder);
-        // Inspiration by https://www.baeldung.com/java-date-to-localdate-and-localdatetime
-        var localDateTimeStart = timeOrder.getStart().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime();
-        var localDateTimeEnd = timeOrder.getEnd().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+
+        var localDateTimeStart = timeOrderDateToLocalDateTime(timeOrder.getStart());
+        var localDateTimeEnd= timeOrderDateToLocalDateTime(timeOrder.getEnd());
+
         timeOrderShell.setStartString(String.valueOf(localDateTimeStart));
         timeOrderShell.setEndString(String.valueOf(localDateTimeEnd));
-
 
         model.addAttribute("timeOrder", timeOrderShell);
 
@@ -246,13 +234,69 @@ public class TimeController {
     public String doEditModuleCheck(Model model,
                                     @ModelAttribute("timeOrder") TimeOrderWebShell timeOrderWebShell,
                                     RedirectAttributes redirectAttributes) {
-        //TODO: Update time order
+        var timeOrder = timeOrderWebShell.getTimeOrder();
+        var startDate = frontendDateStringToDate(timeOrderWebShell.getStartString());
+        var endDate = frontendDateStringToDate(timeOrderWebShell.getEndString());
+        timeOrder.setStart(startDate);
+        timeOrder.setEnd(endDate);
+        try {
+            timeService.updateTimeOrder(timeOrder);
+            var successMessage = "Successfully updated: " + timeOrder;
+            logger.info(successMessage);
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
 
-        System.out.println(timeOrderWebShell.getStartString());
-        System.out.println(timeOrderWebShell.getEndString());
-        System.out.println(timeOrderWebShell.getTimeOrder().getTimeOrderId());
-        System.out.println(timeOrderWebShell.getTimeOrder().getModule());
-        System.out.println(timeOrderWebShell.getTimeOrder().getOwner());
         return "redirect:/timeorders";
+    }
+
+    @PostMapping("timeorders/delete")
+    public String doDeleteTimeOrder(Model model,
+                                   @ModelAttribute("timeOrder") TimeOrderWebShell timeOrderShell,
+                                   Principal principal,
+                                   RedirectAttributes redirectAttributes) {
+
+        var timeOrder = timeOrderShell.getTimeOrder();
+        try {
+            timeService.deleteTimeOrder(timeOrder);
+            var successMessage = "Successfully deleted the time order with id " + timeOrder.getTimeOrderId() + "!";
+            logger.info(successMessage);
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/timeorders";
+
+    }
+
+    // Inspiration by https://www.baeldung.com/java-date-to-localdate-and-localdatetime
+    public Date frontendDateStringToDate(String dateString) {
+        return Date.from(
+                LocalDateTime.parse(dateString)
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+        );
+    }
+
+    // Inspiration by https://www.baeldung.com/java-date-to-localdate-and-localdatetime
+    public LocalDateTime timeOrderDateToLocalDateTime(Date timeOrderDate) {
+        return timeOrderDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
+
+    public Date getCurrentDateTime() {
+        var dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+        Date date ;
+        try {
+            date = dateFormat.parse(dateFormat.format(new Date()));
+        } catch (ParseException e) {
+            date = new Date();
+        }
+        return date;
     }
 }
