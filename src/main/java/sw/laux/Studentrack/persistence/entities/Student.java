@@ -2,6 +2,7 @@ package sw.laux.Studentrack.persistence.entities;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 @Entity
@@ -67,7 +68,7 @@ public class Student extends User {
     }
 
     public Collection<TimeOrder> getTimeOrders() {
-        return timeOrders;
+        return Collections.unmodifiableCollection(timeOrders);
     }
 
     public void setTimeOrders(Collection<TimeOrder> timeOrders) {

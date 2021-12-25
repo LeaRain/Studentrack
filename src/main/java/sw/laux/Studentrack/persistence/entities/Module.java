@@ -21,7 +21,7 @@ public class Module extends SingleIdEntity<Long>{
     @OneToMany(mappedBy="module")
     private Collection<Grade> resultGrades;
     @ManyToMany(mappedBy="modules")
-    private Collection<Student> students = new ArrayList<Student>();
+    private Collection<Student> students;
     @ElementCollection
     private Collection<Course> availableCourses;
 
@@ -119,16 +119,5 @@ public class Module extends SingleIdEntity<Long>{
 
     public void setStudents(Collection<Student> students) {
         this.students = students;
-    }
-
-    public void addStudent(Student student) {
-        if (!students.contains(student)) {
-            students.add(student);
-        }
-    }
-
-    public void removeStudent(Student student) {
-        // If student is not in the collection, the remove method will return false and will not produce an exception.
-        students.remove(student);
     }
 }
