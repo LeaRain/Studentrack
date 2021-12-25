@@ -2,7 +2,12 @@
     <div class="container">
         <div class="bs-docs-section">
             <div class="row">
-                <div class="col-lg-4">
+                <div th:replace="common/quicktimeorder :: quicktimeorder(modules=${modules}, moduleShell=${moduleShell}, timeOrder=${timeOrder})"/>
+            </div>
+        </div>
+        <div class="bs-docs-section">
+            <div class="row">
+                <div class="col-lg-6">
                     <div class="bs-component">
                         <legend>Your Time Order History</legend>
                         <table class="table table-hover">
@@ -25,7 +30,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                         <legend>Wanna create or edit something?</legend>
                         <div class="d-grid gap-2 mt-4">
                             <form th:action="@{/timeorders/new}" method="get">

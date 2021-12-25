@@ -50,7 +50,7 @@ public class TimeService implements ITimeService {
 
     @Override
     public Iterable<TimeOrder> getAllTimeOrdersForStudent(Student student) throws StudentrackObjectNotFoundException {
-        var timeOrdersOptional = timeRepo.findAllByOwner(student);
+        var timeOrdersOptional = timeRepo.findAllByOwnerOrderByStartDesc(student);
 
         if (timeOrdersOptional.isEmpty()) {
             throw new StudentrackObjectNotFoundException(TimeOrder.class, student);

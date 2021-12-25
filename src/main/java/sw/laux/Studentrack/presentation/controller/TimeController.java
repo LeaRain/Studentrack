@@ -17,6 +17,7 @@ import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,7 +44,7 @@ public class TimeController {
     public String startNewTimeOrder(Model model,
                                     @ModelAttribute("moduleShell") Module module,
                                     Principal principal,
-                                    RedirectAttributes redirectAttributes) {
+                                    RedirectAttributes redirectAttributes ) {
 
         try {
             module = moduleService.findModule(module);
@@ -140,6 +141,13 @@ public class TimeController {
 
         model.addAttribute("timeorders", timeOrders);
         model.addAttribute("timeorderShell", new TimeOrder());
+        model.addAttribute("modules", ((Student) user).getModules());
+        model.addAttribute("moduleShell", new Module());
+        try {
+            var timeOrder = timeService.findOpenTimeOrderForStudent((Student) user);
+            model.addAttribute("timeOrder", timeOrder);
+        } catch (StudentrackObjectNotFoundException ignored) {
+        }
 
         return "timeorders";
     }
@@ -164,9 +172,9 @@ public class TimeController {
 
     @PostMapping("timeorders/new/check")
     public String doNewTimeorder(Model model,
-                              Principal principal,
-                              @ModelAttribute("timeOrderShell") TimeOrderWebShell timeOrderShell,
-                              RedirectAttributes redirectAttributes) {
+                                 Principal principal,
+                                 @ModelAttribute("timeOrderShell") TimeOrderWebShell timeOrderShell,
+                                 RedirectAttributes redirectAttributes) {
 
         var startDate = frontendDateStringToDate(timeOrderShell.getStartString());
         var endDate = frontendDateStringToDate(timeOrderShell.getEndString());
