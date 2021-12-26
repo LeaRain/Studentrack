@@ -19,7 +19,7 @@ public class Module extends SingleIdEntity<Long>{
     @ManyToOne
     private Lecturer responsibleLecturer;
     @OneToMany(mappedBy="module")
-    private Collection<Grade> resultGrades;
+    private Collection<ModuleResults> moduleResults;
     @ManyToMany(mappedBy="modules")
     private Collection<Student> students;
     @ElementCollection
@@ -38,14 +38,6 @@ public class Module extends SingleIdEntity<Long>{
         this.responsibleLecturer = responsibleLecturer;
     }
 
-    public Collection<Grade> getResultGrades() {
-        return resultGrades;
-    }
-
-    public void setResultGrades(Collection<Grade> resultGrades) {
-        this.resultGrades = resultGrades;
-    }
-
     public Collection<Course> getAvailableCourses() {
         return availableCourses;
     }
@@ -54,13 +46,12 @@ public class Module extends SingleIdEntity<Long>{
         this.availableCourses = availableCourses;
     }
 
-    public Module(String name, int ects, int creditHours, String description, Lecturer responsibleLecturer, Collection<Grade> resultGrades, Collection<Course> availableCourses) {
+    public Module(String name, int ects, int creditHours, String description, Lecturer responsibleLecturer, Collection<Course> availableCourses) {
         this.name = name;
         this.ects = ects;
         this.creditHours = creditHours;
         this.description = description;
         this.responsibleLecturer = responsibleLecturer;
-        this.resultGrades = resultGrades;
         this.availableCourses = availableCourses;
     }
 
@@ -119,5 +110,23 @@ public class Module extends SingleIdEntity<Long>{
 
     public void setStudents(Collection<Student> students) {
         this.students = students;
+    }
+
+    public Collection<ModuleResults> getModuleResults() {
+        return moduleResults;
+    }
+
+    public void setModuleResults(Collection<ModuleResults> moduleResults) {
+        this.moduleResults = moduleResults;
+    }
+
+    public void addModuleResults(ModuleResults moduleResults) {
+        if (!this.moduleResults.contains(moduleResults)) {
+            this.moduleResults.add(moduleResults);
+        }
+    }
+
+    public void removeModuleResults(ModuleResults moduleResults) {
+        this.moduleResults.remove(moduleResults);
     }
 }

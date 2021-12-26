@@ -5,7 +5,7 @@ import javax.persistence.Transient;
 import java.util.concurrent.TimeUnit;
 
 @Embeddable
-public class TimeOrderDuration {
+public class TimeDuration {
     @Transient
     private long duration;
     @Transient
@@ -15,7 +15,7 @@ public class TimeOrderDuration {
     @Transient
     private long seconds;
 
-    public TimeOrderDuration() {
+    public TimeDuration() {
 
     }
 

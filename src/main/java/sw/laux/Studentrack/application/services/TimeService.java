@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
+import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.entities.Student;
 import sw.laux.Studentrack.persistence.entities.TimeOrder;
 import sw.laux.Studentrack.persistence.repository.TimeRepository;
@@ -91,6 +92,17 @@ public class TimeService implements ITimeService {
     public void deleteTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException {
         findTimeOrder(timeOrder);
         timeRepo.delete(timeOrder);
+    }
+
+    @Override
+    public Iterable<TimeOrder> findTimeOrdersForModuleAndStudent(Module module, Student student) throws StudentrackObjectNotFoundException {
+        var timeOrderOptional = timeRepo.findAllByOwnerAndModule(student, module);
+
+        if (timeOrderOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, module);
+        }
+
+        return timeOrderOptional.get();
     }
 
 

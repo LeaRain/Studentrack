@@ -1,12 +1,8 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.Period;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @Entity
 public class TimeOrder extends SingleIdEntity<Long>{
@@ -26,9 +22,9 @@ public class TimeOrder extends SingleIdEntity<Long>{
     @OneToOne
     private TimeInvest timeInvest;
     @Transient
-    private TimeOrderDuration duration;
+    private TimeDuration duration;
 
-    public TimeOrderDuration getDuration() {
+    public TimeDuration getDuration() {
         // Calculate the latest value
         setDuration();
         return duration;
@@ -37,7 +33,7 @@ public class TimeOrder extends SingleIdEntity<Long>{
     public void setDuration() {
         if (start != null && end != null) {
             var durationInMilliSeconds = end.getTime() - start.getTime();
-            duration = new TimeOrderDuration();
+            duration = new TimeDuration();
             duration.setDuration(durationInMilliSeconds);
         }
     }

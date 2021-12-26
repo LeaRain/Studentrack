@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.*;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
+import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
@@ -17,13 +18,15 @@ public class ModuleService implements IModuleService {
     @Autowired
     private ModuleRepository moduleRepo;
     @Autowired
-    private GradeRepository gradeRepo;
+    private ModuleResultsRepository moduleResultsRepo;
     @Autowired
     private MajorRepository majorRepo;
     @Autowired
     private FacultyRepository facultyRepo;
     @Autowired
     private IUserServiceInternal userService;
+    @Autowired
+    private ITimeService timeService;
 
     public Collection<Major> getAllMajors() {
         return (Collection<Major>) majorRepo.findAll();
@@ -139,6 +142,59 @@ public class ModuleService implements IModuleService {
             throw new StudentrackObjectNotFoundException(Iterable.class, lecturer);
         }
         return modules.get();
+    }
+
+    @Override
+    public Iterable<ModuleResults> collectResultsForAllModulesOfStudent(Student student) throws StudentrackObjectNotFoundException {
+        for (var module : student.getModules()) {
+            // Write all in repo
+            collectResultForModuleOfStudent(student, module);
+        }
+        // Load all from repo
+        var moduleResultsOptional = moduleResultsRepo.findAllByStudent(student);
+
+        if (moduleResultsOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(ModuleResults.class, student);
+        }
+
+        return moduleResultsOptional.get();
+    }
+
+    @Override
+    public ModuleResults collectResultForModuleOfStudent(Student student, Module module) throws StudentrackObjectNotFoundException {
+        var timeOrders = timeService.findTimeOrdersForModuleAndStudent(module, student);
+        var moduleResultsOptional = moduleResultsRepo.findByStudentAndModule(student, module);
+
+        ModuleResults moduleResults;
+
+        if (moduleResultsOptional.isEmpty()) {
+            moduleResults = new ModuleResults();
+            moduleResults.setTimeInvest(new TimeInvest());
+        }
+        else {
+            moduleResults = moduleResultsOptional.get();
+        }
+
+        long durationSum = 0;
+
+        for (var timeOrder : timeOrders) {
+            var timeOrderDuration = timeOrder.getDuration();
+            durationSum += timeOrderDuration.getDuration();
+        }
+
+        var timeInvest = new TimeInvest();
+        var timeDuration = new TimeDuration();
+        timeDuration.setDuration(durationSum);
+        timeInvest.setTimeDuration(timeDuration);
+        moduleResults.setTimeInvest(timeInvest);
+        timeInvest.setModuleResults(moduleResults);
+        moduleResults.setStudent(student);
+        student.addModuleResults(moduleResults);
+        moduleResults.setModule(module);
+        module.addModuleResults(moduleResults);
+        moduleResultsRepo.save(moduleResults);
+
+        return moduleResults;
     }
 
 

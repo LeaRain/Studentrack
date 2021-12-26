@@ -1,31 +1,24 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Grade {
-    public Grade(double value, String description, int tryNumber, Module module, Student student) {
-        this.value = value;
-        this.description = description;
-        this.tryNumber = tryNumber;
-        this.module = module;
-        this.student = student;
-    }
-
     @Id
     @GeneratedValue
     private long gradeId;
-    double value;
-    String description;
-    int tryNumber;
-    @ManyToOne
-    private Module module;
-    @ManyToOne
-    private Student student;
+    private double value;
+    private String description;
+    private int tryNumber;
+    @OneToOne(mappedBy="grade")
+    private ModuleResults moduleResults;
 
+    public Grade(double value, String description, int tryNumber, ModuleResults moduleResults) {
+        this.value = value;
+        this.description = description;
+        this.tryNumber = tryNumber;
+        this.moduleResults = moduleResults;
+    }
 
     public long getGradeId() {
         return gradeId;
@@ -70,25 +63,15 @@ public class Grade {
                 ", value=" + value +
                 ", description='" + description + '\'' +
                 ", tryNumber=" + tryNumber +
-                ", module=" + module +
-                ", student=" + student +
                 '}';
     }
 
-    public Module getModule() {
-        return module;
+    public ModuleResults getModuleResults() {
+        return moduleResults;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setModuleResults(ModuleResults moduleResults) {
+        this.moduleResults = moduleResults;
     }
 
 }

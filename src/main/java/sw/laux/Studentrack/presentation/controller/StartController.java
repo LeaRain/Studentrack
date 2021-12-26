@@ -115,6 +115,13 @@ public class StartController {
                 model.addAttribute("timeOrder", timeOrder);
             } catch (StudentrackObjectNotFoundException ignored) {
             }
+
+            try {
+                var moduleResults = moduleService.collectResultsForAllModulesOfStudent((Student) user);
+                model.addAttribute("moduleResults", moduleResults);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
         }
 
         model.addAttribute("user", user);

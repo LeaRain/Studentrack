@@ -25,5 +25,8 @@ public interface IModuleService {
     Module withdrawFromModule(Student student, Module module) throws StudentrackObjectNotFoundException;
     @Transactional
     void deleteModule(Module module) throws StudentrackObjectNotFoundException, StudentrackObjectCannotBeDeletedException;
-
+    @Transactional
+    Iterable<ModuleResults> collectResultsForAllModulesOfStudent(Student student) throws StudentrackObjectNotFoundException;
+    @Transactional
+    ModuleResults collectResultForModuleOfStudent(Student student, Module module) throws StudentrackObjectNotFoundException;
 }

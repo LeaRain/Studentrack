@@ -11,16 +11,22 @@ public class TimeInvest extends SingleIdEntity<Long> {
     @Id
     @GeneratedValue
     private long timeInvestId;
-    private long duration;
-    @OneToOne
-    private TimeOrder timeOrder;
-    @ManyToOne
-    private Module module;
+    @OneToOne(mappedBy="timeInvest")
+    private ModuleResults moduleResults;
+    @Embedded
+    private TimeDuration timeDuration;
 
-    public TimeInvest(long duration, TimeOrder timeOrder, Module module) {
-        this.duration = duration;
-        this.timeOrder = timeOrder;
-        this.module = module;
+    public TimeInvest(ModuleResults moduleResults, TimeDuration timeDuration) {
+        this.moduleResults = moduleResults;
+        this.timeDuration = timeDuration;
+    }
+
+    public ModuleResults getModuleResults() {
+        return moduleResults;
+    }
+
+    public void setModuleResults(ModuleResults moduleResults) {
+        this.moduleResults = moduleResults;
     }
 
     public TimeInvest() {
@@ -40,36 +46,11 @@ public class TimeInvest extends SingleIdEntity<Long> {
         this.timeInvestId = timeInvestId;
     }
 
-    public long getDuration() {
-        return duration;
+    public TimeDuration getTimeDuration() {
+        return timeDuration;
     }
 
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public TimeOrder getTimeOrder() {
-        return timeOrder;
-    }
-
-    public void setTimeOrder(TimeOrder timeOrder) {
-        this.timeOrder = timeOrder;
-    }
-
-    @Override
-    public String toString() {
-        return "TimeInvest{" +
-                "timeInvestId=" + timeInvestId +
-                ", duration=" + duration +
-                ", timeOrder=" + timeOrder +
-                '}';
-    }
-
-    public Module getModule() {
-        return module;
-    }
-
-    public void setModule(Module module) {
-        this.module = module;
+    public void setTimeDuration(TimeDuration timeDuration) {
+        this.timeDuration = timeDuration;
     }
 }

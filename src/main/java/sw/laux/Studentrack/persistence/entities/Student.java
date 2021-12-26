@@ -10,7 +10,7 @@ public class Student extends User {
     private int ects;
     private boolean isPremiumUser;
     @OneToMany(mappedBy="student")
-    private Collection<Grade> grades;
+    private Collection<ModuleResults> moduleResults;
     @OneToMany(mappedBy="owner")
     private Collection<TimeOrder> timeOrders;
     @ManyToOne
@@ -59,14 +59,6 @@ public class Student extends User {
         isPremiumUser = premiumUser;
     }
 
-    public Collection<Grade> getGrades() {
-        return grades;
-    }
-
-    public void setGrades(Collection<Grade> grades) {
-        this.grades = grades;
-    }
-
     public Collection<TimeOrder> getTimeOrders() {
         return Collections.unmodifiableCollection(timeOrders);
     }
@@ -86,5 +78,23 @@ public class Student extends User {
     @Override
     public String toString() {
         return getFirstName() + " " + getLastName();
+    }
+
+    public Collection<ModuleResults> getModuleResults() {
+        return Collections.unmodifiableCollection(moduleResults);
+    }
+
+    public void setModuleResults(Collection<ModuleResults> moduleResults) {
+        this.moduleResults = moduleResults;
+    }
+
+    public void addModuleResults(ModuleResults moduleResults) {
+        if (!this.moduleResults.contains(moduleResults)) {
+            this.moduleResults.add(moduleResults);
+        }
+    }
+
+    public void removeModuleResults(ModuleResults moduleResults) {
+        this.moduleResults.remove(moduleResults);
     }
 }
