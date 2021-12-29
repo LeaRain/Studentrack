@@ -227,11 +227,15 @@ public class TimeController {
         var timeOrderShell = new TimeOrderWebShell();
         timeOrderShell.setTimeOrder(timeOrder);
 
-        var localDateTimeStart = timeOrderDateToLocalDateTime(timeOrder.getStart());
-        var localDateTimeEnd= timeOrderDateToLocalDateTime(timeOrder.getEnd());
+        if (timeOrder.getStart() != null) {
+            var localDateTimeStart = timeOrderDateToLocalDateTime(timeOrder.getStart());
+            timeOrderShell.setStartString(String.valueOf(localDateTimeStart));
+        }
 
-        timeOrderShell.setStartString(String.valueOf(localDateTimeStart));
-        timeOrderShell.setEndString(String.valueOf(localDateTimeEnd));
+        if (timeOrder.getEnd() != null) {
+            var localDateTimeEnd = timeOrderDateToLocalDateTime(timeOrder.getEnd());
+            timeOrderShell.setEndString(String.valueOf(localDateTimeEnd));
+        }
 
         model.addAttribute("timeOrder", timeOrderShell);
 

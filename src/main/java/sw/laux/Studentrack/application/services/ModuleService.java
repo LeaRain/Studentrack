@@ -179,7 +179,9 @@ public class ModuleService implements IModuleService {
 
         for (var timeOrder : timeOrders) {
             var timeOrderDuration = timeOrder.getDuration();
-            durationSum += timeOrderDuration.getDuration();
+            if (timeOrderDuration != null) {
+                durationSum += timeOrderDuration.getDuration();
+            }
         }
 
         var timeInvest = new TimeInvest();
