@@ -267,7 +267,6 @@ public class TimeController {
     @PostMapping("timeorders/delete")
     public String doDeleteTimeOrder(Model model,
                                    @ModelAttribute("timeOrder") TimeOrderWebShell timeOrderShell,
-                                   Principal principal,
                                    RedirectAttributes redirectAttributes) {
 
         var timeOrder = timeOrderShell.getTimeOrder();
@@ -282,7 +281,14 @@ public class TimeController {
         }
 
         return "redirect:/timeorders";
+    }
 
+    @PostMapping("timeorders/cancel")
+    public String doCancelTimeOrder(Model model,
+                                    @ModelAttribute("timeOrder") TimeOrderWebShell timeOrderShell,
+                                    RedirectAttributes redirectAttributes) {
+
+        return doDeleteTimeOrder(model, timeOrderShell, redirectAttributes);
     }
 
     // Inspiration by https://www.baeldung.com/java-date-to-localdate-and-localdatetime

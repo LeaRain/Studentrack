@@ -122,6 +122,20 @@ public class StartController {
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
+
+            try {
+                var timeDurationToday = timeService.getTimeInvestDurationForTodayAndStudent((Student) user);
+                model.addAttribute("timeDurationToday", timeDurationToday);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
+
+            try {
+                var timeDurationWeek = timeService.getTimeInvestDurationForCurrentWeekAndStudent((Student) user);
+                model.addAttribute("timeDurationWeek", timeDurationWeek);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
         }
 
         model.addAttribute("user", user);

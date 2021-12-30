@@ -162,9 +162,7 @@ public class ModuleService implements IModuleService {
 
     @Override
     public ModuleResults collectResultForModuleOfStudent(Student student, Module module) throws StudentrackObjectNotFoundException {
-        var timeOrders = timeService.findTimeOrdersForModuleAndStudent(module, student);
         var moduleResultsOptional = moduleResultsRepo.findByStudentAndModule(student, module);
-
         ModuleResults moduleResults;
 
         if (moduleResultsOptional.isEmpty()) {
@@ -175,18 +173,10 @@ public class ModuleService implements IModuleService {
             moduleResults = moduleResultsOptional.get();
         }
 
-        long durationSum = 0;
+        var timeOrders = timeService.findTimeOrdersForModuleAndStudent(module, student);
 
-        for (var timeOrder : timeOrders) {
-            var timeOrderDuration = timeOrder.getDuration();
-            if (timeOrderDuration != null) {
-                durationSum += timeOrderDuration.getDuration();
-            }
-        }
-
+        var timeDuration = timeService.calculateTimeDuration(timeOrders);
         var timeInvest = new TimeInvest();
-        var timeDuration = new TimeDuration();
-        timeDuration.setDuration(durationSum);
         timeInvest.setTimeDuration(timeDuration);
         moduleResults.setTimeInvest(timeInvest);
         timeInvest.setModuleResults(moduleResults);

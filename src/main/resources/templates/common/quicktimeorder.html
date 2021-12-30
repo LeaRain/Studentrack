@@ -31,8 +31,11 @@
                     </tr>
                     </tbody>
                 </table>
-
                 <button type="submit" class="btn btn-info mt-4">End Current Time Order Now</button>
+            </form>
+            <form method="post" th:action="@{/timeorders/cancel}" th:object="${timeOrder}">
+                <input type="hidden" th:field="*{timeOrderId}">
+                <button type="submit" class="btn btn-info mt-4">Cancel Current Time Order</button>
             </form>
         </div>
     </div>
