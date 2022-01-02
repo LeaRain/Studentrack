@@ -10,8 +10,7 @@ import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 @Service
 public class ModuleService implements IModuleService {
@@ -187,6 +186,56 @@ public class ModuleService implements IModuleService {
         moduleResultsRepo.save(moduleResults);
 
         return moduleResults;
+    }
+
+    @Override
+    public Map<Module, TimeDuration> getTimeDurationForModulesToday(Iterable<Module> modules) {
+        var moduleTimeMap = new HashMap<Module, TimeDuration>();
+        
+        for (var module : modules) {
+            try {
+                var timeDuration = getTimeDurationForModuleToday(module);
+                moduleTimeMap.put(module, timeDuration);
+            } catch (StudentrackObjectNotFoundException ignored) {
+            }
+        }
+
+        return moduleTimeMap;
+    }
+
+    @Override
+    public Map<Module, TimeDuration> getTimeDurationForLecturerModulesToday(Lecturer lecturer) {
+        return getTimeDurationForModulesToday(lecturer.getModules());
+    }
+
+    @Override
+    public TimeDuration getTimeDurationForModuleToday(Module module) throws StudentrackObjectNotFoundException {
+        return timeService.getTimeInvestDurationForTodayAndModule(module);
+    }
+
+    @Override
+    public Map<Module, TimeDuration> getTimeDurationForModules(Iterable<Module> modules) {
+        var moduleTimeMap = new HashMap<Module, TimeDuration>();
+
+        for (var module : modules) {
+            try {
+                var timeDuration = getTimeDurationForModule(module);
+                moduleTimeMap.put(module, timeDuration);
+            } catch (StudentrackObjectNotFoundException ignored) {
+            }
+        }
+
+        return moduleTimeMap;
+    }
+
+    @Override
+    public Map<Module, TimeDuration> getTimeDurationForLecturerModules(Lecturer lecturer) {
+        return getTimeDurationForModules(lecturer.getModules());
+    }
+
+    @Override
+    public TimeDuration getTimeDurationForModule(Module module) throws StudentrackObjectNotFoundException {
+        return timeService.getTotalTimeInvestDurationForModule(module);
     }
 
 

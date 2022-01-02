@@ -1,0 +1,30 @@
+<div th:if="${timeDurationToday != null && timeDurationWeek != null}"  th:fragment="homestatistics">
+    <div class="col-lg-6">
+        <div class="bs-component">
+            <legend>Statistics</legend>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Working Hours</th>
+                    <th scope="col">Time Range</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-primary">
+                    <th scope="row">Today</th>
+                    <th scope="row" th:text="${timeDurationToday}"></th>
+                </tr>
+                <tr class="table-info">
+                    <th scope="row">This Week</th>
+                    <th scope="row" th:text="${timeDurationWeek}"></th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="d-grid gap-2">
+                <form action="statistics" method="get">
+                    <button class="btn btn-lg btn-primary col-12" type="submit">More</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

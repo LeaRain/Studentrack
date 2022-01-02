@@ -18,4 +18,7 @@ public interface TimeRepository extends CrudRepository<TimeOrder, Long> {
     Optional<Iterable<TimeOrder>> findAllByOwnerOrderByStartDesc(Student owner);
     Optional<Iterable<TimeOrder>> findAllByOwnerAndModule(Student owner, Module module);
     Optional<Iterable<TimeOrder>> findAllByOwnerAndStartBetween(Student owner, Date start, Date end);
+    Optional<Iterable<TimeOrder>> findAllByModuleAndStartBetween(Module module, Date start, Date end);
+    Optional<Iterable<TimeOrder>> findAllByStartBetween(Date start, Date end);
+    Optional<Iterable<TimeOrder>> findAllByModule(Module module);
 }

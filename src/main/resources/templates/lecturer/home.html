@@ -2,24 +2,19 @@
 <div class="container">
     <div class="bs-docs-section">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6" th:if="${modulesWithTimeDuration} != null">
                 <div class="bs-component">
                     <legend>Courses</legend>
                     <table class="table table-hover">
                         <thead>
                         <tr>
                             <th scope="col">Your Modules</th>
-                            <th scope="col">Total Time Invest</th>
-                        </tr>
+                            <th scope="col">Total Time Invest</th></tr>
                         </thead>
                         <tbody>
-                        <tr class="table-primary">
-                            <th scope="row">Course 1</th>
-                            <th scope="row">Invest 1</th>
-                        </tr>
-                        <tr class="table-info">
-                            <th scope="row">Course 2</th>
-                            <th scope="row">Invest 2</th>
+                        <tr th:each="module, iStat: ${modulesWithTimeDuration.keySet()}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                            <th scope="row" th:text="${module}"/>
+                            <td th:text="${modulesWithTimeDuration.get(module)}"/>
                         </tr>
                         </tbody>
                     </table>
@@ -29,35 +24,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="bs-component">
-                    <legend>Statistics</legend>
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">Working Hours In Total</th>
-                            <th scope="col">Time Range</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="table-primary">
-                            <th scope="row">Today</th>
-                            <th scope="row">5:32</th>
-                        </tr>
-                        <tr class="table-info">
-                            <th scope="row">This Week</th>
-                            <th scope="row">17:34</th>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div class="d-grid gap-2">
-                        <form action="statistics" method="get">
-                            <button class="btn btn-lg btn-primary col-12" type="submit">More</button>
-                        </form>
-                    </div>
-                </div>
+                <div th:replace="common/homestatistics :: homestatistics(timeDurationToday=${timeDurationToday}, timeDurationWeek=${timeDurationWeek})"/>
             </div>
         </div>
     </div>

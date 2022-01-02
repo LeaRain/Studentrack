@@ -138,6 +138,25 @@ public class StartController {
             }
         }
 
+        if (user instanceof Lecturer) {
+            var modulesWithTimeDuration = moduleService.getTimeDurationForLecturerModules((Lecturer) user);
+            model.addAttribute("modulesWithTimeDuration", modulesWithTimeDuration);
+
+            try {
+                var timeDurationToday = timeService.getTotalTimeInvestDurationForToday();
+                model.addAttribute("timeDurationToday", timeDurationToday);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
+
+            try {
+                var timeDurationWeek = timeService.getTotalTimeInvestDurationForCurrentWeek();
+                model.addAttribute("timeDurationWeek", timeDurationWeek);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
+        }
+
         model.addAttribute("user", user);
         return "home";
     }

@@ -6,6 +6,8 @@ import sw.laux.Studentrack.persistence.entities.Module;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
 
 public interface IModuleService {
     Collection<Major> getAllMajors();
@@ -29,4 +31,10 @@ public interface IModuleService {
     Iterable<ModuleResults> collectResultsForAllModulesOfStudent(Student student) throws StudentrackObjectNotFoundException;
     @Transactional
     ModuleResults collectResultForModuleOfStudent(Student student, Module module) throws StudentrackObjectNotFoundException;
+    Map<Module, TimeDuration> getTimeDurationForModulesToday(Iterable<Module> modules);
+    Map<Module, TimeDuration> getTimeDurationForLecturerModulesToday(Lecturer lecturer);
+    TimeDuration getTimeDurationForModuleToday(Module module) throws StudentrackObjectNotFoundException;
+    Map<Module, TimeDuration> getTimeDurationForModules(Iterable<Module> modules);
+    Map<Module, TimeDuration> getTimeDurationForLecturerModules(Lecturer lecturer);
+    TimeDuration getTimeDurationForModule(Module module) throws StudentrackObjectNotFoundException;
 }

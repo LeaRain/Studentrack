@@ -34,11 +34,20 @@ public interface ITimeService {
     TimeDuration getTimeInvestDurationForTodayAndStudent(Student student) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForCurrentWeekAndStudent(Student student) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForCurrentMonthAndStudent(Student student) throws StudentrackObjectNotFoundException;
+    TimeDuration getTimeInvestDurationForDateAndModule(Date date, Module module) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForCurrentYearAndStudent(Student student) throws StudentrackObjectNotFoundException;
+    TimeDuration getTimeInvestDurationForTimeRangeAndModule(Date start, Date end, Module module) throws StudentrackObjectNotFoundException;
+    TimeDuration getTimeInvestDurationForTodayAndModule(Module module) throws StudentrackObjectNotFoundException;
+    TimeDuration getTotalTimeInvestDurationForModule(Module module) throws StudentrackObjectNotFoundException;
+    TimeDuration getTimeInvestDurationForCurrentWeekAndModule(Module module) throws StudentrackObjectNotFoundException;
+    TimeDuration getTimeInvestDurationForCurrentMonthAndModule(Module module) throws StudentrackObjectNotFoundException;
+    TimeDuration getTimeInvestDurationForCurrentYearAndModule(Module module) throws StudentrackObjectNotFoundException;
+    TimeDuration getTotalTimeInvestDurationForToday() throws StudentrackObjectNotFoundException;
+    TimeDuration getTotalTimeInvestDurationForTimeRange(Date start, Date end) throws StudentrackObjectNotFoundException;
+    TimeDuration getTotalTimeInvestDurationForCurrentWeek() throws StudentrackObjectNotFoundException;
     Date[] getWeekStartAndEnd();
     Date[] getMonthStartAndEnd();
     Date[] getYearStartAndEnd();
     Date prepareInputDate(Date date, boolean back);
-
     Date setTimeToMidnight(Date date);
 }

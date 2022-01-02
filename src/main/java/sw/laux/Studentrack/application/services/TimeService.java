@@ -11,6 +11,7 @@ import sw.laux.Studentrack.persistence.entities.TimeDuration;
 import sw.laux.Studentrack.persistence.entities.TimeOrder;
 import sw.laux.Studentrack.persistence.repository.TimeRepository;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -119,18 +120,13 @@ public class TimeService implements ITimeService {
     public TimeDuration getTimeInvestDurationForTimeRangeAndStudent(Date start, Date end, Student student) throws StudentrackObjectNotFoundException {
         start = prepareInputDate(start, true);
         end = prepareInputDate(end, false);
-        System.out.println(start);
-        System.out.println(end);
 
         var timeOrderOptional = timeRepo.findAllByOwnerAndStartBetween(student, start, end);
-        //var timeOrderOptional = timeRepo.getAllBetweenStartAndEnd(start, end, student);
         if (timeOrderOptional.isEmpty()) {
             throw new StudentrackObjectNotFoundException(TimeOrder.class, student);
         }
 
         var timeOrders = timeOrderOptional.get();
-
-        System.out.println(timeOrders);
 
         return calculateTimeDuration(timeOrders);
 
@@ -170,9 +166,90 @@ public class TimeService implements ITimeService {
     }
 
     @Override
+    public TimeDuration getTimeInvestDurationForDateAndModule(Date date, Module module) throws StudentrackObjectNotFoundException {
+        return getTimeInvestDurationForTimeRangeAndModule(date, date, module);
+    }
+
+    @Override
     public TimeDuration getTimeInvestDurationForCurrentYearAndStudent(Student student) throws StudentrackObjectNotFoundException {
         var dates = getYearStartAndEnd();
         return getTimeInvestDurationForTimeRangeAndStudent(dates[0], dates[1], student);
+    }
+
+    @Override
+    public TimeDuration getTimeInvestDurationForTimeRangeAndModule(Date start, Date end, Module module) throws StudentrackObjectNotFoundException {
+        start = prepareInputDate(start, true);
+        end = prepareInputDate(end, false);
+
+        var timeOrderOptional = timeRepo.findAllByModuleAndStartBetween(module, start, end);
+        if (timeOrderOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, module);
+        }
+
+        var timeOrders = timeOrderOptional.get();
+
+        return calculateTimeDuration(timeOrders);
+    }
+
+    @Override
+    public TimeDuration getTimeInvestDurationForTodayAndModule(Module module) throws StudentrackObjectNotFoundException {
+        return getTimeInvestDurationForDateAndModule(new Date(), module);
+    }
+
+    @Override
+    public TimeDuration getTotalTimeInvestDurationForModule(Module module) throws StudentrackObjectNotFoundException {
+        var timeOrderOptional = timeRepo.findAllByModule(module);
+        if (timeOrderOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, module);
+        }
+
+        var timeOrders = timeOrderOptional.get();
+
+        return calculateTimeDuration(timeOrders);
+    }
+
+    @Override
+    public TimeDuration getTimeInvestDurationForCurrentWeekAndModule(Module module) throws StudentrackObjectNotFoundException {
+        var dates = getWeekStartAndEnd();
+        return getTimeInvestDurationForTimeRangeAndModule(dates[0], dates[1], module);
+    }
+
+    @Override
+    public TimeDuration getTimeInvestDurationForCurrentMonthAndModule(Module module) throws StudentrackObjectNotFoundException {
+        var dates = getMonthStartAndEnd();
+        return getTimeInvestDurationForTimeRangeAndModule(dates[0], dates[1], module);
+    }
+
+    @Override
+    public TimeDuration getTimeInvestDurationForCurrentYearAndModule(Module module) throws StudentrackObjectNotFoundException {
+        var dates = getYearStartAndEnd();
+        return getTimeInvestDurationForTimeRangeAndModule(dates[0], dates[1], module);
+    }
+
+    @Override
+    public TimeDuration getTotalTimeInvestDurationForToday() throws StudentrackObjectNotFoundException {
+        return getTotalTimeInvestDurationForTimeRange(new Date(), new Date());
+    }
+
+    @Override
+    public TimeDuration getTotalTimeInvestDurationForTimeRange(Date start, Date end) throws StudentrackObjectNotFoundException {
+        start = prepareInputDate(start, true);
+        end = prepareInputDate(end, false);
+
+        var timeOrderOptional = timeRepo.findAllByStartBetween(start, end);
+        if (timeOrderOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, new TimeOrder());
+        }
+
+        var timeOrders = timeOrderOptional.get();
+
+        return calculateTimeDuration(timeOrders);
+    }
+
+    @Override
+    public TimeDuration getTotalTimeInvestDurationForCurrentWeek() throws StudentrackObjectNotFoundException {
+        var dates = getWeekStartAndEnd();
+        return getTotalTimeInvestDurationForTimeRange(dates[0], dates[1]);
     }
 
     @Override
@@ -180,11 +257,16 @@ public class TimeService implements ITimeService {
         var dateResult = new Date[2];
 
         var calendar = new GregorianCalendar();
-        var dayDifference = (-1) * calendar.get(Calendar.DAY_OF_WEEK) - calendar.getFirstDayOfWeek();
-        calendar.roll(Calendar.DAY_OF_MONTH, dayDifference);
+
+        while(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            calendar.add(Calendar.DATE, -1);
+        }
         var weekStart = calendar.getTime();
         dateResult[0] = weekStart;
-        calendar.add(Calendar.DAY_OF_MONTH, 6);
+
+        while(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            calendar.add(Calendar.DATE, 1);
+        }
         var weekEnd = calendar.getTime();
         dateResult[1] = weekEnd;
 
