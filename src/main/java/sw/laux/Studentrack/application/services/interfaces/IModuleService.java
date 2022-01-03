@@ -37,4 +37,5 @@ public interface IModuleService {
     Map<Module, TimeDuration> getTimeDurationForModules(Iterable<Module> modules);
     Map<Module, TimeDuration> getTimeDurationForLecturerModules(Lecturer lecturer);
     TimeDuration getTimeDurationForModule(Module module) throws StudentrackObjectNotFoundException;
+    Iterable<ModuleResults> getResultsForModule(Module module) throws StudentrackObjectNotFoundException;
 }

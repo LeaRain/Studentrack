@@ -238,5 +238,21 @@ public class ModuleService implements IModuleService {
         return timeService.getTotalTimeInvestDurationForModule(module);
     }
 
+    @Override
+    public Iterable<ModuleResults> getResultsForModule(Module module) throws StudentrackObjectNotFoundException {
+        module = findModule(module);
+        var resultModuleResults = new ArrayList<ModuleResults>();
+        var students = module.getStudents();
 
+        for (var student : students) {
+            var moduleResults = student.getModuleResults();
+            for (var result : moduleResults) {
+                if (result.getModule() == module) {
+                    resultModuleResults.add(result);
+                }
+            }
+        }
+
+        return resultModuleResults;
+    }
 }

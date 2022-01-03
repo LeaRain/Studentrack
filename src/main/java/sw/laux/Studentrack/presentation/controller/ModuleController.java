@@ -13,6 +13,7 @@ import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
+import java.util.ArrayList;
 
 @Controller
 public class ModuleController {
@@ -122,15 +123,7 @@ public class ModuleController {
                                @ModelAttribute("moduleShell") Module module,
                                RedirectAttributes redirectAttributes) {
 
-        try {
-            moduleService.findModule(module);
-
-        } catch (StudentrackObjectNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
-            return "redirect:/modules";
-        }
-
+        // Existence check for module in redirected page -> Here not necessary, even if moduleId is not set (and therefore 0)
         return "redirect:/modules/edit/" + module.getModuleId();
     }
 
@@ -215,6 +208,74 @@ public class ModuleController {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
         }
         return "redirect:/modules";
+    }
+
+    @PostMapping("modules/grade")
+    public String doEnterGrades(Model model,
+                                    @ModelAttribute("module") Module module,
+                                    RedirectAttributes redirectAttributes) {
+
+        return "redirect:/modules/grade/" + module.getModuleId();
+
+    }
+
+    @GetMapping("modules/grade/{moduleId}")
+    public String doEnterGrades(Model model,
+                               @PathVariable long moduleId,
+                               RedirectAttributes redirectAttributes) {
+
+        Module module;
+
+        try {
+            module = moduleService.findModule(moduleId);
+        }
+        catch (StudentrackObjectNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.info(e.getMessage());
+            return "redirect:/modules";
+        }
+
+        model.addAttribute("module", module);
+
+        Iterable<ModuleResults> moduleResults;
+
+        try {
+            moduleResults = moduleService.getResultsForModule(module);
+        } catch (StudentrackObjectNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.info(e.getMessage());
+            return "redirect:/modules";
+        }
+
+        var moduleResultsDTO = new ModuleResultsDTO();
+
+        for (var result : moduleResults) {
+            if (result.getGrade() == null) {
+                result.setGrade(new Grade());
+            }
+            moduleResultsDTO.addModuleResult(result);
+        }
+
+        model.addAttribute("moduleResults", moduleResults);
+        model.addAttribute("moduleResultsDTO", moduleResultsDTO);
+
+        return "grades";
+    }
+
+    @PostMapping("modules/grade/check")
+    public String doGradeCheck(Model model,
+                                    @ModelAttribute("moduleResultsDTO") ModuleResultsDTO moduleResultsDTO,
+                                    RedirectAttributes redirectAttributes) {
+
+
+        System.out.println(moduleResultsDTO);
+
+        for (var result : moduleResultsDTO.getModuleResults()) {
+            System.out.println(result);
+        }
+
+        return "redirect:/modules";
+
     }
 
 }

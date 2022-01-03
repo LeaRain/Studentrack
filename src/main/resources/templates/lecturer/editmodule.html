@@ -39,6 +39,20 @@
 
     <div class="container">
         <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <form method="post" th:action="@{/modules/grade}" th:object="${module}">
+                    <fieldset>
+                        <input type="hidden" th:field="*{moduleId}">
+                    </fieldset>
+                    <button type="submit" class="btn btn-info btn-lg col-12 mt-5">Enter Module Grades</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
             <div class="col-lg-8 col-md-7 col-sm-6 mt-5">
                 <div class="alert alert-dismissible alert-danger">
                     <strong>Proceed with caution!</strong> You are entering the danger zone.
