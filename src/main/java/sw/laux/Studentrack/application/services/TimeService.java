@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
+import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
+import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
-import sw.laux.Studentrack.persistence.entities.Student;
-import sw.laux.Studentrack.persistence.entities.TimeDuration;
-import sw.laux.Studentrack.persistence.entities.TimeOrder;
 import sw.laux.Studentrack.persistence.repository.TimeRepository;
 
 import java.util.Arrays;
@@ -20,6 +20,9 @@ import java.util.GregorianCalendar;
 public class TimeService implements ITimeService {
     @Autowired
     private TimeRepository timeRepo;
+
+    @Autowired
+    private IModuleService moduleService;
 
     @Override
     public TimeOrder findOpenTimeOrderForStudent(Student student) throws StudentrackObjectNotFoundException {
@@ -33,7 +36,13 @@ public class TimeService implements ITimeService {
     }
 
     @Override
-    public TimeOrder createOpenTimeOrder(TimeOrder timeOrder) throws StudentrackObjectAlreadyExistsException {
+    public TimeOrder createOpenTimeOrder(TimeOrder timeOrder) throws StudentrackObjectAlreadyExistsException, StudentrackOperationNotAllowedException {
+        var timeOrderAllowed = timeOrdersForModuleAndStudentAllowed(timeOrder.getModule(), timeOrder.getOwner());
+
+        if (!timeOrderAllowed) {
+            throw new StudentrackOperationNotAllowedException(timeOrder.getClass(), timeOrder);
+        }
+
         try {
             findOpenTimeOrderForStudent(timeOrder.getOwner());
             throw new StudentrackObjectAlreadyExistsException(timeOrder.getClass(), timeOrder);
@@ -68,7 +77,10 @@ public class TimeService implements ITimeService {
     }
 
     @Override
-    public TimeOrder saveTimeOrder(TimeOrder timeOrder) {
+    public TimeOrder saveTimeOrder(TimeOrder timeOrder) throws StudentrackOperationNotAllowedException {
+        if (!(timeOrdersForModuleAndStudentAllowed(timeOrder.getModule(), timeOrder.getOwner()))) {
+            throw new StudentrackOperationNotAllowedException(timeOrder.getClass(), timeOrder);
+        }
         return timeRepo.save(timeOrder);
     }
 
@@ -109,6 +121,21 @@ public class TimeService implements ITimeService {
         }
 
         return timeOrderOptional.get();
+    }
+
+    @Override
+    public boolean timeOrdersForModuleAndStudentAllowed(Module module, Student student) {
+        ModuleResults results;
+
+        try {
+            results = moduleService.findModuleResultsForStudentAndModule(module, student);
+        } catch (StudentrackObjectNotFoundException e) {
+            return true;
+        }
+
+        var grade = results.getGrade();
+        // Grade between 1 and 4 -> Time Order not allowed
+        return !(1 <= grade.getValue()) || !(grade.getValue() <= 4);
     }
 
     @Override

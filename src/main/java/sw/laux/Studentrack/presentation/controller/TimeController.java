@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
@@ -70,7 +71,7 @@ public class TimeController {
 
         try {
             timeOrder = timeService.createOpenTimeOrder(timeOrder);
-        } catch (StudentrackObjectAlreadyExistsException e) {
+        } catch (StudentrackObjectAlreadyExistsException | StudentrackOperationNotAllowedException e) {
             logger.info(e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/home";
@@ -141,6 +142,7 @@ public class TimeController {
 
         model.addAttribute("timeorders", timeOrders);
         model.addAttribute("timeorderShell", new TimeOrder());
+        // TODO: Change to modules without grade
         model.addAttribute("modules", ((Student) user).getModules());
         model.addAttribute("moduleShell", new Module());
         try {
@@ -160,6 +162,7 @@ public class TimeController {
         var user = userService.loadUserByUsername(principal.getName());
 
         if (user instanceof Student) {
+            // TODO: Change to modules without grade
             var modules = ((Student) user).getModules();
             model.addAttribute("modules", modules);
         }
@@ -184,7 +187,14 @@ public class TimeController {
         timeOrder.setEnd(endDate);
         var user = userService.loadUserByUsername(principal.getName());
         timeOrder.setOwner((Student) user);
-        timeOrder = timeService.saveTimeOrder(timeOrder);
+
+        try {
+            timeOrder = timeService.saveTimeOrder(timeOrder);
+        } catch (StudentrackOperationNotAllowedException e) {
+            logger.info(e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/timeorders";
+        }
 
         var successMessage = "Time Order " + timeOrder + "saved!";
         logger.info(successMessage);

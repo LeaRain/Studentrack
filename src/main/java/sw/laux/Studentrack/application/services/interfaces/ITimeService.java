@@ -2,6 +2,7 @@ package sw.laux.Studentrack.application.services.interfaces;
 
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.entities.Student;
 import sw.laux.Studentrack.persistence.entities.TimeDuration;
@@ -15,12 +16,12 @@ import java.util.Map;
 public interface ITimeService {
     TimeOrder findOpenTimeOrderForStudent(Student student) throws StudentrackObjectNotFoundException;
     @Transactional
-    TimeOrder createOpenTimeOrder(TimeOrder timeOrder) throws StudentrackObjectAlreadyExistsException;
+    TimeOrder createOpenTimeOrder(TimeOrder timeOrder) throws StudentrackObjectAlreadyExistsException, StudentrackOperationNotAllowedException;
     @Transactional
     TimeOrder closeOpenTimeOrderForStudent(TimeOrder timeOrder, Student student) throws StudentrackObjectNotFoundException;
     @Transactional
     Iterable<TimeOrder> getAllTimeOrdersForStudent(Student student) throws StudentrackObjectNotFoundException;
-    TimeOrder saveTimeOrder(TimeOrder timeOrder);
+    TimeOrder saveTimeOrder(TimeOrder timeOrder) throws StudentrackOperationNotAllowedException;
     TimeOrder findTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException;
     TimeOrder findTimeOrder(long timeOrderId) throws StudentrackObjectNotFoundException;
     TimeOrder updateTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException;
@@ -28,6 +29,7 @@ public interface ITimeService {
     void deleteTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException;
     @Transactional
     Iterable<TimeOrder> findTimeOrdersForModuleAndStudent(Module module, Student student) throws StudentrackObjectNotFoundException;
+    boolean timeOrdersForModuleAndStudentAllowed(Module module, Student student);
     TimeDuration getTimeInvestDurationForDateAndStudent(Date date, Student student) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForTimeRangeAndStudent(Date start, Date end, Student student) throws StudentrackObjectNotFoundException;
     TimeDuration calculateTimeDuration(Iterable<TimeOrder> timeOrders);

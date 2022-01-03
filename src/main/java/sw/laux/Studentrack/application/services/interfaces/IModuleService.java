@@ -42,4 +42,5 @@ public interface IModuleService {
     ModuleResults saveNewGradeValueAndTryNumberForResult(Grade grade, ModuleResults moduleResults) throws StudentrackObjectNotFoundException;
     ModuleResults findModuleResults(ModuleResults moduleResults) throws StudentrackObjectNotFoundException;
     ModuleResults findModuleResults(long moduleResultsId) throws StudentrackObjectNotFoundException;
+    ModuleResults findModuleResultsForStudentAndModule(Module module, Student student) throws StudentrackObjectNotFoundException;
 }

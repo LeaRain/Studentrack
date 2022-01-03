@@ -161,15 +161,13 @@ public class ModuleService implements IModuleService {
 
     @Override
     public ModuleResults collectResultForModuleOfStudent(Student student, Module module) throws StudentrackObjectNotFoundException {
-        var moduleResultsOptional = moduleResultsRepo.findByStudentAndModule(student, module);
         ModuleResults moduleResults;
-
-        if (moduleResultsOptional.isEmpty()) {
+        try {
+            moduleResults = findModuleResultsForStudentAndModule(module, student);
+        }
+        catch (StudentrackObjectNotFoundException e) {
             moduleResults = new ModuleResults();
             moduleResults.setTimeInvest(new TimeInvest());
-        }
-        else {
-            moduleResults = moduleResultsOptional.get();
         }
 
         var timeOrders = timeService.findTimeOrdersForModuleAndStudent(module, student);
@@ -273,7 +271,18 @@ public class ModuleService implements IModuleService {
         currentGrade.setModuleResults(moduleResults);
         moduleResults.setGrade(currentGrade);
 
-        return moduleResultsRepo.save(moduleResults);
+        moduleResults = moduleResultsRepo.save(moduleResults);
+
+        // Clean up: If there is an open time order during successful grading, cancel it
+        if (grade.getValue() != 5) {
+            try {
+                var openTimeOrder = timeService.findOpenTimeOrderForStudent(moduleResults.getStudent());
+                timeService.deleteTimeOrder(openTimeOrder);
+            } catch (StudentrackObjectNotFoundException ignored) {
+            }
+        }
+
+        return moduleResults;
     }
 
     @Override
@@ -287,6 +296,17 @@ public class ModuleService implements IModuleService {
 
         if (resultsOptional.isEmpty()) {
             throw new StudentrackObjectNotFoundException(ModuleResults.class, moduleResultsId);
+        }
+
+        return resultsOptional.get();
+    }
+
+    @Override
+    public ModuleResults findModuleResultsForStudentAndModule(Module module, Student student) throws StudentrackObjectNotFoundException {
+        var resultsOptional = moduleResultsRepo.findByStudentAndModule(student, module);
+
+        if (resultsOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(ModuleResults.class, module);
         }
 
         return resultsOptional.get();
