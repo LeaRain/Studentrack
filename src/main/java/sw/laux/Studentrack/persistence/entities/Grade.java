@@ -34,6 +34,18 @@ public class Grade {
 
     public void setValue(double value) {
         this.value = value;
+
+        if (value <= 1.5) {
+            setDescription("Very Good");
+        } else if (value <= 2.5) {
+            setDescription("Good");
+        } else if (value <= 3.5) {
+            setDescription("Satisfactory");
+        } else if (value <= 4) {
+            setDescription("Sufficient");
+        } else {
+            setDescription("Failed");
+        }
     }
 
     public String getDescription() {
@@ -58,12 +70,7 @@ public class Grade {
 
     @Override
     public String toString() {
-        return "Grade{" +
-                "gradeId=" + gradeId +
-                ", value=" + value +
-                ", description='" + description + '\'' +
-                ", tryNumber=" + tryNumber +
-                '}';
+        return value + " (" + tryNumber + ")";
     }
 
     public ModuleResults getModuleResults() {

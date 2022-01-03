@@ -14,6 +14,7 @@ import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @Controller
 public class ModuleController {
@@ -253,6 +254,7 @@ public class ModuleController {
             if (result.getGrade() == null) {
                 result.setGrade(new Grade());
             }
+
             moduleResultsDTO.addModuleResult(result);
         }
 
@@ -267,11 +269,39 @@ public class ModuleController {
                                     @ModelAttribute("moduleResultsDTO") ModuleResultsDTO moduleResultsDTO,
                                     RedirectAttributes redirectAttributes) {
 
+        var moduleResults = moduleResultsDTO.getModuleResults();
+        var correctGradeValues = new Double[]{1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0};
+        var successMessage = new StringBuilder();
+        var errorMessage = new StringBuilder();
 
-        System.out.println(moduleResultsDTO);
+        for (var result : moduleResults) {
+            var grade = result.getGrade();
+            if (!(Arrays.asList(correctGradeValues).contains(grade.getValue()))) {
+                var gradeValueErrorMessage = "Grade value " + grade.getValue() + " not allowed";
+                redirectAttributes.addFlashAttribute("errorMessage", gradeValueErrorMessage);
+                logger.info(gradeValueErrorMessage);
+                return "redirect:/modules";
+            }
 
-        for (var result : moduleResultsDTO.getModuleResults()) {
-            System.out.println(result);
+            try {
+                var newResult = moduleService.saveNewGradeValueAndTryNumberForResult(grade, result);
+                var gradeSuccessMessage = "Successfully saved grade " + newResult.getGrade() + " for " + newResult.getStudent();
+                logger.info(gradeSuccessMessage);
+                successMessage.append("\n").append(gradeSuccessMessage);
+
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+                errorMessage.append("\n").append(e.getMessage());
+            }
+
+            if (!(successMessage.isEmpty())) {
+                redirectAttributes.addFlashAttribute("successMessage", successMessage);
+            }
+
+            if (!(errorMessage.isEmpty())) {
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            }
+
         }
 
         return "redirect:/modules";

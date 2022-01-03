@@ -13,7 +13,7 @@ public class ModuleResults extends SingleIdEntity<Long> {
     private Student student;
     @OneToOne(cascade={CascadeType.PERSIST})
     private TimeInvest timeInvest;
-    @OneToOne
+    @OneToOne(cascade={CascadeType.PERSIST})
     private Grade grade;
 
     public ModuleResults(long moduleResultsId, Module module, Student student, TimeInvest timeInvest, Grade grade) {

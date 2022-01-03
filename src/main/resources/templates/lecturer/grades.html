@@ -15,7 +15,8 @@
                             <fieldset th:each="moduleResult, iStat : *{moduleResults}">
                                 <div class="form-group">
                                     <legend class="mt-4" th:text="${moduleResult.student}"></legend>
-                                    <input type="hidden" th:value="${moduleResult.student}">
+                                    <input type="hidden" th:value="*{moduleResults[__${iStat.index}__].moduleResultsId}" th:field="*{moduleResults[__${iStat.index}__].moduleResultsId}">
+                                    <input type="hidden" th:value="*{moduleResults[__${iStat.index}__].grade.gradeId}" th:field="*{moduleResults[__${iStat.index}__].grade.gradeId}">
                                     <label class="col-form-label mt-3">Grade</label>
                                     <input type="number" step="0.1" class="form-control gradeInput" placeholder="Enter Grade" th:field="*{moduleResults[__${iStat.index}__].grade.value}" required>
                                     <label class="col-form-label mt-3">Try Number</label>

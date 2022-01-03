@@ -38,4 +38,8 @@ public interface IModuleService {
     Map<Module, TimeDuration> getTimeDurationForLecturerModules(Lecturer lecturer);
     TimeDuration getTimeDurationForModule(Module module) throws StudentrackObjectNotFoundException;
     Iterable<ModuleResults> getResultsForModule(Module module) throws StudentrackObjectNotFoundException;
+    @Transactional
+    ModuleResults saveNewGradeValueAndTryNumberForResult(Grade grade, ModuleResults moduleResults) throws StudentrackObjectNotFoundException;
+    ModuleResults findModuleResults(ModuleResults moduleResults) throws StudentrackObjectNotFoundException;
+    ModuleResults findModuleResults(long moduleResultsId) throws StudentrackObjectNotFoundException;
 }

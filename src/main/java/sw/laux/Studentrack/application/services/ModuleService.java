@@ -255,4 +255,42 @@ public class ModuleService implements IModuleService {
 
         return resultModuleResults;
     }
+
+    @Override
+    public ModuleResults saveNewGradeValueAndTryNumberForResult(Grade grade, ModuleResults moduleResults) throws StudentrackObjectNotFoundException {
+        moduleResults = findModuleResults(moduleResults);
+        var currentGrade = moduleResults.getGrade();
+
+        if (currentGrade == null) {
+            currentGrade = grade;
+        }
+
+        else {
+            currentGrade.setValue(grade.getValue());
+            currentGrade.setTryNumber(grade.getTryNumber());
+        }
+
+        currentGrade.setModuleResults(moduleResults);
+        moduleResults.setGrade(currentGrade);
+
+        return moduleResultsRepo.save(moduleResults);
+    }
+
+    @Override
+    public ModuleResults findModuleResults(ModuleResults moduleResults) throws StudentrackObjectNotFoundException {
+        return findModuleResults(moduleResults.getModuleResultsId());
+    }
+
+    @Override
+    public ModuleResults findModuleResults(long moduleResultsId) throws StudentrackObjectNotFoundException {
+        var resultsOptional = moduleResultsRepo.findById(moduleResultsId);
+
+        if (resultsOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(ModuleResults.class, moduleResultsId);
+        }
+
+        return resultsOptional.get();
+    }
+
+
 }
