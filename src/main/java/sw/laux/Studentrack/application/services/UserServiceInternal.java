@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.repository.FacultyRepository;
@@ -138,6 +139,24 @@ public class UserServiceInternal implements IUserServiceInternal {
         }
 
         return userOptional.get();
+    }
+
+    @Override
+    public User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackPasswordWrongException {
+        if (!validatePasswordForUser(user, oldPassword)) {
+            throw new StudentrackPasswordWrongException(user.getClass(), user);
+        }
+
+        user = findUserByMailAddress(user);
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        return userRepo.save(user);
+    }
+
+    @Override
+    public boolean validatePasswordForUser(User user, String password) throws StudentrackObjectNotFoundException{
+        user = findUserByMailAddress(user);
+        return passwordEncoder.matches(password, user.getPassword());
     }
 
     @Override

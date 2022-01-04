@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
@@ -116,11 +117,31 @@ public class UserController {
     }
 
     @GetMapping("change/password")
-    public String changePassword(Model model, Principal principal) {
-        var user = (User) userService.loadUserByUsername(principal.getName());
-        var userShell = new UserPasswordChangeWebShell();
-        userShell.setUser(user);
-        model.addAttribute("userShell", userShell);
+    public String changePassword(Model model) {
+        var passwordShell = new PasswordWebShell();
+        model.addAttribute("passwordShell", passwordShell);
         return "passwordchange";
+    }
+
+    @PostMapping("change/password/check")
+    public String doChangePassword(Model model,
+                           Principal principal,
+                           @ModelAttribute("passwordShell") PasswordWebShell passwordWebShell,
+                           RedirectAttributes redirectAttributes) {
+        var user = (User) userService.loadUserByUsername(principal.getName());
+        try {
+            userService.changeUserPassword(user, passwordWebShell.getOldPassword(), passwordWebShell.getNewPassword());
+        } catch (StudentrackObjectNotFoundException | StudentrackPasswordWrongException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.info(e.getMessage());
+            return "redirect:/home";
+        }
+
+        var successMessage = "Successfully updated password for user " + user;
+        redirectAttributes.addFlashAttribute("successMessage", successMessage);
+        logger.info(successMessage);
+
+        return "redirect:/home";
+
     }
 }

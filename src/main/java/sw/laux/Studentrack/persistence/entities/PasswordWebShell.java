@@ -1,25 +1,11 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-
-@Entity
-public class UserPasswordChangeWebShell extends User{
-    @OneToOne
-    private User user;
+public class PasswordWebShell {
     private String oldPassword;
     private String newPassword;
 
-    public UserPasswordChangeWebShell() {
+    public PasswordWebShell() {
 
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getOldPassword() {

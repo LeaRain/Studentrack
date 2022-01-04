@@ -2,6 +2,7 @@ package sw.laux.Studentrack.application.services.interfaces;
 
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
 import sw.laux.Studentrack.persistence.entities.Faculty;
 import sw.laux.Studentrack.persistence.entities.Student;
 import sw.laux.Studentrack.persistence.entities.User;
@@ -17,4 +18,6 @@ public interface IUserServiceInternal extends IUserService{
     User updateUserWithNamesAndMailAddress(User user) throws StudentrackObjectNotFoundException, StudentrackObjectAlreadyExistsException;
     User findUserByMailAddress(User user) throws StudentrackObjectNotFoundException;
     User findUserByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException;
+    User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackPasswordWrongException;
+    boolean validatePasswordForUser(User user, String password) throws StudentrackObjectNotFoundException;
 }
