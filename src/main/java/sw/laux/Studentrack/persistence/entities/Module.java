@@ -22,8 +22,6 @@ public class Module extends SingleIdEntity<Long>{
     private Collection<ModuleResults> moduleResults;
     @ManyToMany(mappedBy="modules")
     private Collection<Student> students;
-    @ElementCollection
-    private Collection<Course> availableCourses;
 
     @Override
     public String toString() {
@@ -38,21 +36,12 @@ public class Module extends SingleIdEntity<Long>{
         this.responsibleLecturer = responsibleLecturer;
     }
 
-    public Collection<Course> getAvailableCourses() {
-        return availableCourses;
-    }
-
-    public void setAvailableCourses(Collection<Course> availableCourses) {
-        this.availableCourses = availableCourses;
-    }
-
-    public Module(String name, int ects, int creditHours, String description, Lecturer responsibleLecturer, Collection<Course> availableCourses) {
+    public Module(String name, int ects, int creditHours, String description, Lecturer responsibleLecturer) {
         this.name = name;
         this.ects = ects;
         this.creditHours = creditHours;
         this.description = description;
         this.responsibleLecturer = responsibleLecturer;
-        this.availableCourses = availableCourses;
     }
 
     public Module() {

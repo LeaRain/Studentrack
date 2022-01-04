@@ -1,9 +1,5 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import sw.laux.Studentrack.persistence.entities.Course;
-import sw.laux.Studentrack.persistence.entities.SingleIdEntity;
-import sw.laux.Studentrack.persistence.entities.TimeOrder;
-
 import javax.persistence.*;
 
 @Entity
