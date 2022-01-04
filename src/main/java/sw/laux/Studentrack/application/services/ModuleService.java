@@ -21,8 +21,6 @@ public class ModuleService implements IModuleService {
     @Autowired
     private MajorRepository majorRepo;
     @Autowired
-    private FacultyRepository facultyRepo;
-    @Autowired
     private IUserServiceInternal userService;
     @Autowired
     private ITimeService timeService;
@@ -31,9 +29,6 @@ public class ModuleService implements IModuleService {
         return (Collection<Major>) majorRepo.findAll();
     }
 
-    public Collection<Faculty> getAllFaculties() {
-        return (Collection<Faculty>) facultyRepo.findAll();
-    }
 
     @Override
     public Module saveModule(Module module) {

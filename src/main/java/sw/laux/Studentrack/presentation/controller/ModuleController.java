@@ -40,8 +40,8 @@ public class ModuleController {
         if (user instanceof Student) {
             var major = ((Student) user).getMajor();
             model.addAttribute("major", major);
-            var modules = ((Student) user).getModules();
-            model.addAttribute("modules", modules);
+            // Also failed modules for withdrawing -> 5.0 makes withdraw possible, for example in case of choosing another module for an exam
+            model.addAttribute("modules", moduleService.findCurrentlyNotPassedModulesForStudent((Student) user));
 
             try {
                 var moduleResults = moduleService.collectResultsForAllModulesOfStudent((Student) user);

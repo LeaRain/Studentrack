@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
-import sw.laux.Studentrack.persistence.entities.Grade;
-import sw.laux.Studentrack.persistence.entities.Student;
-import sw.laux.Studentrack.persistence.entities.TimeInvest;
-import sw.laux.Studentrack.persistence.entities.User;
+import sw.laux.Studentrack.persistence.entities.*;
+import sw.laux.Studentrack.persistence.repository.FacultyRepository;
 import sw.laux.Studentrack.persistence.repository.UserRepository;
 
+import java.lang.Module;
+import java.util.Collection;
 import java.util.Map;
 
 @Service
@@ -23,6 +23,9 @@ public class UserServiceInternal implements IUserServiceInternal {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FacultyRepository facultyRepo;
 
 
     @Override
@@ -83,6 +86,11 @@ public class UserServiceInternal implements IUserServiceInternal {
 
         return (Student) userOptional.get();
 
+    }
+
+    @Override
+    public Collection<Faculty> getAllFaculties() {
+        return (Collection<Faculty>) facultyRepo.findAll();
     }
 
     @Override

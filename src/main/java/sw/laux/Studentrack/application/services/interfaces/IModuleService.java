@@ -10,8 +10,6 @@ import java.util.Date;
 import java.util.Map;
 
 public interface IModuleService {
-    Collection<Major> getAllMajors();
-    Collection<Faculty> getAllFaculties();
     Iterable<Module> getAllModulesByLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
     Module saveModule(Module module);
     Module saveNewModule(Module module) throws StudentrackObjectAlreadyExistsException;

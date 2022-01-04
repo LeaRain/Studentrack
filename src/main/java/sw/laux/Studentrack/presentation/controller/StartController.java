@@ -19,13 +19,9 @@ import java.security.Principal;
 @Controller
 public class StartController {
     @Autowired
-    private IModuleService moduleService;
-    @Autowired
     private IUserServiceInternal userService;
     @Autowired
     private Logger logger;
-    @Autowired
-    private ITimeService timeService;
 
     @GetMapping("/")
     public String index(Model model,
@@ -54,7 +50,7 @@ public class StartController {
         var lecturer = new Lecturer();
         userShell.setLecturer(lecturer);
         model.addAttribute("userShell", userShell);
-        var faculties = moduleService.getAllFaculties();
+        var faculties = userService.getAllFaculties();
         model.addAttribute("faculties", faculties);
         return "registration";
     }
@@ -100,65 +96,6 @@ public class StartController {
         var user = new UserImplementation();
         model.addAttribute("user", user);
         return "login";
-    }
-
-
-    @GetMapping("home")
-    public String home(Model model, Principal principal) {
-        var user = (User) userService.loadUserByUsername(principal.getName());
-
-        if (user instanceof Student) {
-            model.addAttribute("modules", (moduleService.findCurrentlyNotPassedModulesForStudent((Student) user)));
-            model.addAttribute("moduleShell", new Module());
-            try {
-                var timeOrder = timeService.findOpenTimeOrderForStudent((Student) user);
-                model.addAttribute("timeOrder", timeOrder);
-            } catch (StudentrackObjectNotFoundException ignored) {
-            }
-
-            try {
-                var moduleResults = moduleService.collectResultsForAllModulesOfStudent((Student) user);
-                model.addAttribute("moduleResults", moduleResults);
-            } catch (StudentrackObjectNotFoundException e) {
-                logger.info(e.getMessage());
-            }
-
-            try {
-                var timeDurationToday = timeService.getTimeInvestDurationForTodayAndStudent((Student) user);
-                model.addAttribute("timeDurationToday", timeDurationToday);
-            } catch (StudentrackObjectNotFoundException e) {
-                logger.info(e.getMessage());
-            }
-
-            try {
-                var timeDurationWeek = timeService.getTimeInvestDurationForCurrentWeekAndStudent((Student) user);
-                model.addAttribute("timeDurationWeek", timeDurationWeek);
-            } catch (StudentrackObjectNotFoundException e) {
-                logger.info(e.getMessage());
-            }
-        }
-
-        if (user instanceof Lecturer) {
-            var modulesWithTimeDuration = moduleService.getTimeDurationForLecturerModules((Lecturer) user);
-            model.addAttribute("modulesWithTimeDuration", modulesWithTimeDuration);
-
-            try {
-                var timeDurationToday = timeService.getTotalTimeInvestDurationForToday();
-                model.addAttribute("timeDurationToday", timeDurationToday);
-            } catch (StudentrackObjectNotFoundException e) {
-                logger.info(e.getMessage());
-            }
-
-            try {
-                var timeDurationWeek = timeService.getTotalTimeInvestDurationForCurrentWeek();
-                model.addAttribute("timeDurationWeek", timeDurationWeek);
-            } catch (StudentrackObjectNotFoundException e) {
-                logger.info(e.getMessage());
-            }
-        }
-
-        model.addAttribute("user", user);
-        return "home";
     }
 
     @GetMapping("login-error")
