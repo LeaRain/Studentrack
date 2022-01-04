@@ -142,8 +142,7 @@ public class TimeController {
 
         model.addAttribute("timeorders", timeOrders);
         model.addAttribute("timeorderShell", new TimeOrder());
-        // TODO: Change to modules without grade
-        model.addAttribute("modules", ((Student) user).getModules());
+        model.addAttribute("modules", (moduleService.findCurrentlyNotPassedModulesForStudent((Student) user)));
         model.addAttribute("moduleShell", new Module());
         try {
             var timeOrder = timeService.findOpenTimeOrderForStudent((Student) user);
@@ -162,9 +161,7 @@ public class TimeController {
         var user = userService.loadUserByUsername(principal.getName());
 
         if (user instanceof Student) {
-            // TODO: Change to modules without grade
-            var modules = ((Student) user).getModules();
-            model.addAttribute("modules", modules);
+            model.addAttribute("modules", moduleService.findCurrentlyNotPassedModulesForStudent((Student) user));
         }
 
         var timeOrderShell = new TimeOrderWebShell();

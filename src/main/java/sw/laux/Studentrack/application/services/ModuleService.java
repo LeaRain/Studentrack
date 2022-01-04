@@ -114,8 +114,14 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
-    public Module withdrawFromModule(Student student, Module module) throws StudentrackObjectNotFoundException {
+    public Module withdrawFromModule(Student student, Module module) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
         module = findModule(module);
+
+        // Withdraw not possible for existing grade
+        if (existsGradeForModuleAndStudent(student, module)) {
+            throw new StudentrackOperationNotAllowedException(module.getClass(), module);
+        }
+
         var studentModules = student.getModules();
         var removeSuccess = studentModules.remove(module);
         if (!removeSuccess) {
@@ -310,6 +316,53 @@ public class ModuleService implements IModuleService {
         }
 
         return resultsOptional.get();
+    }
+
+    @Override
+    public Iterable<Module> findCurrentlyNotPassedModulesForStudent(Student student) {
+        var modules = student.getModules();
+        var resultModules = new ArrayList<Module>();
+        for (var module : modules) {
+           if (timeService.timeOrdersForModuleAndStudentAllowed(module, student)) {
+               resultModules.add(module);
+           }
+        }
+        return resultModules;
+    }
+
+    @Override
+    public boolean hasStudentPassedModule(Student student, Module module) {
+        ModuleResults results;
+        try {
+            results = findModuleResultsForStudentAndModule(module, student);
+            // Not found means not passed
+        } catch (StudentrackObjectNotFoundException e) {
+            return false;
+        }
+
+        var grade = results.getGrade();
+
+        return 1 <= grade.getValue() && grade.getValue() <= 4;
+    }
+
+    @Override
+    public boolean existsGradeForModuleAndStudent(Student student, Module module) {
+        ModuleResults results;
+        try {
+            results = findModuleResultsForStudentAndModule(module, student);
+            // Not found means not passed
+        } catch (StudentrackObjectNotFoundException e) {
+            return false;
+        }
+
+        var grade = results.getGrade();
+
+        if (grade == null) {
+            return false;
+        }
+
+        // Check for default value -> grade object may exist, but value needs to be set
+        return grade.getValue() != 0;
     }
 
 

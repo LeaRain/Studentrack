@@ -125,17 +125,8 @@ public class TimeService implements ITimeService {
 
     @Override
     public boolean timeOrdersForModuleAndStudentAllowed(Module module, Student student) {
-        ModuleResults results;
-
-        try {
-            results = moduleService.findModuleResultsForStudentAndModule(module, student);
-        } catch (StudentrackObjectNotFoundException e) {
-            return true;
-        }
-
-        var grade = results.getGrade();
-        // Grade between 1 and 4 -> Time Order not allowed
-        return !(1 <= grade.getValue()) || !(grade.getValue() <= 4);
+        // Not passed -> Time Orders allowed
+        return !(moduleService.hasStudentPassedModule(student, module));
     }
 
     @Override

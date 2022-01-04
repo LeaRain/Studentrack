@@ -24,7 +24,7 @@ public interface IModuleService {
     @Transactional
     Module enrollInModule(Student student, Module module) throws StudentrackObjectAlreadyExistsException, StudentrackObjectNotFoundException;
     @Transactional
-    Module withdrawFromModule(Student student, Module module) throws StudentrackObjectNotFoundException;
+    Module withdrawFromModule(Student student, Module module) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     @Transactional
     void deleteModule(Module module) throws StudentrackObjectNotFoundException, StudentrackObjectCannotBeDeletedException;
     @Transactional
@@ -43,4 +43,7 @@ public interface IModuleService {
     ModuleResults findModuleResults(ModuleResults moduleResults) throws StudentrackObjectNotFoundException;
     ModuleResults findModuleResults(long moduleResultsId) throws StudentrackObjectNotFoundException;
     ModuleResults findModuleResultsForStudentAndModule(Module module, Student student) throws StudentrackObjectNotFoundException;
+    Iterable<Module> findCurrentlyNotPassedModulesForStudent(Student student);
+    boolean hasStudentPassedModule(Student student, Module module);
+    boolean existsGradeForModuleAndStudent(Student student, Module module);
 }
