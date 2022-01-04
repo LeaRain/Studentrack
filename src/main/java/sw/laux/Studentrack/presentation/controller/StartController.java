@@ -108,7 +108,7 @@ public class StartController {
         var user = (User) userService.loadUserByUsername(principal.getName());
 
         if (user instanceof Student) {
-            model.addAttribute("modules", ((Student) user).getModules());
+            model.addAttribute("modules", (moduleService.findCurrentlyNotPassedModulesForStudent((Student) user)));
             model.addAttribute("moduleShell", new Module());
             try {
                 var timeOrder = timeService.findOpenTimeOrderForStudent((Student) user);

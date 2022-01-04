@@ -342,6 +342,10 @@ public class ModuleService implements IModuleService {
 
         var grade = results.getGrade();
 
+        if (grade == null) {
+            return false;
+        }
+
         return 1 <= grade.getValue() && grade.getValue() <= 4;
     }
 

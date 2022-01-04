@@ -42,6 +42,13 @@ public class ModuleController {
             model.addAttribute("major", major);
             var modules = ((Student) user).getModules();
             model.addAttribute("modules", modules);
+
+            try {
+                var moduleResults = moduleService.collectResultsForAllModulesOfStudent((Student) user);
+                model.addAttribute("moduleResults", moduleResults);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
         }
 
         if (user instanceof Lecturer) {

@@ -9,7 +9,7 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="bs-component">
                         <legend>Your Modules</legend>
                         <table class="table table-hover">
@@ -20,21 +20,25 @@
                                 <th scope="col">Credit Hours</th>
                                 <th scope="col">Lecturer</th>
                                 <th scope="col">Lecturer Contact</th>
+                                <th scope="col">Grade</th>
+                                <th scope="col">Total Time Invest</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="module, iStat: ${modules}" th:classappend="${iStat.odd} ? table-info : table-primary">
-                                <th scope="row" th:text="${module.name}"/>
-                                <td th:text="${module.ects}"/>
-                                <td th:text="${module.creditHours}"/>
-                                <td th:text="${module.responsibleLecturer.firstName + ' ' + module.responsibleLecturer.lastName}"/>
-                                <td th:text="${module.responsibleLecturer.mailAddress}"/>
+                            <tr th:each="result, iStat: ${moduleResults}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                                <th scope="row" th:text="${result.module.name}"/>
+                                <td th:text="${result.module.ects}"/>
+                                <td th:text="${result.module.creditHours}"/>
+                                <td th:text="${result.module.responsibleLecturer.firstName + ' ' + result.module.responsibleLecturer.lastName}"/>
+                                <td th:text="${result.module.responsibleLecturer.mailAddress}"/>
+                                <td th:text="${result.grade}"/>
+                                <td th:text="${result.timeInvest.timeDuration}"/>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <legend>More to study, more to do?</legend>
                     <div class="d-grid gap-2 mt-4">
                         <form action="modules/new">

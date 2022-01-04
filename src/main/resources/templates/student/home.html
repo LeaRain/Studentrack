@@ -23,12 +23,14 @@
                                 <tr>
                                     <th scope="col">Your Modules</th>
                                     <th scope="col">Total Time Invest</th>
+                                    <th scope="col">Grade</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="result, iStat: ${moduleResults}" th:classappend="${iStat.odd} ? table-info : table-primary">
                                     <th scope="row" th:text="${result.module}"/>
                                     <td th:text="${result.timeInvest.timeDuration}"/>
+                                    <td th:text="${result.grade}"/>
                                 </tr>
                             </tbody>
                         </table>
