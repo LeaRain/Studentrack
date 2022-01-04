@@ -145,14 +145,6 @@ public abstract class User extends SingleIdEntity<Long> implements UserDetails {
 
     @Override
     public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", password='" + password + '\'' +
-                ", mailAddress='" + mailAddress + '\'' +
-                ", membershipStart=" + membershipStart +
-                ", faculty=" + faculty +
-                '}';
+        return firstName + " " + lastName + " (" + mailAddress + ")";
     }
 }

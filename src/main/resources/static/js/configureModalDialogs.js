@@ -13,10 +13,10 @@ function checkForType() {
 }
 
 function configureModalDialogs (type) {
-    registerEventListener(type);
+    registerModalDialogEventListener(type);
 }
 
-function registerEventListener(type) {
+function registerModalDialogEventListener(type) {
     let editModuleButton = document.getElementById("button" + type +"Module");
     let closeModuleButton = document.getElementById("buttonClose" + type + "ModuleModal");
     editModuleButton.addEventListener("click", function() {

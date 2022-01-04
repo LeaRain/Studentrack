@@ -14,4 +14,7 @@ public interface IUserServiceInternal extends IUserService{
     Student findStudent(Student student) throws StudentrackObjectNotFoundException;
     Student findStudent(Long userId) throws StudentrackObjectNotFoundException;
     Collection<Faculty> getAllFaculties();
+    User updateUserWithNamesAndMailAddress(User user) throws StudentrackObjectNotFoundException, StudentrackObjectAlreadyExistsException;
+    User findUserByMailAddress(User user) throws StudentrackObjectNotFoundException;
+    User findUserByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException;
 }

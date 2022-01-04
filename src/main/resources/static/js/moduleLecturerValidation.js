@@ -3,11 +3,11 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function validateLecturerModule() {
-    registerEventListener();
+    registerLecturerModuleEventListener();
     checkForCorrectNumericValues();
 }
 
-function registerEventListener() {
+function registerLecturerModuleEventListener() {
     let ectsInput = document.getElementById("inputEcts");
     let creditHoursInput = document.getElementById("inputCreditHours");
     ectsInput.addEventListener("keyup", checkForCorrectNumericValues);

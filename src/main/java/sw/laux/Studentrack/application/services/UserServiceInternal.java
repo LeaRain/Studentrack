@@ -15,6 +15,7 @@ import sw.laux.Studentrack.persistence.repository.UserRepository;
 import java.lang.Module;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class UserServiceInternal implements IUserServiceInternal {
@@ -91,6 +92,52 @@ public class UserServiceInternal implements IUserServiceInternal {
     @Override
     public Collection<Faculty> getAllFaculties() {
         return (Collection<Faculty>) facultyRepo.findAll();
+    }
+
+    @Override
+    public User updateUserWithNamesAndMailAddress(User user) throws StudentrackObjectNotFoundException, StudentrackObjectAlreadyExistsException {
+        var userOptional = userRepo.findById(user.getUserId());
+
+        if (userOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(user.getClass(), user);
+        }
+
+        var foundUser = userOptional.get();
+
+        foundUser.setFirstName(user.getFirstName());
+        foundUser.setLastName(user.getLastName());
+
+        // Handle mail address change
+        if (!Objects.equals(foundUser.getMailAddress(), user.getMailAddress())) {
+            try {
+                // Find out if user with mail address already exists
+                findUserByMailAddress(user);
+                throw new StudentrackObjectAlreadyExistsException(user.getClass(), user.getMailAddress());
+            }
+
+            catch (StudentrackObjectNotFoundException ignored) {}
+        }
+
+        foundUser.setMailAddress(user.getMailAddress());
+        userRepo.save(foundUser);
+
+        return foundUser;
+    }
+
+    @Override
+    public User findUserByMailAddress(User user) throws StudentrackObjectNotFoundException {
+        return findUserByMailAddress(user.getMailAddress());
+    }
+
+    @Override
+    public User findUserByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException {
+        var userOptional = userRepo.findByMailAddress(mailAddress);
+
+        if (userOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(User.class, mailAddress);
+        }
+
+        return userOptional.get();
     }
 
     @Override

@@ -1,21 +1,20 @@
+document.addEventListener("DOMContentLoaded", function() {
+    validateRegistration();
+})
+
 function validateRegistration() {
-    registerEventListener();
+    registerRegistrationEventListener();
     // Initialize the form fields for the user type at the beginning and not only in case of a click event for the event listeners.
     updateUserTypeFormFields();
 }
 
-function registerEventListener() {
+function registerRegistrationEventListener() {
     let studentRadioButton = document.getElementById("radioUserStudent");
     let lecturerRadioButton = document.getElementById("radioUserLecturer");
-    let passwordInput = document.getElementById("inputPassword");
-    let passwordConfirmInput = document.getElementById("inputPasswordConfirm");
-
     studentRadioButton.addEventListener("click", updateUserTypeFormFields);
     studentRadioButton.addEventListener("click", updateRequiredTagBasedOnRadioButton)
     lecturerRadioButton.addEventListener("click", updateUserTypeFormFields);
     lecturerRadioButton.addEventListener("click", updateRequiredTagBasedOnRadioButton)
-    passwordInput.addEventListener("keyup", checkPasswordEquality);
-    passwordConfirmInput.addEventListener("keyup", checkPasswordEquality);
 }
 
 function updateUserTypeFormFields() {
@@ -33,26 +32,6 @@ function updateUserTypeFormFields() {
     majorFormGroup.hidden = !studentChecked;
     // Faculty is for lecturers.
     facultyFormGroup.hidden = studentChecked;
-}
-
-// Inspired by myself, two years ago, also available on GitHub: https://github.com/LeaRain/DeepSpaceBooks/blob/master/views/js/fieldcheck.js
-function checkPasswordEquality() {
-    // Check the two password fields for equality.
-    let passwordInput = document.getElementById("inputPassword");
-    let passwordConfirmInput = document.getElementById("inputPasswordConfirm");
-    let submitButton = document.getElementById("submitButtonRegistration");
-
-    if (passwordInput.value !== passwordConfirmInput.value) {
-        passwordInput.className = "form-control is-invalid";
-        passwordConfirmInput.className = "form-control is-invalid";
-        submitButton.disabled = true;
-    }
-
-    else {
-        passwordInput.className = "form-control is-valid";
-        passwordConfirmInput.className = "form-control is-valid";
-        submitButton.disabled = false;
-    }
 }
 
 function updateRequiredTagBasedOnRadioButton() {

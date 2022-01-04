@@ -3,11 +3,11 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function validateGrades() {
-    registerEventListener();
+    registerGradeEventListener();
     checkForCorrectGrades();
 }
 
-function registerEventListener() {
+function registerGradeEventListener() {
     let gradeInputs = document.getElementsByClassName("gradeInput");
 
     for (let gradeInput of gradeInputs) {

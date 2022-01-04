@@ -3,11 +3,11 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function valiDATE() {
-    registerEventListener();
+    registerValidateEventListener();
     checkForCorrectDates();
 }
 
-function registerEventListener() {
+function registerValidateEventListener() {
     let startInput = document.getElementById("inputStart");
     let endInput = document.getElementById("inputEnd");
     startInput.addEventListener("change", checkForCorrectDates)

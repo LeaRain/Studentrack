@@ -13,10 +13,10 @@ function checkForType() {
 }
 
 function configureModalDialogs (type) {
-    registerEventListener(type);
+    registerTimeOrderEventListener(type);
 }
 
-function registerEventListener(type) {
+function registerTimeOrderEventListener(type) {
     let editTimeOrderButton = document.getElementById("button" + type +"TimeOrder");
     let closeTimeOrderButton = document.getElementById("buttonClose" + type + "TimeOrderModal");
     editTimeOrderButton.addEventListener("click", function() {

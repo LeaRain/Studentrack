@@ -3,11 +3,11 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function validateStudentModule() {
-    registerEventListener();
+    registerStudentModuleEventListener();
     showSelectedModule();
 }
 
-function registerEventListener() {
+function registerStudentModuleEventListener() {
     let moduleSelect = document.getElementById("selectModule");
     moduleSelect.addEventListener("click", showSelectedModule);
 }
