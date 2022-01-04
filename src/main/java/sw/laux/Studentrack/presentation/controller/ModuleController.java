@@ -184,7 +184,7 @@ public class ModuleController {
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
-        } catch (StudentrackObjectNotFoundException e) {
+        } catch (StudentrackObjectNotFoundException | StudentrackOperationNotAllowedException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
             return "redirect:/modules";
@@ -280,6 +280,13 @@ public class ModuleController {
                 var gradeValueErrorMessage = "Grade value " + grade.getValue() + " not allowed";
                 redirectAttributes.addFlashAttribute("errorMessage", gradeValueErrorMessage);
                 logger.info(gradeValueErrorMessage);
+                return "redirect:/modules";
+            }
+
+            if (grade.getTryNumber() < 1 || grade.getTryNumber() > 3) {
+                var gradeTryNumberErrorMessage = "Try number " + grade.getTryNumber() + " not allowed";
+                redirectAttributes.addFlashAttribute("errorMessage", gradeTryNumberErrorMessage);
+                logger.info(gradeTryNumberErrorMessage);
                 return "redirect:/modules";
             }
 
