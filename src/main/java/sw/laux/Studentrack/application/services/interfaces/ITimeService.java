@@ -28,7 +28,10 @@ public interface ITimeService {
     @Transactional
     void deleteTimeOrder(TimeOrder timeOrder) throws StudentrackObjectNotFoundException;
     @Transactional
+    void deleteAllTimeOrdersForModule(Module module) throws StudentrackObjectNotFoundException;
+    @Transactional
     Iterable<TimeOrder> findTimeOrdersForModuleAndStudent(Module module, Student student) throws StudentrackObjectNotFoundException;
+    Iterable<TimeOrder> findAllTimeOrdersForModule(Module module) throws StudentrackObjectNotFoundException;
     boolean timeOrdersForModuleAndStudentAllowed(Module module, Student student);
     TimeDuration getTimeInvestDurationForDateAndStudent(Date date, Student student) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForTimeRangeAndStudent(Date start, Date end, Student student) throws StudentrackObjectNotFoundException;

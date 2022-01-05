@@ -38,7 +38,7 @@ public class ModuleService implements IModuleService {
     @Override
     public Module saveNewModule(Module module) throws StudentrackObjectAlreadyExistsException {
         try {
-            findModule(module);
+            findModuleByName(module.getName());
             throw new StudentrackObjectAlreadyExistsException(module.getClass(), module);
         } catch (StudentrackObjectNotFoundException ignored) {
 
@@ -69,13 +69,24 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
-    public Iterable<Module> getAllModules() {
-        return moduleRepo.findAll();
+    public Module findModuleByName(String name) throws StudentrackObjectNotFoundException {
+        var moduleOptional = moduleRepo.findModuleByName(name);
+
+        if (moduleOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(Module.class, name);
+        }
+
+        return moduleOptional.get();
     }
 
     @Override
-    public Iterable<Module> getNonTakenModulesByStudent(Student student) {
-        var modules = getAllModules();
+    public Iterable<Module> getAllAvailableModules() {
+        return moduleRepo.findAllByResponsibleLecturerNotNull();
+    }
+
+    @Override
+    public Iterable<Module> getNonTakenAndAvailableModulesByStudent(Student student) {
+        var modules = getAllAvailableModules();
         var studentModules = student.getModules();
 
         var resultModules = new ArrayList<Module>();
@@ -102,8 +113,7 @@ public class ModuleService implements IModuleService {
             throw new StudentrackObjectAlreadyExistsException(module.getClass(), module);
         }
 
-        var studentModules = student.getModules();
-        studentModules.add(module);
+        student.addModule(module);
         userService.updateUser(student);
         return module;
     }
@@ -112,26 +122,60 @@ public class ModuleService implements IModuleService {
     public Module withdrawFromModule(Student student, Module module) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
         module = findModule(module);
 
-        // Withdraw not possible for existing grade
-        if (existsGradeForModuleAndStudent(student, module)) {
+        // Withdraw not possible for passing module
+        if (hasStudentPassedModule(student, module)) {
             throw new StudentrackOperationNotAllowedException(module.getClass(), module);
         }
 
-        var studentModules = student.getModules();
-        var removeSuccess = studentModules.remove(module);
-        if (!removeSuccess) {
-            throw new StudentrackObjectNotFoundException(module.getClass(), module);
+        student.removeModule(module);
+        module.removeStudent(student);
+
+        try {
+            var results = findModuleResultsForStudentAndModule(module, student);
+            student.removeModuleResults(results);
+            moduleResultsRepo.delete(results);
         }
+
+        catch (StudentrackObjectNotFoundException ignored) {}
+
         userService.updateUser(student);
+        moduleRepo.save(module);
+
         return module;
     }
 
     @Override
-    public void deleteModule(Module module) throws StudentrackObjectNotFoundException, StudentrackObjectCannotBeDeletedException {
+    public Module withdrawAllStudentsWithoutSuccessfulGradeFromModule(Module module) throws StudentrackObjectNotFoundException {
+        module = findModule(module);
+        var students = module.getStudents();
+
+        for (var student : students) {
+            var foundStudent = userService.findStudent(student);
+            try {
+                withdrawFromModule(foundStudent, module);
+            }
+            catch (StudentrackOperationNotAllowedException e) {
+                e.getMessage();
+            }
+        }
+
+        return module;
+    }
+
+    @Override
+    public void deleteModule(Module module) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
         module = findModule(module);
         if (!module.getStudents().isEmpty()) {
-            throw new StudentrackObjectCannotBeDeletedException(module.getClass(), module);
+            throw new StudentrackOperationNotAllowedException(module.getClass(), module);
         }
+
+        try {
+            timeService.deleteAllTimeOrdersForModule(module);
+        }
+
+        // Object not found -> no open time orders -> deletion not necessary
+        catch (StudentrackObjectNotFoundException ignored) {}
+
         moduleRepo.delete(module);
     }
 

@@ -5,8 +5,6 @@ import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 
 public interface IModuleService {
@@ -17,14 +15,17 @@ public interface IModuleService {
     Module updateModule(Module module) throws StudentrackObjectNotFoundException;
     Module findModule(Module module) throws StudentrackObjectNotFoundException;
     Module findModule(long moduleId) throws StudentrackObjectNotFoundException;
-    Iterable<Module> getAllModules();
-    Iterable<Module> getNonTakenModulesByStudent(Student student);
+    Module findModuleByName(String name) throws StudentrackObjectNotFoundException;
+    Iterable<Module> getAllAvailableModules();
+    Iterable<Module> getNonTakenAndAvailableModulesByStudent(Student student);
     @Transactional
     Module enrollInModule(Student student, Module module) throws StudentrackObjectAlreadyExistsException, StudentrackObjectNotFoundException;
     @Transactional
     Module withdrawFromModule(Student student, Module module) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     @Transactional
-    void deleteModule(Module module) throws StudentrackObjectNotFoundException, StudentrackObjectCannotBeDeletedException;
+    Module withdrawAllStudentsWithoutSuccessfulGradeFromModule(Module module) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
+    @Transactional
+    void deleteModule(Module module) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     @Transactional
     Iterable<ModuleResults> collectResultsForAllModulesOfStudent(Student student) throws StudentrackObjectNotFoundException;
     @Transactional

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
@@ -143,5 +144,26 @@ public class UserController {
 
         return "redirect:/home";
 
+    }
+
+    @PostMapping("change/delete")
+    public String doDeleteAccount(Model model,
+                                  Principal principal,
+                                  RedirectAttributes redirectAttributes) {
+
+        var user = (User) userService.loadUserByUsername(principal.getName());
+        try {
+            userService.deleteUser(user);
+        } catch (StudentrackObjectNotFoundException | StudentrackOperationNotAllowedException e) {
+            logger.info(e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage");
+            return "redirect:/home";
+        }
+
+        var successMessage = "Successfully deleted user " + user;
+        logger.info(successMessage);
+        redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+        return "redirect:/logout";
     }
 }

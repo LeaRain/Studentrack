@@ -11,9 +11,9 @@ public class ModuleResults extends SingleIdEntity<Long> {
     private Module module;
     @ManyToOne
     private Student student;
-    @OneToOne(cascade={CascadeType.PERSIST})
+    @OneToOne(cascade={CascadeType.ALL}, orphanRemoval=true)
     private TimeInvest timeInvest;
-    @OneToOne(cascade={CascadeType.PERSIST})
+    @OneToOne(cascade={CascadeType.ALL}, orphanRemoval=true)
     private Grade grade;
 
     public ModuleResults(long moduleResultsId, Module module, Student student, TimeInvest timeInvest, Grade grade) {

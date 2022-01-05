@@ -118,4 +118,8 @@ public class Module extends SingleIdEntity<Long>{
     public void removeModuleResults(ModuleResults moduleResults) {
         this.moduleResults.remove(moduleResults);
     }
+
+    public void removeStudent(Student student) {
+        this.students.remove(student);
+    }
 }

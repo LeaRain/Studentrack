@@ -9,9 +9,9 @@ import java.util.Date;
 public class Student extends User {
     private int ects;
     private boolean isPremiumUser;
-    @OneToMany(mappedBy="student")
+    @OneToMany(mappedBy="student", cascade={CascadeType.ALL}, orphanRemoval=true)
     private Collection<ModuleResults> moduleResults;
-    @OneToMany(mappedBy="owner")
+    @OneToMany(mappedBy="owner", cascade={CascadeType.ALL}, orphanRemoval=true)
     private Collection<TimeOrder> timeOrders;
     @ManyToOne
     private Major major;
@@ -19,7 +19,15 @@ public class Student extends User {
     private Collection<Module> modules;
 
     public Collection<Module> getModules() {
-        return modules;
+        return Collections.unmodifiableCollection(modules);
+    }
+
+    public void removeModule(Module module) {
+        this.modules.remove(module);
+    }
+
+    public void addModule(Module module) {
+        this.modules.add(module);
     }
 
     public void setModules(Collection<Module> modules) {

@@ -69,6 +69,7 @@ public class StartController {
 
         else {
             user = userShell.getLecturer();
+            user.setFaculty(userShell.getFaculty());
         }
 
         user.setFirstName(userShell.getFirstName());

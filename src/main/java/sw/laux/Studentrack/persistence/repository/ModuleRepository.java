@@ -15,4 +15,6 @@ import java.util.Optional;
 @Repository
 public interface ModuleRepository extends CrudRepository<Module, Long> {
     Optional<Iterable<Module>> findByResponsibleLecturer(Lecturer responsibleLecturer);
+    Optional<Module> findModuleByName(String name);
+    Iterable<Module> findAllByResponsibleLecturerNotNull();
 }

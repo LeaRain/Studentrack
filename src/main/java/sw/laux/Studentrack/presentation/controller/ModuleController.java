@@ -13,7 +13,6 @@ import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @Controller
@@ -71,12 +70,20 @@ public class ModuleController {
 
     @GetMapping("modules/new")
     public String newModule(Model model,
-                            Principal principal) {
+                            Principal principal,
+                            RedirectAttributes redirectAttributes) {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
         if (user instanceof Student) {
-            var modules = moduleService.getNonTakenModulesByStudent((Student) user);
+            var modules = moduleService.getNonTakenAndAvailableModulesByStudent((Student) user);
+
+            if (!(modules.iterator().hasNext())) {
+                var errorMessage = "New modules are currently not available";
+                logger.info(errorMessage);
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/modules";
+            }
 
             model.addAttribute("modules", modules);
             model.addAttribute("faculty", user.getFaculty());
@@ -211,7 +218,7 @@ public class ModuleController {
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
-        } catch (StudentrackObjectCannotBeDeletedException | StudentrackObjectNotFoundException exception) {
+        } catch (StudentrackOperationNotAllowedException | StudentrackObjectNotFoundException exception) {
             logger.info(exception.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
         }

@@ -161,7 +161,14 @@ public class TimeController {
         var user = userService.loadUserByUsername(principal.getName());
 
         if (user instanceof Student) {
-            model.addAttribute("modules", moduleService.findCurrentlyNotPassedModulesForStudent((Student) user));
+            var modules = moduleService.findCurrentlyNotPassedModulesForStudent((Student) user);
+            if (!(modules.iterator().hasNext())) {
+                var errorMessage = "Currently no modules for Time Orders available";
+                logger.info(errorMessage);
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/timeorders";
+            }
+            model.addAttribute("modules", modules);
         }
 
         var timeOrderShell = new TimeOrderWebShell();

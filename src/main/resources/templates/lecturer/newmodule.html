@@ -17,11 +17,11 @@
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputEcts">Module ECTS</label>
-                            <input type="number" class="form-control" id="inputEcts" placeholder="Enter Module ECTS" th:field="*{ects}" required>
+                            <input type="number" min="1" class="form-control" id="inputEcts" placeholder="Enter Module ECTS" th:field="*{ects}" required>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputCreditHours">Credit Hours</label>
-                            <input type="text" class="form-control" id="inputCreditHours" placeholder="Enter Module Credit Hours" th:field="*{creditHours}" required>
+                            <input type="number" min="1" class="form-control" id="inputCreditHours" placeholder="Enter Module Credit Hours" th:field="*{creditHours}" required>
                         </div>
                         <div class="form-group">
                             <label for="inputDescription" class="form-label mt-4">Description</label>

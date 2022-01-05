@@ -5,15 +5,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
-import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
-import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
+import sw.laux.Studentrack.application.exceptions.*;
+import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
+import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.FacultyRepository;
 import sw.laux.Studentrack.persistence.repository.UserRepository;
 
-import java.lang.Module;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +27,9 @@ public class UserServiceInternal implements IUserServiceInternal {
 
     @Autowired
     private FacultyRepository facultyRepo;
+
+    @Autowired
+    private IModuleService moduleService;
 
 
     @Override
@@ -157,6 +159,50 @@ public class UserServiceInternal implements IUserServiceInternal {
     public boolean validatePasswordForUser(User user, String password) throws StudentrackObjectNotFoundException{
         user = findUserByMailAddress(user);
         return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    @Override
+    public void deleteUser(User user) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
+        // TODO: Student delete, part into lecturer and student delete
+        // Existence check
+        findUserByMailAddress(user);
+
+        if (user instanceof Lecturer) {
+            var faculty = ((Lecturer) user).getDeanOfFaculty();
+            if (faculty != null) {
+                faculty = findFaculty(faculty);
+                faculty.setDean(null);
+                ((Lecturer) user).setDeanOfFaculty(null);
+                facultyRepo.save(faculty);
+            }
+
+            var modules = ((Lecturer) user).getModules();
+            for (var module : modules) {
+                try {
+                    var foundModule = moduleService.findModule(module);
+                    foundModule.setResponsibleLecturer(null);
+                    moduleService.updateModule(foundModule);
+                    moduleService.withdrawAllStudentsWithoutSuccessfulGradeFromModule(foundModule);
+                    moduleService.deleteModule(foundModule);
+                }
+                catch (StudentrackObjectNotFoundException | StudentrackOperationNotAllowedException ignored) {
+                }
+
+            }
+            ((Lecturer) user).removeAllModules();
+        }
+        userRepo.delete(user);
+    }
+
+    @Override
+    public Faculty findFaculty(Faculty faculty) throws StudentrackObjectNotFoundException {
+        var facultyOptional = facultyRepo.findById(faculty.getFacultyId());
+
+        if (facultyOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(faculty.getClass(), faculty);
+        }
+
+        return facultyOptional.get();
     }
 
     @Override

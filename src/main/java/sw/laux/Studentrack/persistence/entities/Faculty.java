@@ -11,7 +11,7 @@ public class Faculty extends SingleIdEntity<Long>{
     private String name;
     @OneToMany(mappedBy="faculty")
     Collection<Major> majors;
-    @OneToOne
+    @OneToOne(cascade={CascadeType.DETACH})
     private Lecturer dean;
     @OneToMany(mappedBy="faculty")
     private Collection<User> members;

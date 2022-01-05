@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import sw.laux.Studentrack.persistence.entities.Grade;
 import sw.laux.Studentrack.persistence.entities.TimeInvest;
 import sw.laux.Studentrack.persistence.entities.User;
+import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.util.Map;
 

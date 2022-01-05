@@ -8,6 +8,7 @@ import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.Grade;
 import sw.laux.Studentrack.persistence.entities.TimeInvest;
 import sw.laux.Studentrack.persistence.entities.User;
+import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.UserRepository;
 
 import java.util.Map;

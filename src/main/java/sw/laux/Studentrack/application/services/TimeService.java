@@ -113,6 +113,14 @@ public class TimeService implements ITimeService {
     }
 
     @Override
+    public void deleteAllTimeOrdersForModule(Module module) throws StudentrackObjectNotFoundException {
+        var timeOrders = findAllTimeOrdersForModule(module);
+        for (var timeOrder : timeOrders) {
+            deleteTimeOrder(timeOrder);
+        }
+    }
+
+    @Override
     public Iterable<TimeOrder> findTimeOrdersForModuleAndStudent(Module module, Student student) throws StudentrackObjectNotFoundException {
         var timeOrderOptional = timeRepo.findAllByOwnerAndModule(student, module);
 
@@ -121,6 +129,17 @@ public class TimeService implements ITimeService {
         }
 
         return timeOrderOptional.get();
+    }
+
+    @Override
+    public Iterable<TimeOrder> findAllTimeOrdersForModule(Module module) throws StudentrackObjectNotFoundException {
+        var timeOrdersOptional = timeRepo.findAllByModule(module);
+
+        if (timeOrdersOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, module);
+        }
+
+        return timeOrdersOptional.get();
     }
 
     @Override
@@ -216,13 +235,7 @@ public class TimeService implements ITimeService {
 
     @Override
     public TimeDuration getTotalTimeInvestDurationForModule(Module module) throws StudentrackObjectNotFoundException {
-        var timeOrderOptional = timeRepo.findAllByModule(module);
-        if (timeOrderOptional.isEmpty()) {
-            throw new StudentrackObjectNotFoundException(TimeOrder.class, module);
-        }
-
-        var timeOrders = timeOrderOptional.get();
-
+        var timeOrders = findAllTimeOrdersForModule(module);
         return calculateTimeDuration(timeOrders);
     }
 
