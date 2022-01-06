@@ -163,35 +163,42 @@ public class UserServiceInternal implements IUserServiceInternal {
 
     @Override
     public void deleteUser(User user) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
-        // TODO: Student delete, part into lecturer and student delete
-        // Existence check
+        // Existence check -> exception if user is not found
         findUserByMailAddress(user);
 
+        // Prepare deletion, so clean up before deleting lecturer
         if (user instanceof Lecturer) {
-            var faculty = ((Lecturer) user).getDeanOfFaculty();
-            if (faculty != null) {
-                faculty = findFaculty(faculty);
-                faculty.setDean(null);
-                ((Lecturer) user).setDeanOfFaculty(null);
-                facultyRepo.save(faculty);
-            }
-
-            var modules = ((Lecturer) user).getModules();
-            for (var module : modules) {
-                try {
-                    var foundModule = moduleService.findModule(module);
-                    foundModule.setResponsibleLecturer(null);
-                    moduleService.updateModule(foundModule);
-                    moduleService.withdrawAllStudentsWithoutSuccessfulGradeFromModule(foundModule);
-                    moduleService.deleteModule(foundModule);
-                }
-                catch (StudentrackObjectNotFoundException | StudentrackOperationNotAllowedException ignored) {
-                }
-
-            }
-            ((Lecturer) user).removeAllModules();
+            deleteLecturer((Lecturer) user);
         }
+
         userRepo.delete(user);
+
+        // Clean up after deleting student
+        if (user instanceof Student) {
+            deleteStudent((Student) user);
+        }
+    }
+
+    @Override
+    public void deleteStudent(Student student) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
+        // Edge case: Student has ModuleResults for Module without Lecturer, because Lecturer has deleted their account before
+        moduleService.deleteModulesWithoutLecturerAndModuleResults();
+    }
+
+    @Override
+    public void deleteLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException {
+        // Is the lecturer currently the dean of a faculty?
+        var faculty = lecturer.getDeanOfFaculty();
+        // Is dean -> remove references
+        if (faculty != null) {
+            faculty = findFaculty(faculty);
+            faculty.setDean(null);
+            lecturer.setDeanOfFaculty(null);
+            facultyRepo.save(faculty);
+        }
+
+        moduleService.deleteAllModulesOfLecturer(lecturer);
+
     }
 
     @Override

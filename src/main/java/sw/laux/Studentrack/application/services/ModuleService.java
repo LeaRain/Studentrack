@@ -180,6 +180,51 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
+    public void deleteAllModulesOfLecturer(Lecturer lecturer) {
+
+        var modules = lecturer.getModules();
+        for (var module : modules) {
+            try {
+                // Could throw object not found exception -> ignore, go to next
+                var foundModule = findModule(module);
+                // Remove lecturer from module
+                foundModule.setResponsibleLecturer(null);
+                updateModule(foundModule);
+                withdrawAllStudentsWithoutSuccessfulGradeFromModule(foundModule);
+                // Existing grades -> operation not allowed exception, ignoring because module is allowed to exist without lecturer, so results for students are still available
+                deleteModule(foundModule);
+            }
+
+            catch (StudentrackObjectNotFoundException | StudentrackOperationNotAllowedException ignored) {}
+
+        }
+        lecturer.removeAllModules();
+    }
+
+    @Override
+    public void deleteModulesWithoutLecturerAndModuleResults() throws StudentrackObjectNotFoundException {
+        // find modules without lecturer -> lecturer null
+        var modules = getAllModulesByLecturer(null);
+        for (var module : modules) {
+            var resultsPresent = hasModuleModuleResults(module);
+            if (!resultsPresent) {
+                try {
+                    deleteModule(module);
+                } catch (StudentrackOperationNotAllowedException ignored) {}
+            }
+        }
+
+    }
+
+    @Override
+    public boolean hasModuleModuleResults(Module module) {
+        var results = moduleResultsRepo.findByModule(module);
+
+        return results.iterator().hasNext();
+    }
+
+
+    @Override
     public Iterable<Module> getAllModulesByLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException {
         var modules = moduleRepo.findByResponsibleLecturer(lecturer);
         if (modules.isEmpty()) {

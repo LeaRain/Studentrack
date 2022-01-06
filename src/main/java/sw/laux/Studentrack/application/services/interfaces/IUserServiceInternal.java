@@ -5,6 +5,7 @@ import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundExcep
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
 import sw.laux.Studentrack.persistence.entities.Faculty;
+import sw.laux.Studentrack.persistence.entities.Lecturer;
 import sw.laux.Studentrack.persistence.entities.Student;
 import sw.laux.Studentrack.persistence.entities.User;
 
@@ -22,7 +23,10 @@ public interface IUserServiceInternal extends IUserService{
     User findUserByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException;
     User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackPasswordWrongException;
     boolean validatePasswordForUser(User user, String password) throws StudentrackObjectNotFoundException;
-    @Transactional
     void deleteUser(User user) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
+    @Transactional
+    void deleteStudent(Student student) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
+    @Transactional
+    void deleteLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     Faculty findFaculty(Faculty faculty) throws StudentrackObjectNotFoundException;
 }

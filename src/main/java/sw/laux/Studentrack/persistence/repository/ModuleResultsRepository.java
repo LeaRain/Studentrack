@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface ModuleResultsRepository extends CrudRepository<ModuleResults, Long> {
     Optional<ModuleResults> findByStudentAndModule(Student student, Module module);
     Optional<Iterable<ModuleResults>> findAllByStudent(Student student);
-    Optional<ModuleResults> findByGrade(Grade grade);
+    Iterable<ModuleResults> findByModule(Module module);
 }

@@ -283,6 +283,8 @@ public class ModuleController {
                                     @ModelAttribute("moduleResultsDTO") ModuleResultsDTO moduleResultsDTO,
                                     RedirectAttributes redirectAttributes) {
 
+        //TODO: Update ECTS on student
+
         var moduleResults = moduleResultsDTO.getModuleResults();
         var correctGradeValues = new Double[]{1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0};
         var successMessage = new StringBuilder();
