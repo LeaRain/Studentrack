@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.*;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
+import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
@@ -19,16 +20,11 @@ public class ModuleService implements IModuleService {
     @Autowired
     private ModuleResultsRepository moduleResultsRepo;
     @Autowired
-    private MajorRepository majorRepo;
-    @Autowired
     private IUserServiceInternal userService;
     @Autowired
     private ITimeService timeService;
-
-    public Collection<Major> getAllMajors() {
-        return (Collection<Major>) majorRepo.findAll();
-    }
-
+    @Autowired
+    private IStatisticsService statisticsService;
 
     @Override
     public Module saveModule(Module module) {
@@ -262,7 +258,7 @@ public class ModuleService implements IModuleService {
 
         var timeOrders = timeService.findTimeOrdersForModuleAndStudent(module, student);
 
-        var timeDuration = timeService.calculateTimeDuration(timeOrders);
+        var timeDuration = statisticsService.calculateTimeDuration(timeOrders);
         var timeInvest = new TimeInvest();
         timeInvest.setTimeDuration(timeDuration);
         moduleResults.setTimeInvest(timeInvest);
@@ -274,56 +270,6 @@ public class ModuleService implements IModuleService {
         moduleResultsRepo.save(moduleResults);
 
         return moduleResults;
-    }
-
-    @Override
-    public Map<Module, TimeDuration> getTimeDurationForModulesToday(Iterable<Module> modules) {
-        var moduleTimeMap = new HashMap<Module, TimeDuration>();
-        
-        for (var module : modules) {
-            try {
-                var timeDuration = getTimeDurationForModuleToday(module);
-                moduleTimeMap.put(module, timeDuration);
-            } catch (StudentrackObjectNotFoundException ignored) {
-            }
-        }
-
-        return moduleTimeMap;
-    }
-
-    @Override
-    public Map<Module, TimeDuration> getTimeDurationForLecturerModulesToday(Lecturer lecturer) {
-        return getTimeDurationForModulesToday(lecturer.getModules());
-    }
-
-    @Override
-    public TimeDuration getTimeDurationForModuleToday(Module module) throws StudentrackObjectNotFoundException {
-        return timeService.getTimeInvestDurationForTodayAndModule(module);
-    }
-
-    @Override
-    public Map<Module, TimeDuration> getTimeDurationForModules(Iterable<Module> modules) {
-        var moduleTimeMap = new HashMap<Module, TimeDuration>();
-
-        for (var module : modules) {
-            try {
-                var timeDuration = getTimeDurationForModule(module);
-                moduleTimeMap.put(module, timeDuration);
-            } catch (StudentrackObjectNotFoundException ignored) {
-            }
-        }
-
-        return moduleTimeMap;
-    }
-
-    @Override
-    public Map<Module, TimeDuration> getTimeDurationForLecturerModules(Lecturer lecturer) {
-        return getTimeDurationForModules(lecturer.getModules());
-    }
-
-    @Override
-    public TimeDuration getTimeDurationForModule(Module module) throws StudentrackObjectNotFoundException {
-        return timeService.getTotalTimeInvestDurationForModule(module);
     }
 
     @Override
@@ -446,26 +392,4 @@ public class ModuleService implements IModuleService {
 
         return 1 <= grade.getValue() && grade.getValue() <= 4;
     }
-
-    @Override
-    public boolean existsGradeForModuleAndStudent(Student student, Module module) {
-        ModuleResults results;
-        try {
-            results = findModuleResultsForStudentAndModule(module, student);
-            // Not found means not passed
-        } catch (StudentrackObjectNotFoundException e) {
-            return false;
-        }
-
-        var grade = results.getGrade();
-
-        if (grade == null) {
-            return false;
-        }
-
-        // Check for default value -> grade object may exist, but value needs to be set
-        return grade.getValue() != 0;
-    }
-
-
 }

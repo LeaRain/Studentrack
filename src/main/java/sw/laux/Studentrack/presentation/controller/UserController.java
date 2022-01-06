@@ -14,6 +14,7 @@ import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundExcep
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
+import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
@@ -31,13 +32,15 @@ public class UserController {
     private Logger logger;
     @Autowired
     private ITimeService timeService;
+    @Autowired
+    private IStatisticsService statisticsService;
 
     @GetMapping("home")
     public String home(Model model, Principal principal) {
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (user instanceof Student) {
-            model.addAttribute("modules", (moduleService.findCurrentlyNotPassedModulesForStudent((Student) user)));
+        if (user instanceof Student student) {
+            model.addAttribute("modules", (moduleService.findCurrentlyNotPassedModulesForStudent(student)));
             model.addAttribute("moduleShell", new Module());
             try {
                 var timeOrder = timeService.findOpenTimeOrderForStudent((Student) user);
@@ -46,40 +49,40 @@ public class UserController {
             }
 
             try {
-                var moduleResults = moduleService.collectResultsForAllModulesOfStudent((Student) user);
+                var moduleResults = moduleService.collectResultsForAllModulesOfStudent(student);
                 model.addAttribute("moduleResults", moduleResults);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
 
             try {
-                var timeDurationToday = timeService.getTimeInvestDurationForTodayAndStudent((Student) user);
+                var timeDurationToday = statisticsService.getTimeInvestDurationForTodayAndStudent(student);
                 model.addAttribute("timeDurationToday", timeDurationToday);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
 
             try {
-                var timeDurationWeek = timeService.getTimeInvestDurationForCurrentWeekAndStudent((Student) user);
+                var timeDurationWeek = statisticsService.getTimeInvestDurationForCurrentWeekAndStudent(student);
                 model.addAttribute("timeDurationWeek", timeDurationWeek);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
         }
 
-        if (user instanceof Lecturer) {
-            var modulesWithTimeDuration = moduleService.getTimeDurationForLecturerModules((Lecturer) user);
+        if (user instanceof Lecturer lecturer) {
+            var modulesWithTimeDuration = statisticsService.getTimeDurationForLecturerModules(lecturer);
             model.addAttribute("modulesWithTimeDuration", modulesWithTimeDuration);
 
             try {
-                var timeDurationToday = timeService.getTotalTimeInvestDurationForToday();
+                var timeDurationToday = statisticsService.getTotalTimeInvestDurationForToday();
                 model.addAttribute("timeDurationToday", timeDurationToday);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
 
             try {
-                var timeDurationWeek = timeService.getTotalTimeInvestDurationForCurrentWeek();
+                var timeDurationWeek = statisticsService.getTotalTimeInvestDurationForCurrentWeek();
                 model.addAttribute("timeDurationWeek", timeDurationWeek);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());

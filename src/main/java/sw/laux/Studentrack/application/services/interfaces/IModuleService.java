@@ -5,7 +5,6 @@ import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
 import javax.transaction.Transactional;
-import java.util.Map;
 
 public interface IModuleService {
     Iterable<Module> getAllModulesByLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
@@ -36,12 +35,6 @@ public interface IModuleService {
     Iterable<ModuleResults> collectResultsForAllModulesOfStudent(Student student) throws StudentrackObjectNotFoundException;
     @Transactional
     ModuleResults collectResultForModuleOfStudent(Student student, Module module) throws StudentrackObjectNotFoundException;
-    Map<Module, TimeDuration> getTimeDurationForModulesToday(Iterable<Module> modules);
-    Map<Module, TimeDuration> getTimeDurationForLecturerModulesToday(Lecturer lecturer);
-    TimeDuration getTimeDurationForModuleToday(Module module) throws StudentrackObjectNotFoundException;
-    Map<Module, TimeDuration> getTimeDurationForModules(Iterable<Module> modules);
-    Map<Module, TimeDuration> getTimeDurationForLecturerModules(Lecturer lecturer);
-    TimeDuration getTimeDurationForModule(Module module) throws StudentrackObjectNotFoundException;
     Iterable<ModuleResults> getResultsForModule(Module module) throws StudentrackObjectNotFoundException;
     @Transactional
     ModuleResults saveNewGradeValueAndTryNumberForResult(Grade grade, ModuleResults moduleResults) throws StudentrackObjectNotFoundException;
@@ -51,5 +44,4 @@ public interface IModuleService {
     Iterable<Module> findCurrentlyNotPassedModulesForStudent(Student student);
     int calculateECTSOfStudent(Student student);
     boolean hasStudentPassedModule(Student student, Module module);
-    boolean existsGradeForModuleAndStudent(Student student, Module module);
 }
