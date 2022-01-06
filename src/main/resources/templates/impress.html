@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="common/header :: header(title='Impress')"/>
+
+<body class style>
+<div th:replace="common/navigation :: navigation"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>Impress</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-6">
+            <p>Studentrack</p>
+            <p>Responsible Organisation: United Federation of Planets</p>
+            <p>24-593 Federation Drive</p>
+            <p>San Francisco</p>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/footer :: footer"/>
+</body>
+</html>

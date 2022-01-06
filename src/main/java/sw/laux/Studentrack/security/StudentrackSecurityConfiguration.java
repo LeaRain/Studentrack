@@ -45,12 +45,12 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
     }
 
     private static final String[] ALLOW_ACCESS_WITHOUT_AUTHENTICATION = {
-            "/css/**", "/image/**", "/fonts/**", "/js/**", "/", "/login", "/registration", "/registration/check"
+            "/css/**", "/image/**", "/fonts/**", "/js/**", "/", "/login", "/registration", "/registration/check", "/impress", "/privacy"
     };
 
-    private static final String[] ALLOW_ACCESS_FOR_LECTURERS = {"/modules/edit/", "/modules/edit/*"};
-    private static final String[] ALLOW_ACCESS_FOR_STUDENTS = {};
-    private static final String[] ALLOW_ACCESS_FOR_ALL = {"/home", "/modules", "/modules/new**"};
+    private static final String[] ALLOW_ACCESS_FOR_LECTURERS = {"/modules/edit/*", "/modules/grade/*"};
+    private static final String[] ALLOW_ACCESS_FOR_STUDENTS = {"/timeorders/*"};
+    private static final String[] ALLOW_ACCESS_FOR_ALL = {"/home", "/modules", "/modules/new**", "/change/*"};
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

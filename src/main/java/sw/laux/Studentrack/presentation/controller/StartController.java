@@ -105,4 +105,14 @@ public class StartController {
         return "login";
     }
 
+    @GetMapping("impress")
+    public String impress() {
+        return "impress";
+    }
+
+    @GetMapping("privacy")
+    public String privacy() {
+        return "privacy";
+    }
+
 }
