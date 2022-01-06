@@ -368,8 +368,7 @@ public class ModuleService implements IModuleService {
             try {
                 var openTimeOrder = timeService.findOpenTimeOrderForStudent(moduleResults.getStudent());
                 timeService.deleteTimeOrder(openTimeOrder);
-            } catch (StudentrackObjectNotFoundException ignored) {
-            }
+            } catch (StudentrackObjectNotFoundException ignored) {}
         }
 
         return moduleResults;
@@ -412,6 +411,21 @@ public class ModuleService implements IModuleService {
            }
         }
         return resultModules;
+    }
+
+    @Override
+    public int calculateECTSOfStudent(Student student) {
+       var results = student.getModuleResults();
+       var ects = 0;
+       for (var result : results) {
+           if (hasStudentPassedModule(student, result.getModule())) {
+               var module = result.getModule();
+               var moduleEcts = module.getEcts();
+               ects += moduleEcts;
+           }
+       }
+
+       return ects;
     }
 
     @Override

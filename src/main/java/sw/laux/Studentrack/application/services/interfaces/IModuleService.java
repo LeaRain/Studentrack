@@ -49,6 +49,7 @@ public interface IModuleService {
     ModuleResults findModuleResults(long moduleResultsId) throws StudentrackObjectNotFoundException;
     ModuleResults findModuleResultsForStudentAndModule(Module module, Student student) throws StudentrackObjectNotFoundException;
     Iterable<Module> findCurrentlyNotPassedModulesForStudent(Student student);
+    int calculateECTSOfStudent(Student student);
     boolean hasStudentPassedModule(Student student, Module module);
     boolean existsGradeForModuleAndStudent(Student student, Module module);
 }

@@ -213,6 +213,14 @@ public class UserServiceInternal implements IUserServiceInternal {
     }
 
     @Override
+    public Student calculateCurrentECTSOfStudent(Student student) throws StudentrackObjectNotFoundException {
+        student = findStudent(student);
+        var ects = moduleService.calculateECTSOfStudent(student);
+        student.setEcts(ects);
+        return userRepo.save(student);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         var user = userRepo.findByMailAddress(s);
 

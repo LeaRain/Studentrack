@@ -3,8 +3,10 @@
         <div class="bs-docs-section">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3 th:text="'Your faculty: ' + ${faculty}"></h3>
-                    <h3 th:text="'Your major: ' + ${major}"></h3>
+                    <h3 th:text="'Your Faculty: ' + ${faculty}"></h3>
+                    <h3 th:text="'Your Major: ' + ${student.major}"></h3>
+                    <h3 th:text="'Your ECTS: ' + ${student.ects}"></h3>
+                </div>
                 </div>
             </div>
 
@@ -25,7 +27,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="result, iStat: ${moduleResults}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                            <tr th:each="result, iStat: ${student.moduleResults}" th:classappend="${iStat.odd} ? table-info : table-primary">
                                 <th scope="row" th:text="${result.module.name}"/>
                                 <td th:text="${result.module.ects}"/>
                                 <td th:text="${result.module.creditHours}"/>

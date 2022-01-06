@@ -36,18 +36,23 @@ public class ModuleController {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (user instanceof Student) {
-            var major = ((Student) user).getMajor();
-            model.addAttribute("major", major);
+        if (user instanceof Student student) {
             // Also failed modules for withdrawing -> 5.0 makes withdraw possible, for example in case of choosing another module for an exam
-            model.addAttribute("modules", moduleService.findCurrentlyNotPassedModulesForStudent((Student) user));
-
+            model.addAttribute("modules", moduleService.findCurrentlyNotPassedModulesForStudent(student));
             try {
-                var moduleResults = moduleService.collectResultsForAllModulesOfStudent((Student) user);
+                var moduleResults = moduleService.collectResultsForAllModulesOfStudent(student);
                 model.addAttribute("moduleResults", moduleResults);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
+            try {
+                student = userService.calculateCurrentECTSOfStudent(student);
+                // User is loaded out of user service -> will exist
+            } catch (StudentrackObjectNotFoundException ignored) {
+
+            }
+
+            model.addAttribute("student", student);
         }
 
         if (user instanceof Lecturer) {

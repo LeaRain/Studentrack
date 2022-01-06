@@ -29,4 +29,5 @@ public interface IUserServiceInternal extends IUserService{
     @Transactional
     void deleteLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     Faculty findFaculty(Faculty faculty) throws StudentrackObjectNotFoundException;
+    Student calculateCurrentECTSOfStudent(Student student) throws StudentrackObjectNotFoundException;
 }
