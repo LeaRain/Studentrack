@@ -431,7 +431,31 @@ public class StatisticsService implements IStatisticsService {
 
     @Override
     public ModuleStudentStatisticsShell buildModuleStudentStatisticsShell(Student student, Module module) {
-        return null;
+        var moduleStudentStatisticsShell = new ModuleStudentStatisticsShell();
+        moduleStudentStatisticsShell.setModule(module);
+        try {
+            var result = moduleService.collectResultForModuleOfStudent(student, module);
+            moduleStudentStatisticsShell.setStudentGrade(result.getGrade());
+            moduleStudentStatisticsShell.setStudentTimeInvestDuration(result.getTimeInvest().getTimeDuration());
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        try {
+            var grade = getAverageGradeForModule(module);
+            moduleStudentStatisticsShell.setAverageGrade(grade);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        try {
+            var timeDuration = getAverageTimeInvestDurationForModule(module);
+            moduleStudentStatisticsShell.setAverageTimeInvestDuration(timeDuration);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        return moduleStudentStatisticsShell;
     }
 
     @Override
@@ -462,7 +486,15 @@ public class StatisticsService implements IStatisticsService {
 
     @Override
     public Iterable<ModuleStudentStatisticsShell> getModuleStudentStatisticsForStudent(Student student) {
-        return null;
+        var statisticShells = new ArrayList<ModuleStudentStatisticsShell>();
+        var modules = student.getModules();
+
+        for (var module : modules) {
+            var shell = buildModuleStudentStatisticsShell(student, module);
+            statisticShells.add(shell);
+        }
+
+        return statisticShells;
     }
 
     @Override

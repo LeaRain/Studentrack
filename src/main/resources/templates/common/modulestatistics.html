@@ -1,16 +1,16 @@
-<div th:fragment="lecturerstatistics">
+<div th:fragment="modulestatistics">
     <div class="container">
         <div class="bs-docs-section">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Your Personal Statistics</h3>
+                    <h3>Overall Statistics</h3>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-12">
                     <div class="bs-component">
-                        <legend>Your Module Statistics</legend>
+                        <legend>Overall Module Statistics</legend>
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -25,7 +25,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="statistics, iStat: ${moduleStatisticsLecturer}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                            <tr th:each="statistics, iStat: ${moduleStatistics}" th:classappend="${iStat.odd} ? table-info : table-primary">
                                 <th scope="row" th:text="${statistics.module}"/>
                                 <td th:text="${statistics.totalTimeInvestDuration}"/>
                                 <td th:text="${statistics.averageTimeInvestDuration}"/>
@@ -43,7 +43,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="bs-component">
-                            <legend>Your Module Time Statistics</legend>
+                            <legend>Overall Module Time Statistics</legend>
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
@@ -56,7 +56,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="statistics, iStat: ${moduleTimeStatisticsLecturer}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                                <tr th:each="statistics, iStat: ${moduleTimeStatistics}" th:classappend="${iStat.odd} ? table-info : table-primary">
                                     <th scope="row" th:text="${statistics.module}"/>
                                     <td th:text="${statistics.timeInvestDurationToday}"/>
                                     <td th:text="${statistics.timeInvestDurationWeek}"/>
@@ -66,11 +66,11 @@
                                 </tr>
                                 <tr class="table-dark">
                                     <th scope="row">Total</th>
-                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationToday}"/>
-                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationWeek}"/>
-                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationMonth}"/>
-                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationYear}"/>
-                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationTotal}"/>
+                                    <td th:text="${moduleTimeStatisticsOverview.timeInvestDurationToday}"/>
+                                    <td th:text="${moduleTimeStatisticsOverview.timeInvestDurationWeek}"/>
+                                    <td th:text="${moduleTimeStatisticsOverview.timeInvestDurationMonth}"/>
+                                    <td th:text="${moduleTimeStatisticsOverview.timeInvestDurationYear}"/>
+                                    <td th:text="${moduleTimeStatisticsOverview.timeInvestDurationTotal}"/>
                                 </tr>
                                 </tbody>
                             </table>
@@ -80,5 +80,4 @@
             </div>
         </div>
     </div>
-    <div th:replace="common/modulestatistics :: modulestatistics"></div>
 </div>

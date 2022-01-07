@@ -86,6 +86,8 @@ public class StatisticsController {
             if (student.isPremiumUser()) {
                 var timeStatisticsOverviewStudent = statisticsService.getTimeStatisticsOverviewForStudent(student);
                 model.addAttribute("timeStatisticsOverview", timeStatisticsOverviewStudent);
+                var moduleStudentStatisticsShells = statisticsService.getModuleStudentStatisticsForStudent(student);
+                model.addAttribute("moduleStudentStatistics", moduleStudentStatisticsShells);
             }
 
         }

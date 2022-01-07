@@ -80,7 +80,33 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="col-lg-6">
+                            <div class="bs-component">
+                                <legend>Your Overall Standing</legend>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Module</th>
+                                        <th scope="col">Your Grade</th>
+                                        <th scope="col">Average Grade</th>
+                                        <th scope="col">Your Time Invest</th>
+                                        <th scope="col">Average Time Invest</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="statistics, iStat: ${moduleStudentStatistics}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                                        <th scope="row" th:text="${statistics.module}"/>
+                                        <td th:text="${statistics.studentGrade}"/>
+                                        <td th:text="${statistics.averageGrade}"/>
+                                        <td th:text="${statistics.studentTimeInvestDuration}"/>
+                                        <td th:text="${statistics.averageTimeInvestDuration}"/>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
+                    <div th:replace="common/modulestatistics :: modulestatistics"></div>
                 </div>
             </div>
         </div>
