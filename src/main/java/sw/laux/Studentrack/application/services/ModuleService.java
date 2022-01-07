@@ -97,6 +97,11 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
+    public Iterable<Module> findAllModules() {
+        return moduleRepo.findAll();
+    }
+
+    @Override
     public Module enrollInModule(Student student, Module module) throws StudentrackObjectAlreadyExistsException, StudentrackObjectNotFoundException{
         try {
             module = findModule(module);

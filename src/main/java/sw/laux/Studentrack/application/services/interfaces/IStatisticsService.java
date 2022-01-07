@@ -39,8 +39,14 @@ public interface IStatisticsService {
     Grade getAverageGradeForStudent(Student student) throws StudentrackObjectNotFoundException;
     Map<Student, Grade> getAverageGradeForStudents(Iterable<Student> students);
     ModuleStatisticsShell buildModuleStatisticsShell(Module module);
+    Iterable<ModuleStatisticsShell> getModuleStatisticsShellsForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
+    Iterable<ModuleTimeStatisticsShell> getModuleTimeStatisticShellsForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
     ModuleTimeStatisticsShell buildModuleTimeStatisticsShell(Module module);
-    ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForLecturer (Lecturer lecturer);
+    ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
+    Iterable<ModuleStatisticsShell> getModuleStatisticsShellForAllModules();
+    Iterable<ModuleTimeStatisticsShell> getModuleTimeStatisticsForAllModules();
+    ModuleTimeStatisticsShell getModuleTimeStatisticsOverviewForAllModules();
+    ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForModules(Iterable<Module> modules);
     Date[] getWeekStartAndEnd();
     Date[] getMonthStartAndEnd();
     Date[] getYearStartAndEnd();

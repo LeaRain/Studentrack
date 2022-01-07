@@ -26,9 +26,6 @@ public class StatisticsController {
     private IUserServiceInternal userService;
 
     @Autowired
-    private IModuleService moduleService;
-
-    @Autowired
     private Logger logger;
 
     @GetMapping("statistics")
@@ -38,29 +35,40 @@ public class StatisticsController {
         var user = (User) userService.loadUserByUsername(principal.getName());
 
         if (user instanceof Lecturer lecturer) {
-            var moduleStatisticsLecturerWebShells = new ArrayList<ModuleStatisticsShell>();
-            var moduleTimeStatisticsLecturerWebShells = new ArrayList<ModuleTimeStatisticsShell>();
-            Iterable<Module> modules = null;
+            Iterable<ModuleStatisticsShell> moduleStatisticsLecturerShells = null;
             try {
-                modules = moduleService.getAllModulesByLecturer(lecturer);
+                moduleStatisticsLecturerShells = statisticsService.getModuleStatisticsShellsForLecturer(lecturer);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
 
-            for (var module : Objects.requireNonNull(modules)) {
-                var moduleStatisticsLecturerWebShell = statisticsService.buildModuleStatisticsShell(module);
-                moduleStatisticsLecturerWebShells.add(moduleStatisticsLecturerWebShell);
-                var moduleTimeStatisticsLecturerWebShell = statisticsService.buildModuleTimeStatisticsShell(module);
-                moduleTimeStatisticsLecturerWebShells.add(moduleTimeStatisticsLecturerWebShell);
+            Iterable<ModuleTimeStatisticsShell> moduleTimeStatisticsLecturerShells = null;
+            try {
+                moduleTimeStatisticsLecturerShells = statisticsService.getModuleTimeStatisticShellsForLecturer(lecturer);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
             }
 
-            model.addAttribute("moduleStatisticsLecturer", moduleStatisticsLecturerWebShells);
-            model.addAttribute("moduleTimeStatisticsLecturer", moduleTimeStatisticsLecturerWebShells);
 
-            var moduleTimeStatisticsOverviewLecturer = statisticsService.buildModuleTimeStatisticsShellOverviewForLecturer(lecturer);
+            model.addAttribute("moduleStatisticsLecturer", moduleStatisticsLecturerShells);
+            model.addAttribute("moduleTimeStatisticsLecturer",  moduleTimeStatisticsLecturerShells);
+
+            ModuleTimeStatisticsShell moduleTimeStatisticsOverviewLecturer = null;
+            try {
+                moduleTimeStatisticsOverviewLecturer = statisticsService.buildModuleTimeStatisticsShellOverviewForLecturer(lecturer);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
             model.addAttribute("moduleTimeStatisticsOverviewLecturer", moduleTimeStatisticsOverviewLecturer);
-
         }
+
+        if (user instanceof Student student) {
+            // TODO: Student statistics, separate into free and premium
+        }
+
+        model.addAttribute("moduleStatistics", statisticsService.getModuleStatisticsShellForAllModules());
+        model.addAttribute("moduleTimeStatistics", statisticsService.getModuleTimeStatisticsForAllModules());
+        model.addAttribute("moduleTimeStatisticsOverview", statisticsService.getModuleTimeStatisticsOverviewForAllModules());
 
         return "statistics";
     }

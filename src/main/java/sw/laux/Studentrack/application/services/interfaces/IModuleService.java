@@ -17,6 +17,7 @@ public interface IModuleService {
     Module findModuleByName(String name) throws StudentrackObjectNotFoundException;
     Iterable<Module> getAllAvailableModules();
     Iterable<Module> getNonTakenAndAvailableModulesByStudent(Student student);
+    Iterable<Module> findAllModules();
     @Transactional
     Module enrollInModule(Student student, Module module) throws StudentrackObjectAlreadyExistsException, StudentrackObjectNotFoundException;
     @Transactional

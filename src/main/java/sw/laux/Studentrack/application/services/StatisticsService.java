@@ -347,6 +347,32 @@ public class StatisticsService implements IStatisticsService {
     }
 
     @Override
+    public Iterable<ModuleStatisticsShell> getModuleStatisticsShellsForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException {
+        var moduleStatisticsShells = new ArrayList<ModuleStatisticsShell>();
+        var modules = moduleService.getAllModulesByLecturer(lecturer);
+
+        for (var module : modules) {
+            var moduleStatisticsLecturerShell = buildModuleStatisticsShell(module);
+            moduleStatisticsShells.add(moduleStatisticsLecturerShell);
+        }
+
+        return moduleStatisticsShells;
+    }
+
+    @Override
+    public Iterable<ModuleTimeStatisticsShell> getModuleTimeStatisticShellsForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException {
+        var moduleTimeStatisticsLecturerShells = new ArrayList<ModuleTimeStatisticsShell>();
+        var modules = moduleService.getAllModulesByLecturer(lecturer);
+
+        for (var module : modules) {
+            var moduleTimeStatisticsLecturerShell = buildModuleTimeStatisticsShell(module);
+            moduleTimeStatisticsLecturerShells.add(moduleTimeStatisticsLecturerShell);
+        }
+
+        return moduleTimeStatisticsLecturerShells;
+    }
+
+    @Override
     public ModuleTimeStatisticsShell buildModuleTimeStatisticsShell(Module module) {
         var moduleTimeStatisticsShell = new ModuleTimeStatisticsShell();
         moduleTimeStatisticsShell.setModule(module);
@@ -391,7 +417,45 @@ public class StatisticsService implements IStatisticsService {
     }
 
     @Override
-    public ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForLecturer(Lecturer lecturer) {
+    public ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException {
+        var modules = moduleService.getAllModulesByLecturer(lecturer);
+        return buildModuleTimeStatisticsShellOverviewForModules(modules);
+    }
+
+    @Override
+    public Iterable<ModuleStatisticsShell> getModuleStatisticsShellForAllModules() {
+        var statisticsShells = new ArrayList<ModuleStatisticsShell>();
+        var modules = moduleService.findAllModules();
+
+        for (var module : modules) {
+            var shell = buildModuleStatisticsShell(module);
+            statisticsShells.add(shell);
+        }
+
+        return statisticsShells;
+    }
+
+    @Override
+    public Iterable<ModuleTimeStatisticsShell> getModuleTimeStatisticsForAllModules() {
+        var statisticsShell = new ArrayList<ModuleTimeStatisticsShell>();
+        var modules = moduleService.findAllModules();
+
+        for (var module : modules) {
+            var shell = buildModuleTimeStatisticsShell(module);
+            statisticsShell.add(shell);
+        }
+
+        return statisticsShell;
+    }
+
+    @Override
+    public ModuleTimeStatisticsShell getModuleTimeStatisticsOverviewForAllModules() {
+        var modules = moduleService.findAllModules();
+        return buildModuleTimeStatisticsShellOverviewForModules(modules);
+    }
+
+    @Override
+    public ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForModules(Iterable<Module> modules) {
         var moduleTimeStatisticsShell = new ModuleTimeStatisticsShell();
 
         var timeDurationToday = new TimeDuration();
@@ -400,14 +464,7 @@ public class StatisticsService implements IStatisticsService {
         var timeDurationYear = new TimeDuration();
         var timeDurationTotal = new TimeDuration();
 
-        Iterable<Module> modules = null;
-        try {
-            modules = moduleService.getAllModulesByLecturer(lecturer);
-        } catch (StudentrackObjectNotFoundException e) {
-            logger.info(e.getMessage());
-        }
-
-        for (var module : Objects.requireNonNull(modules)) {
+        for (var module : modules) {
             try {
                 var moduleTimeDurationToday = getTimeDurationForModuleToday(module);
                 var duration = timeDurationToday.getDuration() + moduleTimeDurationToday.getDuration();
