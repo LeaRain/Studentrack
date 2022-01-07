@@ -1,0 +1,79 @@
+<div th:fragment="lecturerstatistics">
+    <div class="container">
+        <div class="bs-docs-section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 th:text="'Your Personal Statistics'"></h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="bs-component">
+                        <legend>Your Module Statistics</legend>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Module</th>
+                                <th scope="col">Total Time Invest</th>
+                                <th scope="col">Average Grade</th>
+                                <th scope="col">Average Grade Without Failures</th>
+                                <th scope="col">Failure Rate</th>
+                                <th scope="col">Student Number</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="statistics, iStat: ${moduleStatisticsLecturer}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                                <th scope="row" th:text="${statistics.module}"/>
+                                <td th:text="${statistics.totalTimeInvestDuration}"/>
+                                <td th:text="${statistics.averageGrade.value}"/>
+                                <td th:text="${statistics.averageGradeWithoutFailures.value}"/>
+                                <td th:text="${statistics.failureRate * 100 + '%'}"/>
+                                <td th:text="${statistics.numberOfStudents}"/>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="bs-component">
+                            <legend>Your Module Time Statistics</legend>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Module</th>
+                                    <th scope="col">Time Invest Today</th>
+                                    <th scope="col">Time Invest Week</th>
+                                    <th scope="col">Time Invest Month</th>
+                                    <th scope="col">Time Invest Year</th>
+                                    <th scope="col">Time Invest Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="statistics, iStat: ${moduleTimeStatisticsLecturer}" th:classappend="${iStat.odd} ? table-info : table-primary">
+                                    <th scope="row" th:text="${statistics.module}"/>
+                                    <td th:text="${statistics.timeInvestDurationToday}"/>
+                                    <td th:text="${statistics.timeInvestDurationWeek}"/>
+                                    <td th:text="${statistics.timeInvestDurationMonth}"/>
+                                    <td th:text="${statistics.timeInvestDurationYear}"/>
+                                    <td th:text="${statistics.timeInvestDurationTotal}"/>
+                                </tr>
+                                <tr class="table-dark">
+                                    <th scope="row">Total</th>
+                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationToday}"/>
+                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationWeek}"/>
+                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationMonth}"/>
+                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationYear}"/>
+                                    <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationTotal}"/>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

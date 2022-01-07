@@ -177,7 +177,6 @@ public class ModuleService implements IModuleService {
 
     @Override
     public void deleteAllModulesOfLecturer(Lecturer lecturer) {
-
         var modules = lecturer.getModules();
         for (var module : modules) {
             try {

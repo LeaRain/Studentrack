@@ -31,6 +31,16 @@ public interface IStatisticsService {
     TimeDuration getTotalTimeInvestDurationForToday() throws StudentrackObjectNotFoundException;
     TimeDuration getTotalTimeInvestDurationForTimeRange(Date start, Date end) throws StudentrackObjectNotFoundException;
     TimeDuration getTotalTimeInvestDurationForCurrentWeek() throws StudentrackObjectNotFoundException;
+    Grade getAverageGradeForModule(Module module) throws StudentrackObjectNotFoundException;
+    Grade getAverageGradeForModuleWithoutFailedGrades(Module module) throws StudentrackObjectNotFoundException;
+    double calculateGradeValue(Iterable<ModuleResults> moduleResults, boolean calculateWithFailedGrade);
+    double getFailureRateForModule(Module module) throws StudentrackObjectNotFoundException;
+    TimeDuration getAverageTimeInvestDurationForModule(Module module) throws StudentrackObjectNotFoundException;
+    Grade getAverageGradeForStudent(Student student) throws StudentrackObjectNotFoundException;
+    Map<Student, Grade> getAverageGradeForStudents(Iterable<Student> students);
+    ModuleStatisticsShell buildModuleStatisticsShell(Module module);
+    ModuleTimeStatisticsShell buildModuleTimeStatisticsShell(Module module);
+    ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForLecturer (Lecturer lecturer);
     Date[] getWeekStartAndEnd();
     Date[] getMonthStartAndEnd();
     Date[] getYearStartAndEnd();
