@@ -261,25 +261,19 @@ public class StatisticsService implements IStatisticsService {
 
     @Override
     public TimeDuration getAverageTimeInvestDurationForModule(Module module) throws StudentrackObjectNotFoundException {
-        var results = moduleService.getResultsForModule(module);
-        var timeDurationSum = 0;
-        var timeNumber = 0;
+        module = moduleService.findModule(module);
+        var timeOrders = timeService.getAllByModule(module);
 
-        for (var result : results) {
-            var timeInvest = result.getTimeInvest();
-            if (timeInvest != null) {
-                var timeDuration = timeInvest.getTimeDuration();
-                if (timeDuration != null) {
-                    timeDurationSum += timeDuration.getDuration();
-                    timeNumber += 1;
-                }
-            }
+        var durationValue = calculateTimeDuration(timeOrders).getDuration();
+        var studentNumber = module.getStudents().size();
+
+        var timeDuration = new TimeDuration();
+
+        if (studentNumber != 0) {
+            timeDuration.setDuration(durationValue / studentNumber);
         }
 
-        var duration = new TimeDuration();
-        duration.setDuration(timeDurationSum / timeNumber);
-
-        return duration;
+        return timeDuration;
     }
 
     @Override
@@ -342,6 +336,19 @@ public class StatisticsService implements IStatisticsService {
 
         int numberOfStudents = module.getStudents().size();
         moduleStatisticsWebShell.setNumberOfStudents(numberOfStudents);
+
+        try {
+            var averageTimeInvestDuration = getAverageTimeInvestDurationForModule(module);
+            moduleStatisticsWebShell.setAverageTimeInvestDuration(averageTimeInvestDuration);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        // One ECTS = 30 hours = 108000000 milliseconds
+        var estimatedTimeDurationValue = module.getEcts() * 108000000;
+        var estimatedTimeDuration = new TimeDuration();
+        estimatedTimeDuration.setDuration(estimatedTimeDurationValue);
+        moduleStatisticsWebShell.setEstimatedTimeInvestDuration(estimatedTimeDuration);
 
         return moduleStatisticsWebShell;
     }
@@ -423,6 +430,11 @@ public class StatisticsService implements IStatisticsService {
     }
 
     @Override
+    public ModuleStudentStatisticsShell buildModuleStudentStatisticsShell(Student student, Module module) {
+        return null;
+    }
+
+    @Override
     public Iterable<ModuleStatisticsShell> getModuleStatisticsShellForAllModules() {
         var statisticsShells = new ArrayList<ModuleStatisticsShell>();
         var modules = moduleService.findAllModules();
@@ -446,6 +458,11 @@ public class StatisticsService implements IStatisticsService {
         }
 
         return statisticsShell;
+    }
+
+    @Override
+    public Iterable<ModuleStudentStatisticsShell> getModuleStudentStatisticsForStudent(Student student) {
+        return null;
     }
 
     @Override

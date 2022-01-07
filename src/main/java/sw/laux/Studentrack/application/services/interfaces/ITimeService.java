@@ -37,4 +37,5 @@ public interface ITimeService {
     Iterable<TimeOrder> getAllByOwnerAndStartBetween(Student student, Date start, Date end) throws StudentrackObjectNotFoundException;
     Iterable<TimeOrder> getAllByModuleAndStartBetween(Module module, Date start, Date end) throws StudentrackObjectNotFoundException;
     Iterable<TimeOrder> getAllByStartAndEnd(Date start, Date end) throws StudentrackObjectNotFoundException;
+    Iterable<TimeOrder> getAllByModule(Module module) throws StudentrackObjectNotFoundException;
 }

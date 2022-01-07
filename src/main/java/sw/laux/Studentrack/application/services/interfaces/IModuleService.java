@@ -36,6 +36,8 @@ public interface IModuleService {
     Iterable<ModuleResults> collectResultsForAllModulesOfStudent(Student student) throws StudentrackObjectNotFoundException;
     @Transactional
     ModuleResults collectResultForModuleOfStudent(Student student, Module module) throws StudentrackObjectNotFoundException;
+    @Transactional
+    Iterable<ModuleResults> collectResultsForModule(Module module) throws StudentrackObjectNotFoundException;
     Iterable<ModuleResults> getResultsForModule(Module module) throws StudentrackObjectNotFoundException;
     @Transactional
     ModuleResults saveNewGradeValueAndTryNumberForResult(Grade grade, ModuleResults moduleResults) throws StudentrackObjectNotFoundException;

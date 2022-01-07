@@ -44,10 +44,44 @@
                 </div>
 
                 <div class="container" th:if="${isPremium} == true">
-
-
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="bs-component">
+                                <legend>Your Time Statistics</legend>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Time Range</th>
+                                        <th scope="col">Time Invest</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="table-primary">
+                                        <th>Today</th>
+                                        <td th:text="${timeStatisticsOverview.timeInvestDurationToday}"></td>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <th>Week</th>
+                                        <td th:text="${timeStatisticsOverview.timeInvestDurationWeek}"></td>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <th>Month</th>
+                                        <td th:text="${timeStatisticsOverview.timeInvestDurationMonth}"></td>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <th>Year</th>
+                                        <td th:text="${timeStatisticsOverview.timeInvestDurationYear}"></td>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <th>Total</th>
+                                        <td th:text="${timeStatisticsOverview.timeInvestDurationTotal}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>

@@ -16,6 +16,8 @@
                             <tr>
                                 <th scope="col">Module</th>
                                 <th scope="col">Total Time Invest</th>
+                                <th scope="col">Average Time Invest</th>
+                                <th scope="col">Estimated Time Invest</th>
                                 <th scope="col">Average Grade</th>
                                 <th scope="col">Average Grade Without Failures</th>
                                 <th scope="col">Failure Rate</th>
@@ -26,18 +28,12 @@
                             <tr th:each="statistics, iStat: ${moduleStatisticsLecturer}" th:classappend="${iStat.odd} ? table-info : table-primary">
                                 <th scope="row" th:text="${statistics.module}"/>
                                 <td th:text="${statistics.totalTimeInvestDuration}"/>
+                                <td th:text="${statistics.averageTimeInvestDuration}"/>
+                                <td th:text="${statistics.estimatedTimeInvestDuration}"/>
                                 <td th:text="${statistics.averageGrade.value}"/>
                                 <td th:text="${statistics.averageGradeWithoutFailures.value}"/>
                                 <td th:text="${statistics.failureRate * 100 + '%'}"/>
                                 <td th:text="${statistics.numberOfStudents}"/>
-                            </tr>
-                            <tr class="table-dark">
-                                <th scope="row">Total</th>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationToday}"/>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationWeek}"/>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationMonth}"/>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationYear}"/>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationTotal}"/>
                             </tr>
                             </tbody>
                         </table>
@@ -102,6 +98,8 @@
                             <tr>
                                 <th scope="col">Module</th>
                                 <th scope="col">Total Time Invest</th>
+                                <th scope="col">Average Time Invest</th>
+                                <th scope="col">Estimated Time Invest</th>
                                 <th scope="col">Average Grade</th>
                                 <th scope="col">Average Grade Without Failures</th>
                                 <th scope="col">Failure Rate</th>
@@ -112,18 +110,12 @@
                             <tr th:each="statistics, iStat: ${moduleStatistics}" th:classappend="${iStat.odd} ? table-info : table-primary">
                                 <th scope="row" th:text="${statistics.module}"/>
                                 <td th:text="${statistics.totalTimeInvestDuration}"/>
+                                <td th:text="${statistics.averageTimeInvestDuration}"/>
+                                <td th:text="${statistics.estimatedTimeInvestDuration}"/>
                                 <td th:text="${statistics.averageGrade.value}"/>
                                 <td th:text="${statistics.averageGradeWithoutFailures.value}"/>
                                 <td th:text="${statistics.failureRate * 100 + '%'}"/>
                                 <td th:text="${statistics.numberOfStudents}"/>
-                            </tr>
-                            <tr class="table-dark">
-                                <th scope="row">Total</th>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationToday}"/>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationWeek}"/>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationMonth}"/>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationYear}"/>
-                                <td th:text="${moduleTimeStatisticsOverviewLecturer.timeInvestDurationTotal}"/>
                             </tr>
                             </tbody>
                         </table>

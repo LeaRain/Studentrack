@@ -43,8 +43,10 @@ public interface IStatisticsService {
     Iterable<ModuleTimeStatisticsShell> getModuleTimeStatisticShellsForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
     ModuleTimeStatisticsShell buildModuleTimeStatisticsShell(Module module);
     TimeStatisticsShell buildTimeStatisticsShellOverviewForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
+    ModuleStudentStatisticsShell buildModuleStudentStatisticsShell(Student student, Module module);
     Iterable<ModuleStatisticsShell> getModuleStatisticsShellForAllModules();
     Iterable<ModuleTimeStatisticsShell> getModuleTimeStatisticsForAllModules();
+    Iterable<ModuleStudentStatisticsShell> getModuleStudentStatisticsForStudent(Student student);
     TimeStatisticsShell getModuleTimeStatisticsOverviewForAllModules();
     TimeStatisticsShell buildTimeStatisticsShellOverviewForModules(Iterable<Module> modules);
     TimeStatisticsShell getTimeStatisticsOverviewForStudent(Student student);

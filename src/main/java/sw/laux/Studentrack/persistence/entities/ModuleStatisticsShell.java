@@ -8,8 +8,26 @@ public class ModuleStatisticsShell {
     private Grade averageGradeWithoutFailures;
     private double failureRate;
     private int numberOfStudents;
+    private TimeDuration averageTimeInvestDuration;
+    private TimeDuration estimatedTimeInvestDuration;
 
     public ModuleStatisticsShell() {};
+
+    public TimeDuration getAverageTimeInvestDuration() {
+        return averageTimeInvestDuration;
+    }
+
+    public void setAverageTimeInvestDuration(TimeDuration averageTimeInvestDuration) {
+        this.averageTimeInvestDuration = averageTimeInvestDuration;
+    }
+
+    public TimeDuration getEstimatedTimeInvestDuration() {
+        return estimatedTimeInvestDuration;
+    }
+
+    public void setEstimatedTimeInvestDuration(TimeDuration estimatedTimeInvestDuration) {
+        this.estimatedTimeInvestDuration = estimatedTimeInvestDuration;
+    }
 
     public int getNumberOfStudents() {
         return numberOfStudents;

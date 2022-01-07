@@ -189,5 +189,14 @@ public class TimeService implements ITimeService {
         return timeOrderOptional.get();
     }
 
+    @Override
+    public Iterable<TimeOrder> getAllByModule(Module module) throws StudentrackObjectNotFoundException {
+        var timeOrderOptional = timeRepo.findAllByModule(module);
 
+        if (timeOrderOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, module);
+        }
+
+        return timeOrderOptional.get();
+    }
 }

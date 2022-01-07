@@ -85,7 +85,6 @@ public class StatisticsController {
 
             if (student.isPremiumUser()) {
                 var timeStatisticsOverviewStudent = statisticsService.getTimeStatisticsOverviewForStudent(student);
-                // TODO: Update student/statistics with timeStatisticsOverview
                 model.addAttribute("timeStatisticsOverview", timeStatisticsOverviewStudent);
             }
 
