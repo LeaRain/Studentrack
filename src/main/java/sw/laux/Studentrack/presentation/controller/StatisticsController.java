@@ -26,6 +26,9 @@ public class StatisticsController {
     private IUserServiceInternal userService;
 
     @Autowired
+    private IModuleService moduleService;
+
+    @Autowired
     private Logger logger;
 
     @GetMapping("statistics")
@@ -33,6 +36,17 @@ public class StatisticsController {
                              Principal principal) {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
+
+        // Determine access to specific parts of the statistics
+        boolean overallAccess = false;
+        if (user instanceof Lecturer) {
+            overallAccess = true;
+        }
+        else {
+            if (user instanceof Student student && student.isPremiumUser()) {
+                overallAccess = true;
+            }
+        }
 
         if (user instanceof Lecturer lecturer) {
             Iterable<ModuleStatisticsShell> moduleStatisticsLecturerShells = null;
@@ -63,12 +77,22 @@ public class StatisticsController {
         }
 
         if (user instanceof Student student) {
-            // TODO: Student statistics, separate into free and premium
+            try {
+                var moduleResults = moduleService.collectResultsForAllModulesOfStudent(student);
+                model.addAttribute("moduleResults", moduleResults);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
+
+            model.addAttribute("isPremium", student.isPremiumUser());
+
         }
 
-        model.addAttribute("moduleStatistics", statisticsService.getModuleStatisticsShellForAllModules());
-        model.addAttribute("moduleTimeStatistics", statisticsService.getModuleTimeStatisticsForAllModules());
-        model.addAttribute("moduleTimeStatisticsOverview", statisticsService.getModuleTimeStatisticsOverviewForAllModules());
+        if (overallAccess) {
+            model.addAttribute("moduleStatistics", statisticsService.getModuleStatisticsShellForAllModules());
+            model.addAttribute("moduleTimeStatistics", statisticsService.getModuleTimeStatisticsForAllModules());
+            model.addAttribute("moduleTimeStatisticsOverview", statisticsService.getModuleTimeStatisticsOverviewForAllModules());
+        }
 
         return "statistics";
     }
