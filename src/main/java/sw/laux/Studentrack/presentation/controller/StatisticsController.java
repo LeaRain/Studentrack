@@ -11,11 +11,8 @@ import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
-import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Objects;
 
 @Controller
 public class StatisticsController {
@@ -67,9 +64,9 @@ public class StatisticsController {
             model.addAttribute("moduleStatisticsLecturer", moduleStatisticsLecturerShells);
             model.addAttribute("moduleTimeStatisticsLecturer",  moduleTimeStatisticsLecturerShells);
 
-            ModuleTimeStatisticsShell moduleTimeStatisticsOverviewLecturer = null;
+            TimeStatisticsShell moduleTimeStatisticsOverviewLecturer = null;
             try {
-                moduleTimeStatisticsOverviewLecturer = statisticsService.buildModuleTimeStatisticsShellOverviewForLecturer(lecturer);
+                moduleTimeStatisticsOverviewLecturer = statisticsService.buildTimeStatisticsShellOverviewForLecturer(lecturer);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
@@ -85,6 +82,12 @@ public class StatisticsController {
             }
 
             model.addAttribute("isPremium", student.isPremiumUser());
+
+            if (student.isPremiumUser()) {
+                var timeStatisticsOverviewStudent = statisticsService.getTimeStatisticsOverviewForStudent(student);
+                // TODO: Update student/statistics with timeStatisticsOverview
+                model.addAttribute("timeStatisticsOverview", timeStatisticsOverviewStudent);
+            }
 
         }
 

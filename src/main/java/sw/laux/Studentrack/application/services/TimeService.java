@@ -143,6 +143,17 @@ public class TimeService implements ITimeService {
     }
 
     @Override
+    public Iterable<TimeOrder> findAllTimeOrdersForStudent(Student student) throws StudentrackObjectNotFoundException {
+        var timeOrdersOptional = timeRepo.findAllByOwner(student);
+
+        if (timeOrdersOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, student);
+        }
+
+        return timeOrdersOptional.get();
+    }
+
+    @Override
     public boolean timeOrdersForModuleAndStudentAllowed(Module module, Student student) {
         // Not passed -> Time Orders allowed
         return !(moduleService.hasStudentPassedModule(student, module));

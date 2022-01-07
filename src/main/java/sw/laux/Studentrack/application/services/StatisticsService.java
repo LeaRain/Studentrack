@@ -11,7 +11,6 @@ import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
-import java.sql.Time;
 import java.util.*;
 
 @Service
@@ -41,11 +40,6 @@ public class StatisticsService implements IStatisticsService {
         }
 
         return moduleTimeMap;
-    }
-
-    @Override
-    public Map<Module, TimeDuration> getTimeDurationForLecturerModulesToday(Lecturer lecturer) {
-        return getTimeDurationForModulesToday(lecturer.getModules());
     }
 
     @Override
@@ -135,6 +129,12 @@ public class StatisticsService implements IStatisticsService {
     public TimeDuration getTimeInvestDurationForCurrentYearAndStudent(Student student) throws StudentrackObjectNotFoundException {
         var dates = getYearStartAndEnd();
         return getTimeInvestDurationForTimeRangeAndStudent(dates[0], dates[1], student);
+    }
+
+    @Override
+    public TimeDuration getTotalTimeInvestDurationForStudent(Student student) throws StudentrackObjectNotFoundException {
+        var timeOrders = timeService.findAllTimeOrdersForStudent(student);
+        return calculateTimeDuration(timeOrders);
     }
 
     @Override
@@ -417,9 +417,9 @@ public class StatisticsService implements IStatisticsService {
     }
 
     @Override
-    public ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException {
+    public TimeStatisticsShell buildTimeStatisticsShellOverviewForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException {
         var modules = moduleService.getAllModulesByLecturer(lecturer);
-        return buildModuleTimeStatisticsShellOverviewForModules(modules);
+        return buildTimeStatisticsShellOverviewForModules(modules);
     }
 
     @Override
@@ -449,13 +449,13 @@ public class StatisticsService implements IStatisticsService {
     }
 
     @Override
-    public ModuleTimeStatisticsShell getModuleTimeStatisticsOverviewForAllModules() {
+    public TimeStatisticsShell getModuleTimeStatisticsOverviewForAllModules() {
         var modules = moduleService.findAllModules();
-        return buildModuleTimeStatisticsShellOverviewForModules(modules);
+        return buildTimeStatisticsShellOverviewForModules(modules);
     }
 
     @Override
-    public ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForModules(Iterable<Module> modules) {
+    public TimeStatisticsShell buildTimeStatisticsShellOverviewForModules(Iterable<Module> modules) {
         var moduleTimeStatisticsShell = new ModuleTimeStatisticsShell();
 
         var timeDurationToday = new TimeDuration();
@@ -513,6 +513,54 @@ public class StatisticsService implements IStatisticsService {
         moduleTimeStatisticsShell.setTimeInvestDurationTotal(timeDurationTotal);
 
         return moduleTimeStatisticsShell;
+    }
+
+    @Override
+    public TimeStatisticsShell getTimeStatisticsOverviewForStudent(Student student) {
+        var timeStatisticsShell = new TimeStatisticsShell();
+        var timeDurationToday = new TimeDuration();
+        var timeDurationWeek = new TimeDuration();
+        var timeDurationMonth = new TimeDuration();
+        var timeDurationYear = new TimeDuration();
+        var timeDurationTotal = new TimeDuration();
+
+        try {
+            timeDurationToday = getTimeInvestDurationForTodayAndStudent(student);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        try {
+            timeDurationWeek = getTimeInvestDurationForCurrentWeekAndStudent(student);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        try {
+            timeDurationMonth = getTimeInvestDurationForCurrentMonthAndStudent(student);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        try {
+            timeDurationYear = getTimeInvestDurationForCurrentYearAndStudent(student);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        try {
+            timeDurationTotal = getTotalTimeInvestDurationForStudent(student);
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+        }
+
+        timeStatisticsShell.setTimeInvestDurationToday(timeDurationToday);
+        timeStatisticsShell.setTimeInvestDurationWeek(timeDurationWeek);
+        timeStatisticsShell.setTimeInvestDurationMonth(timeDurationMonth);
+        timeStatisticsShell.setTimeInvestDurationYear(timeDurationYear);
+        timeStatisticsShell.setTimeInvestDurationTotal(timeDurationTotal);
+
+        return timeStatisticsShell;
     }
 
     @Override

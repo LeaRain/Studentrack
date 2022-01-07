@@ -32,6 +32,7 @@ public interface ITimeService {
     @Transactional
     Iterable<TimeOrder> findTimeOrdersForModuleAndStudent(Module module, Student student) throws StudentrackObjectNotFoundException;
     Iterable<TimeOrder> findAllTimeOrdersForModule(Module module) throws StudentrackObjectNotFoundException;
+    Iterable<TimeOrder> findAllTimeOrdersForStudent(Student student) throws StudentrackObjectNotFoundException;
     boolean timeOrdersForModuleAndStudentAllowed(Module module, Student student);
     Iterable<TimeOrder> getAllByOwnerAndStartBetween(Student student, Date start, Date end) throws StudentrackObjectNotFoundException;
     Iterable<TimeOrder> getAllByModuleAndStartBetween(Module module, Date start, Date end) throws StudentrackObjectNotFoundException;

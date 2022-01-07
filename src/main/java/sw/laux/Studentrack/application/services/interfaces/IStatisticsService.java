@@ -9,7 +9,6 @@ import java.util.Map;
 
 public interface IStatisticsService {
     Map<Module, TimeDuration> getTimeDurationForModulesToday(Iterable<Module> modules);
-    Map<Module, TimeDuration> getTimeDurationForLecturerModulesToday(Lecturer lecturer);
     TimeDuration getTimeDurationForModuleToday(Module module) throws StudentrackObjectNotFoundException;
     Map<Module, TimeDuration> getTimeDurationForModules(Iterable<Module> modules);
     Map<Module, TimeDuration> getTimeDurationForLecturerModules(Lecturer lecturer);
@@ -22,6 +21,7 @@ public interface IStatisticsService {
     TimeDuration getTimeInvestDurationForCurrentMonthAndStudent(Student student) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForDateAndModule(Date date, Module module) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForCurrentYearAndStudent(Student student) throws StudentrackObjectNotFoundException;
+    TimeDuration getTotalTimeInvestDurationForStudent(Student student) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForTimeRangeAndModule(Date start, Date end, Module module) throws StudentrackObjectNotFoundException;
     TimeDuration getTimeInvestDurationForTodayAndModule(Module module) throws StudentrackObjectNotFoundException;
     TimeDuration getTotalTimeInvestDurationForModule(Module module) throws StudentrackObjectNotFoundException;
@@ -42,11 +42,12 @@ public interface IStatisticsService {
     Iterable<ModuleStatisticsShell> getModuleStatisticsShellsForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
     Iterable<ModuleTimeStatisticsShell> getModuleTimeStatisticShellsForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
     ModuleTimeStatisticsShell buildModuleTimeStatisticsShell(Module module);
-    ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
+    TimeStatisticsShell buildTimeStatisticsShellOverviewForLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException;
     Iterable<ModuleStatisticsShell> getModuleStatisticsShellForAllModules();
     Iterable<ModuleTimeStatisticsShell> getModuleTimeStatisticsForAllModules();
-    ModuleTimeStatisticsShell getModuleTimeStatisticsOverviewForAllModules();
-    ModuleTimeStatisticsShell buildModuleTimeStatisticsShellOverviewForModules(Iterable<Module> modules);
+    TimeStatisticsShell getModuleTimeStatisticsOverviewForAllModules();
+    TimeStatisticsShell buildTimeStatisticsShellOverviewForModules(Iterable<Module> modules);
+    TimeStatisticsShell getTimeStatisticsOverviewForStudent(Student student);
     Date[] getWeekStartAndEnd();
     Date[] getMonthStartAndEnd();
     Date[] getYearStartAndEnd();
