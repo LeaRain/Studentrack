@@ -32,7 +32,6 @@ public interface IModuleService {
     void deleteModulesWithoutLecturerAndModuleResults() throws StudentrackObjectNotFoundException;
     @Transactional
     boolean hasModuleModuleResults(Module module);
-    @Transactional
     Iterable<ModuleResults> collectResultsForAllModulesOfStudent(Student student) throws StudentrackObjectNotFoundException;
     @Transactional
     ModuleResults collectResultForModuleOfStudent(Student student, Module module) throws StudentrackObjectNotFoundException;

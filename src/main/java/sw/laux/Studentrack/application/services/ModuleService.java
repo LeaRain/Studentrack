@@ -270,7 +270,7 @@ public class ModuleService implements IModuleService {
         student.addModuleResults(moduleResults);
         moduleResults.setModule(module);
         module.addModuleResults(moduleResults);
-        moduleResultsRepo.save(moduleResults);
+        //moduleResultsRepo.save(moduleResults);
         return moduleResults;
     }
 

@@ -21,7 +21,6 @@
                                 <th scope="col">ECTS</th>
                                 <th scope="col">Credit Hours</th>
                                 <th scope="col">Grade</th>
-                                <th scope="col">Total Time Invest</th>
                                 <th scope="col">Lecturer</th>
                                 <th scope="col">Lecturer Contact</th>
                             </tr>
@@ -32,7 +31,6 @@
                                 <td th:text="${result.module.ects}"/>
                                 <td th:text="${result.module.creditHours}"/>
                                 <td th:text="${result.grade}"/>
-                                <td th:text="${result.timeInvest.timeDuration}"/>
                                 <td th:if="${result.module.responsibleLecturer != null}" th:text="${result.module.responsibleLecturer.firstName + ' ' + result.module.responsibleLecturer.lastName}"/>
                                 <td th:if="${result.module.responsibleLecturer != null}" th:text="${result.module.responsibleLecturer.mailAddress}"/>
                             </tr>
@@ -69,6 +67,37 @@
                                         <button type="button" class="btn btn-info mt-4" data-dismiss="modal" id="buttonCloseWithdrawModuleModal">Close</button>
                                         <button type="submit" class="btn btn-info mt-4">Withdraw from Module</button>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="bs-component">
+                            <div th:each="statistics : ${durationStatistics}">
+                                <legend th:text="${statistics.module}"></legend>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr></tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="table-primary">
+                                        <th class="row">Your Time Invest</th>
+                                        <th th:text="${statistics.currentDuration}"></th>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <th class="row">Estimated Time Invest</th>
+                                        <th th:text="${statistics.estimatedDuration}"></th>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <th class="row">Current Percentage</th>
+                                        <th th:text="${statistics.currentPercentage * 100} + '%'"></th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" th:style="'width: ' + ${statistics.currentPercentage * 100} +'%;'"  aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>

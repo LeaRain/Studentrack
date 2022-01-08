@@ -344,10 +344,7 @@ public class StatisticsService implements IStatisticsService {
             logger.info(e.getMessage());
         }
 
-        // One ECTS = 30 hours = 108000000 milliseconds
-        var estimatedTimeDurationValue = module.getEcts() * 108000000;
-        var estimatedTimeDuration = new TimeDuration();
-        estimatedTimeDuration.setDuration(estimatedTimeDurationValue);
+        var estimatedTimeDuration = calculateEstimatedTimeDurationForModule(module);
         moduleStatisticsWebShell.setEstimatedTimeInvestDuration(estimatedTimeDuration);
 
         return moduleStatisticsWebShell;
@@ -610,6 +607,59 @@ public class StatisticsService implements IStatisticsService {
         timeStatisticsShell.setTimeInvestDurationTotal(timeDurationTotal);
 
         return timeStatisticsShell;
+    }
+
+    @Override
+    public ModuleEstimationStatisticsShell getCurrentProgressOfStudentInModule(Student student, Module module) throws StudentrackObjectNotFoundException {
+        var shell = new ModuleEstimationStatisticsShell();
+        shell.setModule(module);
+        // Module passed -> student done
+        if (moduleService.hasStudentPassedModule(student, module)) {
+            shell.setCurrentPercentage(1);
+        }
+
+        var timeOrders = timeService.findTimeOrdersForModuleAndStudent(module, student);
+        var timeDuration = calculateTimeDuration(timeOrders);
+        shell.setCurrentDuration(timeDuration);
+        var estimatedTimeDuration = calculateEstimatedTimeDurationForModule(module);
+        shell.setEstimatedDuration(estimatedTimeDuration);
+
+        var percentage = (double) timeDuration.getDuration() / estimatedTimeDuration.getDuration();
+        percentage = Math.round(percentage * 10000.0) / 10000.0;
+
+        // More time than currently planned -> set to 1
+        if (percentage > 1) {
+            percentage = 1;
+        }
+
+        shell.setCurrentPercentage(percentage);
+
+        return shell;
+    }
+
+    @Override
+    public Iterable<ModuleEstimationStatisticsShell> getCurrentProgressOfStudentInAllModules(Student student) {
+        var statisticsShells = new ArrayList<ModuleEstimationStatisticsShell>();
+        var modules = student.getModules();
+        for (var module : modules) {
+            try {
+                var shell = getCurrentProgressOfStudentInModule(student, module);
+                statisticsShells.add(shell);
+            } catch (StudentrackObjectNotFoundException e) {
+                logger.info(e.getMessage());
+            }
+        }
+        return statisticsShells;
+    }
+
+    @Override
+    public TimeDuration calculateEstimatedTimeDurationForModule(Module module) {
+        var ects = module.getEcts();
+        // One ECTS = 30 hours = 108000000 milliseconds
+        long estimatedValue = ects * 108000000L;
+        var timeDuration = new TimeDuration();
+        timeDuration.setDuration(estimatedValue);
+        return timeDuration;
     }
 
     @Override

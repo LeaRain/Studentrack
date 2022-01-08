@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.*;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
+import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
@@ -22,6 +23,9 @@ public class ModuleController {
 
     @Autowired
     private IModuleService moduleService;
+
+    @Autowired
+    private IStatisticsService statisticsService;
 
     @Autowired
     private Logger logger;
@@ -51,8 +55,8 @@ public class ModuleController {
             } catch (StudentrackObjectNotFoundException ignored) {
 
             }
-
             model.addAttribute("student", student);
+            model.addAttribute("durationStatistics", statisticsService.getCurrentProgressOfStudentInAllModules(student));
         }
 
         if (user instanceof Lecturer) {

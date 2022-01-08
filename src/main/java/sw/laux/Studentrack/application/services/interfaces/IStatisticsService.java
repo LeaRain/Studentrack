@@ -4,6 +4,7 @@ import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundExcep
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Map;
 
@@ -50,6 +51,9 @@ public interface IStatisticsService {
     TimeStatisticsShell getModuleTimeStatisticsOverviewForAllModules();
     TimeStatisticsShell buildTimeStatisticsShellOverviewForModules(Iterable<Module> modules);
     TimeStatisticsShell getTimeStatisticsOverviewForStudent(Student student);
+    ModuleEstimationStatisticsShell getCurrentProgressOfStudentInModule(Student student, Module module) throws StudentrackObjectNotFoundException;
+    Iterable<ModuleEstimationStatisticsShell> getCurrentProgressOfStudentInAllModules(Student student);
+    TimeDuration calculateEstimatedTimeDurationForModule(Module module);
     Date[] getWeekStartAndEnd();
     Date[] getMonthStartAndEnd();
     Date[] getYearStartAndEnd();
