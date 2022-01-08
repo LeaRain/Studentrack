@@ -4,12 +4,10 @@ import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundExcep
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Map;
 
 public interface IStatisticsService {
-    Map<Module, TimeDuration> getTimeDurationForModulesToday(Iterable<Module> modules);
     TimeDuration getTimeDurationForModuleToday(Module module) throws StudentrackObjectNotFoundException;
     Map<Module, TimeDuration> getTimeDurationForModules(Iterable<Module> modules);
     Map<Module, TimeDuration> getTimeDurationForLecturerModules(Lecturer lecturer);

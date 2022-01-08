@@ -28,21 +28,6 @@ public class StatisticsService implements IStatisticsService {
     private Logger logger;
 
     @Override
-    public Map<Module, TimeDuration> getTimeDurationForModulesToday(Iterable<Module> modules) {
-        var moduleTimeMap = new HashMap<Module, TimeDuration>();
-
-        for (var module : modules) {
-            try {
-                var timeDuration = getTimeDurationForModuleToday(module);
-                moduleTimeMap.put(module, timeDuration);
-            } catch (StudentrackObjectNotFoundException ignored) {
-            }
-        }
-
-        return moduleTimeMap;
-    }
-
-    @Override
     public TimeDuration getTimeDurationForModuleToday(Module module) throws StudentrackObjectNotFoundException {
         return getTimeInvestDurationForTodayAndModule(module);
     }
