@@ -648,6 +648,99 @@ public class StatisticsService implements IStatisticsService {
     }
 
     @Override
+    public Map<ModuleDTO, GradeDTO> getModuleGradesForStudent(Student student) throws StudentrackObjectNotFoundException {
+        var results = moduleService.collectResultsForAllModulesOfStudent(student);
+        var resultMap = new HashMap<ModuleDTO, GradeDTO>();
+        for (var result : results) {
+            var module = result.getModule();
+            var moduleDto = buildModuleDTOBasedOnModule(module);
+            var grade = result.getGrade();
+            var gradeDto = buildGradeDTOBasedOnGrade(grade);
+            resultMap.put(moduleDto, gradeDto);
+        }
+
+        return resultMap;
+    }
+
+    @Override
+    public Map<ModuleDTO, TimeDurationDTO> getModuleTimeDurationForStudent(Student student) throws StudentrackObjectNotFoundException {
+        var results = moduleService.collectResultsForAllModulesOfStudent(student);
+        var resultMap = new HashMap<ModuleDTO, TimeDurationDTO>();
+        for (var result : results) {
+            var module = result.getModule();
+            var timeDuration = result.getTimeInvest().getTimeDuration();
+            var moduleDto = buildModuleDTOBasedOnModule(module);
+            var timeDurationDto = buildTimeDurationDTOBasedOnTimeDuration(timeDuration);
+            resultMap.put(moduleDto, timeDurationDto);
+        }
+
+        return resultMap;
+    }
+
+    @Override
+    public ModuleDTO buildModuleDTOBasedOnModule(Module module) {
+        var moduleDto = new ModuleDTO();
+        moduleDto.setModuleId(module.getModuleId());
+        moduleDto.setName(module.getName());
+        moduleDto.setEcts(module.getEcts());
+        moduleDto.setCreditHours(module.getCreditHours());
+        return moduleDto;
+    }
+
+    @Override
+    public GradeDTO buildGradeDTOBasedOnGrade(Grade grade) {
+        if (grade == null) {
+            return null;
+        }
+
+        var gradeDto = new GradeDTO();
+        gradeDto.setGradeId(grade.getGradeId());
+        gradeDto.setValue(grade.getValue());
+        gradeDto.setDescription(grade.getDescription());
+        gradeDto.setTryNumber(grade.getTryNumber());
+        return gradeDto;
+    }
+
+    @Override
+    public TimeDurationDTO buildTimeDurationDTOBasedOnTimeDuration(TimeDuration timeDuration) {
+        var timeDurationDto = new TimeDurationDTO();
+        timeDurationDto.setDuration(timeDuration.getDuration());
+        return timeDurationDto;
+    }
+
+    @Override
+    public Iterable<ModuleDTO> getAllModules() {
+        var results = new ArrayList<ModuleDTO>();
+        var modules = moduleService.getAllModules();
+        for (var module : modules) {
+            var moduleDto = buildModuleDTOBasedOnModule(module);
+            results.add(moduleDto);
+        }
+
+        return results;
+    }
+
+    @Override
+    public ModuleDTO getModuleDTOBasedOnModuleId(long moduleId) throws StudentrackObjectNotFoundException {
+        var module = moduleService.findModule(moduleId);
+        return buildModuleDTOBasedOnModule(module);
+    }
+
+    @Override
+    public GradeDTO getAverageGradeDTOForModule(long moduleId) throws StudentrackObjectNotFoundException {
+        var module = moduleService.findModule(moduleId);
+        var grade = getAverageGradeForModule(module);
+        return buildGradeDTOBasedOnGrade(grade);
+    }
+
+    @Override
+    public TimeDurationDTO getAverageTimeDurationDTOForModule(long moduleId) throws StudentrackObjectNotFoundException {
+        var module = moduleService.findModule(moduleId);
+        var timeDuration = getAverageTimeInvestDurationForModule(module);
+        return buildTimeDurationDTOBasedOnTimeDuration(timeDuration);
+    }
+
+    @Override
     public Date[] getWeekStartAndEnd() {
         var dateResult = new Date[2];
 

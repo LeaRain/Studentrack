@@ -15,6 +15,7 @@ public interface IModuleService {
     Module findModule(Module module) throws StudentrackObjectNotFoundException;
     Module findModule(long moduleId) throws StudentrackObjectNotFoundException;
     Module findModuleByName(String name) throws StudentrackObjectNotFoundException;
+    Iterable<Module> getAllModules();
     Iterable<Module> getAllAvailableModules();
     Iterable<Module> getNonTakenAndAvailableModulesByStudent(Student student);
     Iterable<Module> findAllModules();

@@ -4,10 +4,7 @@ import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExists
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
-import sw.laux.Studentrack.persistence.entities.Faculty;
-import sw.laux.Studentrack.persistence.entities.Lecturer;
-import sw.laux.Studentrack.persistence.entities.Student;
-import sw.laux.Studentrack.persistence.entities.User;
+import sw.laux.Studentrack.persistence.entities.*;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
@@ -21,6 +18,9 @@ public interface IUserServiceInternal extends IUserService{
     User updateUserWithNamesAndMailAddress(User user) throws StudentrackObjectNotFoundException, StudentrackObjectAlreadyExistsException;
     User findUserByMailAddress(User user) throws StudentrackObjectNotFoundException;
     User findUserByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException;
+    StudentDTO findStudentDTOByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException;
+    StudentDTO findStudentDTOByUserId(Long userId) throws StudentrackObjectNotFoundException;
+    StudentDTO buildStudentDTOBasedOnStudent(Student student);
     User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackPasswordWrongException;
     boolean validatePasswordForUser(User user, String password) throws StudentrackObjectNotFoundException;
     void deleteUser(User user) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;

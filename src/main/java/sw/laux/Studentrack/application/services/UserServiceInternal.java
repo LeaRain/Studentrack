@@ -144,6 +144,36 @@ public class UserServiceInternal implements IUserServiceInternal {
     }
 
     @Override
+    public StudentDTO findStudentDTOByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException {
+        var user = findUserByMailAddress(mailAddress);
+
+        if (!(user instanceof Student student)) {
+            throw new StudentrackObjectNotFoundException(StudentDTO.class, mailAddress);
+        }
+
+        return buildStudentDTOBasedOnStudent(student);
+
+    }
+
+    @Override
+    public StudentDTO findStudentDTOByUserId(Long userId) throws StudentrackObjectNotFoundException {
+        var student = findStudent(userId);
+        return buildStudentDTOBasedOnStudent(student);
+    }
+
+    @Override
+    public StudentDTO buildStudentDTOBasedOnStudent(Student student) {
+        var studentDto = new StudentDTO();
+        studentDto.setUserId(student.getUserId());
+        studentDto.setFirstName(student.getFirstName());
+        studentDto.setLastName(student.getLastName());
+        studentDto.setMailAddress(student.getMailAddress());
+        studentDto.setEcts(student.getEcts());
+
+        return studentDto;
+    }
+
+    @Override
     public User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackPasswordWrongException {
         if (!validatePasswordForUser(user, oldPassword)) {
             throw new StudentrackPasswordWrongException(user.getClass(), user);

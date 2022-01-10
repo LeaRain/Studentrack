@@ -52,6 +52,15 @@ public interface IStatisticsService {
     ModuleEstimationStatisticsShell getCurrentProgressOfStudentInModule(Student student, Module module) throws StudentrackObjectNotFoundException;
     Iterable<ModuleEstimationStatisticsShell> getCurrentProgressOfStudentInAllModules(Student student);
     TimeDuration calculateEstimatedTimeDurationForModule(Module module);
+    Map<ModuleDTO, GradeDTO> getModuleGradesForStudent(Student student) throws StudentrackObjectNotFoundException;
+    Map<ModuleDTO, TimeDurationDTO> getModuleTimeDurationForStudent(Student student) throws StudentrackObjectNotFoundException;
+    ModuleDTO buildModuleDTOBasedOnModule(Module module);
+    GradeDTO buildGradeDTOBasedOnGrade(Grade grade);
+    TimeDurationDTO buildTimeDurationDTOBasedOnTimeDuration(TimeDuration timeDuration);
+    Iterable<ModuleDTO> getAllModules();
+    ModuleDTO getModuleDTOBasedOnModuleId(long moduleId) throws StudentrackObjectNotFoundException;
+    GradeDTO getAverageGradeDTOForModule(long moduleId) throws StudentrackObjectNotFoundException;
+    TimeDurationDTO getAverageTimeDurationDTOForModule(long moduleId) throws StudentrackObjectNotFoundException;
     Date[] getWeekStartAndEnd();
     Date[] getMonthStartAndEnd();
     Date[] getYearStartAndEnd();

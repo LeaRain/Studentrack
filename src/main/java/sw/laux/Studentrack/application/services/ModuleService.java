@@ -76,6 +76,11 @@ public class ModuleService implements IModuleService {
     }
 
     @Override
+    public Iterable<Module> getAllModules() {
+       return moduleRepo.findAll();
+    }
+
+    @Override
     public Iterable<Module> getAllAvailableModules() {
         return moduleRepo.findAllByResponsibleLecturerNotNull();
     }

@@ -1,17 +1,13 @@
 package sw.laux.Studentrack.presentation.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 
-import java.lang.Module;
 import java.util.Map;
 
 @RequestMapping("/api")
@@ -22,58 +18,48 @@ public class StatisticsServiceRestController {
     @Autowired
     IUserServiceInternal userService;
 
-    @GetMapping(value = "/student/{mailAddress}")
-    public StudentDTO getStudentByMailAddress(@PathVariable("mailAddress") String mailAddress) throws StudentrackObjectNotFoundException {
-        // TODO: Method in UserService for DTO
-        var user = userService.findUserByMailAddress(mailAddress);
+    // TODO: API token
 
-        if (!(user instanceof Student)) {
-            throw new StudentrackObjectNotFoundException(Student.class, mailAddress);
-        }
-
-        var studentDto = new StudentDTO();
-        studentDto.setUserId(user.getUserId());
-        studentDto.setFirstName(user.getFirstName());
-        studentDto.setLastName(user.getLastName());
-        studentDto.setMailAddress(user.getMailAddress());
-        studentDto.setEcts(((Student) user).getEcts());
-
-        return studentDto;
+    @GetMapping(value = "/student/mail/{mailAddress}")
+    public StudentDTO getStudentByMailAddress(@PathVariable(value="mailAddress") String mailAddress) throws StudentrackObjectNotFoundException {
+        return userService.findStudentDTOByMailAddress(mailAddress);
     }
 
     @GetMapping(value = "/student/{id}")
     public StudentDTO getStudentById(@PathVariable("id") long userId) throws StudentrackObjectNotFoundException {
-        return null;
+        return userService.findStudentDTOByUserId(userId);
     }
 
     @GetMapping(value = "/student/{id}/grades")
     public Map<ModuleDTO, GradeDTO> getModuleGradesForStudent(@PathVariable("id") long userId) throws StudentrackObjectNotFoundException {
-        return null;
+        var student = userService.findStudent(userId);
+        return statisticsService.getModuleGradesForStudent(student);
     }
 
     @GetMapping(value = "/student/{id}/time")
     public Map<ModuleDTO, TimeDurationDTO> getModuleTimeDurationForStudent(@PathVariable("id") long userId) throws StudentrackObjectNotFoundException {
-        return null;
+        var student = userService.findStudent(userId);
+        return statisticsService.getModuleTimeDurationForStudent(student);
     }
 
-    @GetMapping(value = "/modules")
+    @GetMapping(value = "/module")
     public Iterable<ModuleDTO> getAllModules() {
-        return null;
+        return statisticsService.getAllModules();
     }
 
     @GetMapping(value = "/module/{id}")
-    public ModuleDTO getModule(@PathVariable("@id") long moduleId) throws StudentrackObjectNotFoundException {
-        return null;
+    public ModuleDTO getModule(@PathVariable("id") long moduleId) throws StudentrackObjectNotFoundException {
+        return statisticsService.getModuleDTOBasedOnModuleId(moduleId);
     }
 
     @GetMapping(value = "/module/{id}/grade")
-    public GradeDTO getAverageGradeForModule(@PathVariable("@id") long moduleId) throws StudentrackObjectNotFoundException {
-        return null;
+    public GradeDTO getAverageGradeForModule(@PathVariable("id") long moduleId) throws StudentrackObjectNotFoundException {
+        return statisticsService.getAverageGradeDTOForModule(moduleId);
     }
 
     @GetMapping(value = "/module/{id}/time")
-    public TimeDurationDTO getAverageTimeDurationForModule(@PathVariable("@id") long moduleId) throws StudentrackObjectNotFoundException {
-        return null;
+    public TimeDurationDTO getAverageTimeDurationForModule(@PathVariable("id") long moduleId) throws StudentrackObjectNotFoundException {
+        return statisticsService.getAverageTimeDurationDTOForModule(moduleId);
     }
 
 }
