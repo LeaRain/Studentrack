@@ -45,7 +45,7 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
     }
 
     private static final String[] ALLOW_ACCESS_WITHOUT_AUTHENTICATION = {
-            "/css/**", "/image/**", "/fonts/**", "/js/**", "/", "/login", "/registration", "/registration/check", "/impress", "/privacy", "/api/**"
+            "/css/**", "/image/**", "/fonts/**", "/js/**", "/", "/login", "/registration", "/registration/check", "/impress", "/privacy", "/api/**", "developer/**"
     };
 
     private static final String[] ALLOW_ACCESS_FOR_LECTURERS = {"/modules/edit/*", "/modules/grade/*"};

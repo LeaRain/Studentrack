@@ -8,6 +8,7 @@ import sw.laux.Studentrack.persistence.entities.*;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Date;
 
 public interface IUserServiceInternal extends IUserService{
     User registerUser(User user) throws StudentrackObjectAlreadyExistsException;
@@ -30,4 +31,9 @@ public interface IUserServiceInternal extends IUserService{
     void deleteLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     Faculty findFaculty(Faculty faculty) throws StudentrackObjectNotFoundException;
     Student calculateCurrentECTSOfStudent(Student student) throws StudentrackObjectNotFoundException;
+    Developer preregisterDeveloper(Developer developer) throws StudentrackObjectAlreadyExistsException;
+    Developer commitRegisterDeveloper(Developer developer);
+    APIKey generateAPIKeyForDeveloper(Developer developer);
+    String generateKey();
+    Date getDateInOneMonth();
 }

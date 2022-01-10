@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
-import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 
@@ -18,7 +17,7 @@ public class StatisticsServiceRestController {
     @Autowired
     IUserServiceInternal userService;
 
-    // TODO: API token
+    // TODO: Authenticate with API token
 
     @GetMapping(value = "/student/mail/{mailAddress}")
     public StudentDTO getStudentByMailAddress(@PathVariable(value="mailAddress") String mailAddress) throws StudentrackObjectNotFoundException {

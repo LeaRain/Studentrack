@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="common/header :: header(title='Developer')"/>
+
+<body class style>
+<div th:replace="common/navigation :: navigation"/>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-7 col-sm-6">
+      <h1>Developer Information</h1>
+      <p>Are you a developer or data scientist interested in the Studentrack API? Register today!</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-7 col-sm-6">
+      <form method="post" th:action="@{/developer/check}" th:object="${developer}">
+        <fieldset>
+            <div class="form-group">
+              <label class="form-label mt-4">Email address</label>
+              <input type="email" class="form-control" placeholder="Enter Email address" th:field="*{mailAddress}" required>
+            </div>
+          <div class="form-group">
+            <label class="col-form-label mt-4">Organization</label>
+            <input type="text" class="form-control" placeholder="Enter Organization" th:field="*{organization}" required>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButton">Generate API Token!</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div th:replace="common/footer :: footer"/>
+</body>
+</html>

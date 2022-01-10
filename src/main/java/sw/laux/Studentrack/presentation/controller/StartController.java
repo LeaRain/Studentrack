@@ -115,4 +115,32 @@ public class StartController {
         return "privacy";
     }
 
+    @GetMapping("developer")
+    public String developer(Model model) {
+        var developer = new Developer();
+        model.addAttribute("developer", developer);
+        return "developer";
+    }
+
+    @PostMapping("developer/check")
+    public String checkDeveloper(Model model,
+                                 @ModelAttribute("developer") Developer developer,
+                                 RedirectAttributes redirectAttributes) {
+
+        // TODO: Test
+
+        try {
+            developer = userService.preregisterDeveloper(developer);
+        } catch (StudentrackObjectAlreadyExistsException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.info(e.getMessage());
+            return "redirect:/";
+        }
+
+        var successMessage = "Successfully created API key " + developer.getKey() + " with expiration date " + developer.getKey().getExpirationDate();
+        model.addAttribute("successMessage", successMessage);
+        userService.commitRegisterDeveloper(developer);
+        return "redirect:/";
+    }
+
 }

@@ -13,9 +13,7 @@ import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.FacultyRepository;
 import sw.laux.Studentrack.persistence.repository.UserRepository;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserServiceInternal implements IUserServiceInternal {
@@ -248,6 +246,47 @@ public class UserServiceInternal implements IUserServiceInternal {
         var ects = moduleService.calculateECTSOfStudent(student);
         student.setEcts(ects);
         return userRepo.save(student);
+    }
+
+    @Override
+    public Developer preregisterDeveloper(Developer developer) throws StudentrackObjectAlreadyExistsException {
+        try {
+            var user = findUserByMailAddress(developer.getMailAddress());
+            throw new StudentrackObjectAlreadyExistsException(developer.getClass(), developer);
+        } catch (StudentrackObjectNotFoundException ignored) {
+        }
+        var key = generateAPIKeyForDeveloper(developer);
+        developer.setKey(key);
+        return developer;
+    }
+
+    @Override
+    public Developer commitRegisterDeveloper(Developer developer) {
+        var apiKey = developer.getKey();
+        apiKey.setKey(passwordEncoder.encode(apiKey.getKey()));
+        return userRepo.save(developer);
+    }
+
+    @Override
+    public APIKey generateAPIKeyForDeveloper(Developer developer) {
+        var apiKey = new APIKey();
+        apiKey.setDeveloper(developer);
+        apiKey.setKey(generateKey());
+        apiKey.setExpirationDate(getDateInOneMonth());
+        return apiKey;
+    }
+
+    @Override
+    public String generateKey() {
+        // Uses Secure Random -> considered as secure enough for example key generation
+        return UUID.randomUUID().toString();
+    }
+
+    @Override
+    public Date getDateInOneMonth() {
+        var calendar = new GregorianCalendar();
+        calendar.add(Calendar.MONTH, 1);
+        return calendar.getTime();
     }
 
     @Override
