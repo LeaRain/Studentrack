@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
-import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
+import sw.laux.Studentrack.application.exceptions.StudentrackAuthenticationException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
@@ -134,7 +134,7 @@ public class UserController {
         var user = (User) userService.loadUserByUsername(principal.getName());
         try {
             userService.changeUserPassword(user, passwordWebShell.getOldPassword(), passwordWebShell.getNewPassword());
-        } catch (StudentrackObjectNotFoundException | StudentrackPasswordWrongException e) {
+        } catch (StudentrackObjectNotFoundException | StudentrackAuthenticationException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.info(e.getMessage());
             return "redirect:/home";

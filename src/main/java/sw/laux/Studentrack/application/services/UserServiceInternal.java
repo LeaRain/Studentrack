@@ -172,9 +172,9 @@ public class UserServiceInternal implements IUserServiceInternal {
     }
 
     @Override
-    public User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackPasswordWrongException {
+    public User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackAuthenticationException {
         if (!validatePasswordForUser(user, oldPassword)) {
-            throw new StudentrackPasswordWrongException(user.getClass(), user);
+            throw new StudentrackAuthenticationException(user.getClass(), user);
         }
 
         user = findUserByMailAddress(user);
@@ -252,7 +252,12 @@ public class UserServiceInternal implements IUserServiceInternal {
     public Developer preregisterDeveloper(Developer developer) throws StudentrackObjectAlreadyExistsException {
         try {
             var user = findUserByMailAddress(developer.getMailAddress());
-            throw new StudentrackObjectAlreadyExistsException(developer.getClass(), developer);
+
+            // check for developer account and currently valid key
+            if (!(user instanceof Developer && !existsValidKeyForDeveloper((Developer) user))) {
+                throw new StudentrackObjectAlreadyExistsException(developer.getClass(), developer);
+            }
+
         } catch (StudentrackObjectNotFoundException ignored) {
         }
         var key = generateAPIKeyForDeveloper(developer);
@@ -274,6 +279,52 @@ public class UserServiceInternal implements IUserServiceInternal {
         apiKey.setKey(generateKey());
         apiKey.setExpirationDate(getDateInOneMonth());
         return apiKey;
+    }
+
+    @Override
+    public void validateAPIKey(APIKeyDTO apiKeyDTO) throws StudentrackObjectNotFoundException, StudentrackAuthenticationException {
+        var user = findUserByMailAddress(apiKeyDTO.getMailAddress());
+
+        if (!(user instanceof Developer developer)) {
+            throw new StudentrackObjectNotFoundException(Developer.class, apiKeyDTO);
+        }
+
+        var developerKey = developer.getKey();
+        // Exception if key is expired
+        validateKeyExpirationDate(developer, apiKeyDTO);
+
+        if (!(passwordEncoder.matches(apiKeyDTO.getKey(), developerKey.getKey()))) {
+            throw new StudentrackAuthenticationException(APIKeyDTO.class, apiKeyDTO);
+        }
+    }
+
+    @Override
+    public void validateKeyExpirationDate(Developer developer, APIKeyDTO apiKeyDTO) throws StudentrackAuthenticationException {
+        var developerKey = developer.getKey();
+        var expirationDate = developerKey.getExpirationDate();
+
+        if (isDateExpired(expirationDate)) {
+            throw new StudentrackAuthenticationException(Developer.class, developer);
+        }
+    }
+
+    @Override
+    public boolean existsValidKeyForDeveloper(Developer developer) {
+        var apiKey = developer.getKey();
+
+        if (apiKey == null) {
+            return false;
+        }
+
+        var expirationDate = apiKey.getExpirationDate();
+        return !(isDateExpired(expirationDate));
+    }
+
+    @Override
+    public boolean isDateExpired(Date date) {
+        var now = new Date();
+        // date is after now -> expired
+        return now.after(date);
     }
 
     @Override

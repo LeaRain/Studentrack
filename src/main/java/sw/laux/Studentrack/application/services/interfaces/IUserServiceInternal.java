@@ -3,7 +3,7 @@ package sw.laux.Studentrack.application.services.interfaces;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
-import sw.laux.Studentrack.application.exceptions.StudentrackPasswordWrongException;
+import sw.laux.Studentrack.application.exceptions.StudentrackAuthenticationException;
 import sw.laux.Studentrack.persistence.entities.*;
 
 import javax.transaction.Transactional;
@@ -22,7 +22,7 @@ public interface IUserServiceInternal extends IUserService{
     StudentDTO findStudentDTOByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException;
     StudentDTO findStudentDTOByUserId(Long userId) throws StudentrackObjectNotFoundException;
     StudentDTO buildStudentDTOBasedOnStudent(Student student);
-    User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackPasswordWrongException;
+    User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackAuthenticationException;
     boolean validatePasswordForUser(User user, String password) throws StudentrackObjectNotFoundException;
     void deleteUser(User user) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     @Transactional
@@ -34,6 +34,10 @@ public interface IUserServiceInternal extends IUserService{
     Developer preregisterDeveloper(Developer developer) throws StudentrackObjectAlreadyExistsException;
     Developer commitRegisterDeveloper(Developer developer);
     APIKey generateAPIKeyForDeveloper(Developer developer);
+    void validateAPIKey(APIKeyDTO apiKeyDTO) throws StudentrackObjectNotFoundException, StudentrackAuthenticationException;
+    void validateKeyExpirationDate(Developer developer, APIKeyDTO apiKeyDTO) throws StudentrackAuthenticationException;
+    boolean existsValidKeyForDeveloper(Developer developer);
+    boolean isDateExpired(Date date);
     String generateKey();
     Date getDateInOneMonth();
 }

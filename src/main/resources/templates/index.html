@@ -19,6 +19,9 @@
     <div th:replace="common/statusmessage :: status(successMessage=${successMessage})"></div>
 </div>
 
+<div th:if="${errorMessage} != ''">
+    <div th:replace="common/statusmessage :: status(errorMessage=${errorMessage})"></div>
+</div>
 
 <div th:if="${param.logout}">
     <div th:replace="common/statusmessage :: status(successMessage='Logout successful!')"></div>

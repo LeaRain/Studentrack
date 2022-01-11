@@ -127,8 +127,6 @@ public class StartController {
                                  @ModelAttribute("developer") Developer developer,
                                  RedirectAttributes redirectAttributes) {
 
-        // TODO: Test
-
         try {
             developer = userService.preregisterDeveloper(developer);
         } catch (StudentrackObjectAlreadyExistsException e) {
@@ -137,8 +135,8 @@ public class StartController {
             return "redirect:/";
         }
 
-        var successMessage = "Successfully created API key " + developer.getKey() + " with expiration date " + developer.getKey().getExpirationDate();
-        model.addAttribute("successMessage", successMessage);
+        var successMessage = "Successfully created API key " + developer.getKey().getKey() + " with expiration date " + developer.getKey().getExpirationDate();
+        redirectAttributes.addFlashAttribute("successMessage", successMessage);
         userService.commitRegisterDeveloper(developer);
         return "redirect:/";
     }
