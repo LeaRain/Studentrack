@@ -6,7 +6,7 @@ import sw.laux.Studentrack.application.exceptions.*;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
-import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
+import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.*;
@@ -20,7 +20,7 @@ public class ModuleService implements IModuleService {
     @Autowired
     private ModuleResultsRepository moduleResultsRepo;
     @Autowired
-    private IUserServiceInternal userService;
+    private IUserService userService;
     @Autowired
     private ITimeService timeService;
     @Autowired

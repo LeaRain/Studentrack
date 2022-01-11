@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
-import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
+import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.*;
 import org.slf4j.Logger;
 import sw.laux.Studentrack.presentation.WebShell.UserWebShell;
@@ -16,7 +16,7 @@ import java.security.Principal;
 @Controller
 public class StartController {
     @Autowired
-    private IUserServiceInternal userService;
+    private IUserService userService;
     @Autowired
     private Logger logger;
 

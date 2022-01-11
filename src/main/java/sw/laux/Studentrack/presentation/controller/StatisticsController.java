@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
-import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
+import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.presentation.WebShell.ModuleStatisticsShell;
 import sw.laux.Studentrack.presentation.WebShell.ModuleTimeStatisticsShell;
@@ -23,7 +23,7 @@ public class StatisticsController {
     private IStatisticsService statisticsService;
 
     @Autowired
-    private IUserServiceInternal userService;
+    private IUserService userService;
 
     @Autowired
     private IModuleService moduleService;

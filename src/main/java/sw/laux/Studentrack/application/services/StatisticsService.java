@@ -7,7 +7,7 @@ import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundExcep
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
-import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
+import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.application.DTO.GradeDTO;
 import sw.laux.Studentrack.application.DTO.ModuleDTO;
@@ -26,7 +26,7 @@ public class StatisticsService implements IStatisticsService {
     private ITimeService timeService;
 
     @Autowired
-    private IUserServiceInternal userService;
+    private IUserService userService;
 
     @Autowired
     private Logger logger;

@@ -7,7 +7,7 @@ import sw.laux.Studentrack.application.exceptions.StudentrackAuthenticationExcep
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
-import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
+import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.*;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ public class StatisticsServiceRestController {
     @Autowired
     IStatisticsService statisticsService;
     @Autowired
-    IUserServiceInternal userService;
+    IUserService userService;
 
     @PostMapping(value = "/register")
     public APIKeyDTO registerNewDeveloper(@RequestBody DeveloperDTO developerDTO) throws StudentrackObjectAlreadyExistsException {

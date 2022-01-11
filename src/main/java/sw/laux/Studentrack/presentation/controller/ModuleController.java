@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sw.laux.Studentrack.application.exceptions.*;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
-import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
+import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.presentation.WebShell.ModuleResultsListShell;
 import sw.laux.Studentrack.persistence.entities.Module;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 @Controller
 public class ModuleController {
     @Autowired
-    private IUserServiceInternal userService;
+    private IUserService userService;
 
     @Autowired
     private IModuleService moduleService;
