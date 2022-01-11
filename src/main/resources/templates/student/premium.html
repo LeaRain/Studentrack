@@ -1,0 +1,59 @@
+<div th:fragment="studentpremium">
+    <div class="container" th:if="${isPremium == true}">
+        <div class="bs-docs-section">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="bs-component">
+                        <h3>Premium Already Available</h3>
+                        <div class="alert alert-dismissible alert-success">
+                            Congratulations! You are already a premium user and can access more statistics!
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <form action="statistics" method="get">
+                            <button class="btn btn-lg btn-primary col-12" type="submit">Get Statistics</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" th:if="${isPremium == false}">
+        <div class="bs-docs-section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="bs-component">
+                        <h3>Get Premium!</h3>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Advantages</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="table-primary">
+                                <th scope="row">Get access to more than just your grades</th>
+                            </tr>
+                            <tr class="table-info">
+                                <th scope="row">See average grade and time invest for all available modules</th>
+                            </tr>
+                            <tr class="table-primary">
+                                <th scope="row">Pay once, profit your whole study life</th>
+                            </tr>
+                            <tr class="table-info">
+                                <th scope="row">Test new Studentrack features first</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <form action="/change/premium/check" method="post">
+                            <button class="btn btn-lg btn-primary col-12" type="submit">Get Premium</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

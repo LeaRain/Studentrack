@@ -67,6 +67,25 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Student upgradeStudentToPremium(Student student) throws StudentrackAuthenticationException, StudentrackObjectNotFoundException {
+        student = findStudent(student);
+
+        if (student.isPremiumUser()) {
+            return student;
+        }
+
+        // TODO: Call Banking Service
+        var bankingSuccess = new Random().nextBoolean();
+
+        if (!bankingSuccess) {
+            throw new StudentrackAuthenticationException(student.getClass(), student);
+        }
+
+        student.setPremiumUser(true);
+        return userRepo.save(student);
+    }
+
+    @Override
     public Collection<Faculty> getAllFaculties() {
         return (Collection<Faculty>) facultyRepo.findAll();
     }

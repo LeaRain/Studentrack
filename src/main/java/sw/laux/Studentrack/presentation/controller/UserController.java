@@ -96,6 +96,14 @@ public class UserController {
     @GetMapping("change")
     public String changeUserData(Model model, Principal principal) {
         var user = (User) userService.loadUserByUsername(principal.getName());
+        if (user instanceof Lecturer || (user instanceof Student && ((Student) user).isPremiumUser())) {
+            model.addAttribute("isPremium", true);
+        }
+
+        else {
+            model.addAttribute("isPremium", false);
+        }
+
         model.addAttribute("user", user);
         return "change";
     }
@@ -168,5 +176,42 @@ public class UserController {
         redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
         return "redirect:/logout";
+    }
+
+    @GetMapping("change/premium")
+    public String premium(Model model,
+                          Principal principal,
+                          RedirectAttributes redirectAttributes) {
+        var user = (User) userService.loadUserByUsername(principal.getName());
+
+        if (!(user instanceof Student student)) {
+            var errorMessage = "Wrong user type for " + user;
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/home";
+        }
+
+        model.addAttribute("isPremium", student.isPremiumUser());
+        return "premium";
+    }
+
+    @PostMapping("change/premium/check")
+    public String doPremium(Model model,
+                          Principal principal,
+                          RedirectAttributes redirectAttributes) {
+        var user = (User) userService.loadUserByUsername(principal.getName());
+
+        try {
+            userService.upgradeStudentToPremium((Student) user);
+        } catch (StudentrackAuthenticationException | StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/home";
+        }
+
+        var successMessage = "Upgrade to premium successfully for " + user;
+        logger.info(successMessage);
+        redirectAttributes.addFlashAttribute("successMessage", successMessage);
+        return "redirect:/home";
     }
 }

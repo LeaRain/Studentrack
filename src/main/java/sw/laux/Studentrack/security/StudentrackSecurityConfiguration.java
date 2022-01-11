@@ -38,8 +38,8 @@ public class StudentrackSecurityConfiguration extends WebSecurityConfigurerAdapt
     };
 
     private static final String[] ALLOW_ACCESS_FOR_LECTURERS = {"/modules/edit/*", "/modules/grade/*"};
-    private static final String[] ALLOW_ACCESS_FOR_STUDENTS = {"/timeorders/*"};
-    private static final String[] ALLOW_ACCESS_FOR_ALL = {"/home", "/modules", "/modules/new**", "/change/*"};
+    private static final String[] ALLOW_ACCESS_FOR_STUDENTS = {"/timeorders/*", "/change/premium/*"};
+    private static final String[] ALLOW_ACCESS_FOR_ALL = {"/home", "/modules", "/modules/new**", "/change", "/change/check"};
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
