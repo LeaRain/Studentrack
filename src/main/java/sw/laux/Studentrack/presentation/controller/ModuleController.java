@@ -60,11 +60,11 @@ public class ModuleController {
             model.addAttribute("durationStatistics", statisticsService.getCurrentProgressOfStudentInAllModules(student));
         }
 
-        if (user instanceof Lecturer) {
+        if (user instanceof Lecturer lecturer) {
             Iterable<Module> modules = null;
             try {
                 // Harmless case, because instance is checked.
-                modules = moduleService.getAllModulesByLecturer((Lecturer) user);
+                modules = moduleService.getAllModulesByLecturer(lecturer);
             } catch (StudentrackObjectNotFoundException e) {
                 logger.info(e.getMessage());
             }
@@ -85,8 +85,8 @@ public class ModuleController {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (user instanceof Student) {
-            var modules = moduleService.getNonTakenAndAvailableModulesByStudent((Student) user);
+        if (user instanceof Student student) {
+            var modules = moduleService.getNonTakenAndAvailableModulesByStudent(student);
 
             if (!(modules.iterator().hasNext())) {
                 var errorMessage = "New modules are currently not available";
@@ -112,8 +112,8 @@ public class ModuleController {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (user instanceof Lecturer) {
-            moduleShell.setResponsibleLecturer((Lecturer) user);
+        if (user instanceof Lecturer lecturer) {
+            moduleShell.setResponsibleLecturer(lecturer);
             try {
                 moduleService.saveNewModule(moduleShell);
                 var successMessage = "Successfully saved module " + moduleShell;
@@ -127,10 +127,10 @@ public class ModuleController {
             }
         }
 
-        if (user instanceof Student) {
+        if (user instanceof Student student) {
             try {
-                var module = moduleService.enrollInModule((Student) user, moduleShell);
-                var successMessage = "Successfully enrolled " + user + " in module " + module;
+                var module = moduleService.enrollInModule(student, moduleShell);
+                var successMessage = "Successfully enrolled " + student + " in module " + module;
                 redirectAttributes.addFlashAttribute("successMessage", successMessage);
                 logger.info(successMessage);
 

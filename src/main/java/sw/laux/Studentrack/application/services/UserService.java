@@ -190,15 +190,15 @@ public class UserService implements IUserService {
         findUserByMailAddress(user);
 
         // Prepare deletion, so clean up before deleting lecturer
-        if (user instanceof Lecturer) {
-            deleteLecturer((Lecturer) user);
+        if (user instanceof Lecturer lecturer) {
+            deleteLecturer(lecturer);
         }
 
         userRepo.delete(user);
 
         // Clean up after deleting student
-        if (user instanceof Student) {
-            deleteStudent((Student) user);
+        if (user instanceof Student student) {
+            deleteStudent(student);
         }
     }
 
