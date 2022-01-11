@@ -5,6 +5,8 @@ import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundExcep
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.exceptions.StudentrackAuthenticationException;
 import sw.laux.Studentrack.persistence.entities.*;
+import sw.laux.Studentrack.application.DTO.APIKeyDTO;
+import sw.laux.Studentrack.application.DTO.StudentDTO;
 
 import javax.transaction.Transactional;
 import java.util.Collection;

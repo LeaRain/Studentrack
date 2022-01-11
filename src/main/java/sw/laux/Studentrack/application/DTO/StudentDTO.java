@@ -1,4 +1,4 @@
-package sw.laux.Studentrack.persistence.entities;
+package sw.laux.Studentrack.application.DTO;
 
 public class StudentDTO {
     private long userId;

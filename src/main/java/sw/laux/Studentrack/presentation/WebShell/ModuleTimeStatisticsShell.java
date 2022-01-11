@@ -1,4 +1,6 @@
-package sw.laux.Studentrack.persistence.entities;
+package sw.laux.Studentrack.presentation.WebShell;
+
+import sw.laux.Studentrack.persistence.entities.Module;
 
 public class ModuleTimeStatisticsShell extends TimeStatisticsShell {
     private Module module;

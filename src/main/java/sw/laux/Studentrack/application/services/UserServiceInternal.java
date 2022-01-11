@@ -9,6 +9,8 @@ import sw.laux.Studentrack.application.exceptions.*;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
+import sw.laux.Studentrack.application.DTO.APIKeyDTO;
+import sw.laux.Studentrack.application.DTO.StudentDTO;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.FacultyRepository;
 import sw.laux.Studentrack.persistence.repository.UserRepository;

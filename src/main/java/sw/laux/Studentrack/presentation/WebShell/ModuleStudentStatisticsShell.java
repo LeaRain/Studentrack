@@ -1,4 +1,8 @@
-package sw.laux.Studentrack.persistence.entities;
+package sw.laux.Studentrack.presentation.WebShell;
+
+import sw.laux.Studentrack.persistence.entities.Grade;
+import sw.laux.Studentrack.persistence.entities.Module;
+import sw.laux.Studentrack.persistence.entities.TimeDuration;
 
 public class ModuleStudentStatisticsShell {
     private Module module;

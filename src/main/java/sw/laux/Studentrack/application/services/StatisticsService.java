@@ -9,7 +9,11 @@ import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
+import sw.laux.Studentrack.application.DTO.GradeDTO;
+import sw.laux.Studentrack.application.DTO.ModuleDTO;
+import sw.laux.Studentrack.application.DTO.TimeDurationDTO;
 import sw.laux.Studentrack.persistence.entities.Module;
+import sw.laux.Studentrack.presentation.WebShell.*;
 
 import java.util.*;
 

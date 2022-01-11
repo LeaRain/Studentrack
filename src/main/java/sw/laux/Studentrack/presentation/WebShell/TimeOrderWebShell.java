@@ -1,10 +1,12 @@
-package sw.laux.Studentrack.persistence.entities;
+package sw.laux.Studentrack.presentation.WebShell;
+
+import sw.laux.Studentrack.persistence.entities.TimeOrder;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
-public class TimeOrderWebShell extends TimeOrder{
+public class TimeOrderWebShell extends TimeOrder {
     @OneToOne
     private TimeOrder timeOrder;
     private String startString;

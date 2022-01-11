@@ -1,13 +1,15 @@
-package sw.laux.Studentrack.persistence.entities;
+package sw.laux.Studentrack.presentation.WebShell;
+
+import sw.laux.Studentrack.persistence.entities.ModuleResults;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // Inspiration: https://www.baeldung.com/thymeleaf-list
-public class ModuleResultsDTO {
+public class ModuleResultsListShell {
     private List<ModuleResults> moduleResults;
 
-    public ModuleResultsDTO() {
+    public ModuleResultsListShell() {
         moduleResults = new ArrayList<ModuleResults>();
     }
 

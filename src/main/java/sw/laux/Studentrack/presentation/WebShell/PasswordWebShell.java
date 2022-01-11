@@ -1,4 +1,4 @@
-package sw.laux.Studentrack.persistence.entities;
+package sw.laux.Studentrack.presentation.WebShell;
 
 public class PasswordWebShell {
     private String oldPassword;

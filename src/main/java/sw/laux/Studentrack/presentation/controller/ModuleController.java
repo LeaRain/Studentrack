@@ -11,6 +11,7 @@ import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
+import sw.laux.Studentrack.presentation.WebShell.ModuleResultsListShell;
 import sw.laux.Studentrack.persistence.entities.Module;
 
 import java.security.Principal;
@@ -271,28 +272,28 @@ public class ModuleController {
             return "redirect:/modules";
         }
 
-        var moduleResultsDTO = new ModuleResultsDTO();
+        var moduleResultsShell = new ModuleResultsListShell();
 
         for (var result : moduleResults) {
             if (result.getGrade() == null) {
                 result.setGrade(new Grade());
             }
 
-            moduleResultsDTO.addModuleResult(result);
+            moduleResultsShell.addModuleResult(result);
         }
 
         model.addAttribute("moduleResults", moduleResults);
-        model.addAttribute("moduleResultsDTO", moduleResultsDTO);
+        model.addAttribute("moduleResultsShell", moduleResultsShell);
 
         return "grades";
     }
 
     @PostMapping("modules/grade/check")
     public String doGradeCheck(Model model,
-                                    @ModelAttribute("moduleResultsDTO") ModuleResultsDTO moduleResultsDTO,
+                                    @ModelAttribute("moduleResultsShell") ModuleResultsListShell moduleResultsListShell,
                                     RedirectAttributes redirectAttributes) {
 
-        var moduleResults = moduleResultsDTO.getModuleResults();
+        var moduleResults = moduleResultsListShell.getModuleResults();
         var correctGradeValues = new Double[]{1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0};
         var successMessage = new StringBuilder();
         var errorMessage = new StringBuilder();
@@ -335,7 +336,6 @@ public class ModuleController {
         }
 
         return "redirect:/modules";
-
     }
 
 }

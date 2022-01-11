@@ -1,4 +1,8 @@
-package sw.laux.Studentrack.persistence.entities;
+package sw.laux.Studentrack.presentation.WebShell;
+
+import sw.laux.Studentrack.persistence.entities.Lecturer;
+import sw.laux.Studentrack.persistence.entities.Student;
+import sw.laux.Studentrack.persistence.entities.User;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;

@@ -11,7 +11,7 @@
                 <div class="col-lg-6">
                     <div class="bs-component">
                         <legend>Your Students</legend>
-                        <form method="post" th:action="@{/modules/grade/check}" th:object="${moduleResultsDTO}">
+                        <form method="post" th:action="@{/modules/grade/check}" th:object="${moduleResultsShell}">
                             <fieldset th:each="moduleResult, iStat : *{moduleResults}">
                                 <div class="form-group">
                                     <legend class="mt-4" th:text="${moduleResult.student}"></legend>

@@ -18,6 +18,7 @@ import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.application.services.interfaces.IUserServiceInternal;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
+import sw.laux.Studentrack.presentation.WebShell.PasswordWebShell;
 
 import java.security.Principal;
 

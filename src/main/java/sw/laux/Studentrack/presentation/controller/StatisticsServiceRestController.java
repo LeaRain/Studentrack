@@ -2,6 +2,7 @@ package sw.laux.Studentrack.presentation.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sw.laux.Studentrack.application.DTO.*;
 import sw.laux.Studentrack.application.exceptions.StudentrackAuthenticationException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
