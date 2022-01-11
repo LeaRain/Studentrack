@@ -14,25 +14,4 @@ public class StudentrackApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StudentrackApplication.class, args);
 	}
-	/*
-	@GetMapping("/write")
-	public String write (@RequestParam(value="personid") long userId, @RequestParam(value="name") String name) {
-		User newUser = new User(userId, name);
-		repo.save(newUser);
-		return newUser.toString();
-	}
-
-	@GetMapping("/read")
-	public String read (@RequestParam(value="personid") long userId) {
-		Optional<User> userOptional = repo.findById(userId);
-
-		if (userOptional.isPresent()) {
-			User user = userOptional.get();
-			return user.toString();
-		}
-
-		return null;
-	}
-
-	 */
 }

@@ -231,7 +231,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             logger.info(errorMessage);
         }
-        
+
         return "redirect:/home";
     }
 }
