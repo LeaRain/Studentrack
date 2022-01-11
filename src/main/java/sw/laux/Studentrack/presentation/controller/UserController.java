@@ -115,15 +115,20 @@ public class UserController {
 
         try {
             userService.updateUserWithNamesAndMailAddress(user);
-        } catch (StudentrackObjectNotFoundException | StudentrackObjectAlreadyExistsException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
-            return "redirect:/home";
+            var successMessage = "Successfully updated " + user;
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+            logger.info(successMessage);
         }
-
-        var successMessage = "Successfully updated " + user;
-        redirectAttributes.addFlashAttribute("successMessage", successMessage);
-        logger.info(successMessage);
+        catch (StudentrackObjectNotFoundException e) {
+            var errorMessage = "User " + user + " cannot be found: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+        }
+        catch (StudentrackObjectAlreadyExistsException e) {
+            var errorMessage = "User with mail address " + user.getMailAddress() + " already exists: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(e.getMessage());
+        }
 
         return "redirect:/home";
     }
@@ -143,15 +148,21 @@ public class UserController {
         var user = (User) userService.loadUserByUsername(principal.getName());
         try {
             userService.changeUserPassword(user, passwordWebShell.getOldPassword(), passwordWebShell.getNewPassword());
-        } catch (StudentrackObjectNotFoundException | StudentrackAuthenticationException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
+            var successMessage = "Successfully updated password for user " + user;
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+            logger.info(successMessage);
+        }
+        catch (StudentrackObjectNotFoundException e) {
+            var errorMessage = "User " + user + " cannot be found: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
+        }
+        catch( StudentrackAuthenticationException e) {
+            var errorMessage = "Old password is wrong, cannot change password: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
             return "redirect:/home";
         }
-
-        var successMessage = "Successfully updated password for user " + user;
-        redirectAttributes.addFlashAttribute("successMessage", successMessage);
-        logger.info(successMessage);
 
         return "redirect:/home";
 
@@ -165,9 +176,11 @@ public class UserController {
         var user = (User) userService.loadUserByUsername(principal.getName());
         try {
             userService.deleteUser(user);
-        } catch (StudentrackObjectNotFoundException | StudentrackOperationNotAllowedException e) {
-            logger.info(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage");
+        }
+        catch (StudentrackObjectNotFoundException e) {
+            var errorMessage = "User " + user + " not found: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
             return "redirect:/home";
         }
 
@@ -203,15 +216,22 @@ public class UserController {
 
         try {
             userService.upgradeStudentToPremium((Student) user);
-        } catch (StudentrackAuthenticationException | StudentrackObjectNotFoundException e) {
-            logger.info(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/home";
+            var successMessage = "Upgrade to premium successfully for " + user;
+            logger.info(successMessage);
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
         }
+        catch (StudentrackAuthenticationException e) {
+            var errorMessage = "Authentication with the banking service failed. Please try again later: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
 
-        var successMessage = "Upgrade to premium successfully for " + user;
-        logger.info(successMessage);
-        redirectAttributes.addFlashAttribute("successMessage", successMessage);
+        }
+        catch (StudentrackObjectNotFoundException e) {
+            var errorMessage = "User " + user + " not found: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
+        }
+        
         return "redirect:/home";
     }
 }

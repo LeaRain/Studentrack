@@ -28,9 +28,9 @@ public interface IUserService extends UserDetailsService {
     StudentDTO buildStudentDTOBasedOnStudent(Student student);
     User changeUserPassword(User user, String oldPassword, String newPassword) throws StudentrackObjectNotFoundException, StudentrackAuthenticationException;
     boolean validatePasswordForUser(User user, String password) throws StudentrackObjectNotFoundException;
-    void deleteUser(User user) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
+    void deleteUser(User user) throws StudentrackObjectNotFoundException;
     @Transactional
-    void deleteStudent(Student student) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
+    void deleteStudent(Student student) throws StudentrackObjectNotFoundException;
     @Transactional
     void deleteLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     Faculty findFaculty(Faculty faculty) throws StudentrackObjectNotFoundException;

@@ -50,8 +50,9 @@ public class TimeController {
         try {
             module = moduleService.findModule(module);
         } catch (StudentrackObjectNotFoundException e) {
-            logger.info(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            var errorMessage = "Module " + module + " cannot be found: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/home";
         }
 
@@ -71,9 +72,17 @@ public class TimeController {
 
         try {
             timeOrder = timeService.createOpenTimeOrder(timeOrder);
-        } catch (StudentrackObjectAlreadyExistsException | StudentrackOperationNotAllowedException e) {
-            logger.info(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        catch (StudentrackObjectAlreadyExistsException e) {
+            var errorMessage = "There is currently one open time order for you, please close it before opening a new one: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/home";
+        }
+        catch (StudentrackOperationNotAllowedException e) {
+            var errorMessage = "Time Orders for " + module + " are not allowed, because you have already passed the module: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/home";
         }
 
@@ -94,7 +103,7 @@ public class TimeController {
 
         var user = userService.loadUserByUsername(principal.getName());
 
-        if (!(user instanceof Student)) {
+        if (!(user instanceof Student student)) {
             var errorMessage = "Wrong user type for " + user;
             logger.info(errorMessage);
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
@@ -104,16 +113,15 @@ public class TimeController {
         timeOrder.setEnd(getCurrentDateTime());
 
         try {
-            timeOrder = timeService.closeOpenTimeOrderForStudent(timeOrder, (Student) user);
+            timeOrder = timeService.closeOpenTimeOrderForStudent(timeOrder, student);
+            var successMessage = "Successfully updated Time Order " + timeOrder + " for " + timeOrder.getModule() + " for student " + user;
+            logger.info(successMessage);
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
         } catch (StudentrackObjectNotFoundException e) {
-            logger.info(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/home";
+            var errorMessage = "An open time order cannot be found: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         }
-
-        var successMessage = "Successfully updated Time Order " + timeOrder + " for " + timeOrder.getModule() + " for student " + user;
-        logger.info(successMessage);
-        redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
         return "redirect:/home";
     }
@@ -194,15 +202,14 @@ public class TimeController {
 
         try {
             timeOrder = timeService.saveTimeOrder(timeOrder);
+            var successMessage = "Time Order " + timeOrder + "saved!";
+            logger.info(successMessage);
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
         } catch (StudentrackOperationNotAllowedException e) {
-            logger.info(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/timeorders";
+            var errorMessage = "Time Orders is not allowed, because module is already passed: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         }
-
-        var successMessage = "Time Order " + timeOrder + "saved!";
-        logger.info(successMessage);
-        redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
         return "redirect:/timeorders";
     }
@@ -215,8 +222,9 @@ public class TimeController {
         try {
             timeService.findTimeOrder(timeOrder);
         } catch (StudentrackObjectNotFoundException e) {
-            logger.info(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            var errorMessage = "Time order " + timeOrder + "cannot be found: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/timeorders";
         }
 
@@ -233,8 +241,9 @@ public class TimeController {
             timeOrder = timeService.findTimeOrder(timeOrderId);
         }
         catch (StudentrackObjectNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
+            var errorMessage = "Time order with id " + timeOrderId + "cannot be found: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/modules";
         }
 
@@ -257,7 +266,7 @@ public class TimeController {
     }
 
     @PostMapping("timeorders/edit/check")
-    public String doEditModuleCheck(Model model,
+    public String doEditTimeOrderCheck(Model model,
                                     @ModelAttribute("timeOrder") TimeOrderWebShell timeOrderWebShell,
                                     RedirectAttributes redirectAttributes) {
         var timeOrder = timeOrderWebShell.getTimeOrder();
@@ -271,8 +280,9 @@ public class TimeController {
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
         } catch (StudentrackObjectNotFoundException e) {
-            logger.info(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            var errorMessage = "Time order " + timeOrder + "cannot be found: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         }
 
         return "redirect:/timeorders";
@@ -290,7 +300,8 @@ public class TimeController {
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
         } catch (StudentrackObjectNotFoundException e) {
-            logger.info(e.getMessage());
+            var errorMessage = "Time order " + timeOrder + "cannot be found: " + e.getMessage();
+            logger.info(errorMessage);
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 

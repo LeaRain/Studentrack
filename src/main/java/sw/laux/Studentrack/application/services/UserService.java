@@ -185,7 +185,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void deleteUser(User user) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
+    public void deleteUser(User user) throws StudentrackObjectNotFoundException {
         // Existence check -> exception if user is not found
         findUserByMailAddress(user);
 
@@ -203,7 +203,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void deleteStudent(Student student) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
+    public void deleteStudent(Student student) throws StudentrackObjectNotFoundException {
         // Edge case: Student has ModuleResults for Module without Lecturer, because Lecturer has deleted their account before
         moduleService.deleteModulesWithoutLecturerAndModuleResults();
     }

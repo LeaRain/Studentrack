@@ -127,8 +127,9 @@ public class StartController {
         try {
             developer = userService.preregisterDeveloper(developer);
         } catch (StudentrackObjectAlreadyExistsException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
+            var errorMessage = "Developer registration failed: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
             return "redirect:/";
         }
 

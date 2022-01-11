@@ -122,8 +122,9 @@ public class ModuleController {
             }
 
             catch (StudentrackObjectAlreadyExistsException exception) {
-                redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
-                logger.info(exception.getMessage());
+                var errorMessage = "New module cannot be created, because a module with name " + moduleShell.getName() + " already exists: " + exception.getMessage();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                logger.info(errorMessage);
             }
         }
 
@@ -134,9 +135,17 @@ public class ModuleController {
                 redirectAttributes.addFlashAttribute("successMessage", successMessage);
                 logger.info(successMessage);
 
-            } catch (StudentrackObjectAlreadyExistsException | StudentrackObjectNotFoundException exception) {
-                redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
-                logger.info(exception.getMessage());
+            }
+            catch (StudentrackObjectAlreadyExistsException e) {
+                var errorMessage = "You are already enrolled in " + moduleShell.getName() + ": " + e.getMessage();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                logger.info(errorMessage);
+            }
+
+            catch (StudentrackObjectNotFoundException e) {
+                var errorMessage = "Student cannot be found: " + e.getMessage();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                logger.info(errorMessage);
             }
         }
 
@@ -162,8 +171,9 @@ public class ModuleController {
             module = moduleService.findModule(moduleId);
         }
         catch (StudentrackObjectNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
+            var errorMessage = "Module with id " + moduleId + " cannot be found: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
             return "redirect:/modules";
         }
 
@@ -181,8 +191,9 @@ public class ModuleController {
             moduleService.updateModule(module);
 
         } catch (StudentrackObjectNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
+            var errorMessage = "Module " + module + "cannot be found: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
             return "redirect:/modules";
         }
 
@@ -208,10 +219,18 @@ public class ModuleController {
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
-        } catch (StudentrackObjectNotFoundException | StudentrackOperationNotAllowedException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
-            return "redirect:/modules";
+        }
+
+        catch (StudentrackObjectNotFoundException e) {
+            var errorMessage = "Module " + module + " not found, student cannot be withdrawn: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
+        }
+
+        catch(StudentrackOperationNotAllowedException e) {
+            var errorMessage = "Withdraw for module " + module + " not possible, because withdraw for passed modules not possible: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
         }
 
         return "redirect:/modules";
@@ -228,9 +247,17 @@ public class ModuleController {
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
-        } catch (StudentrackOperationNotAllowedException | StudentrackObjectNotFoundException exception) {
-            logger.info(exception.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+        }
+        catch (StudentrackOperationNotAllowedException exception) {
+            var errorMessage = "Module " + module + " cannot be deleted, because students are currently enrolled: " + exception.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+        }
+
+        catch(StudentrackObjectNotFoundException exception) {
+            var errorMessage = "Module " + module.getName() + " cannot be found and therefore not be deleted: " + exception.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         }
         return "redirect:/modules";
     }
@@ -255,8 +282,9 @@ public class ModuleController {
             module = moduleService.findModule(moduleId);
         }
         catch (StudentrackObjectNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
+            var errorMessage = "Module with id " + moduleId + " cannot be found: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
             return "redirect:/modules";
         }
 
@@ -267,8 +295,9 @@ public class ModuleController {
         try {
             moduleResults = moduleService.getResultsForModule(module);
         } catch (StudentrackObjectNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            logger.info(e.getMessage());
+            var errorMessage = "Module with id " + moduleId + " cannot be found: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
             return "redirect:/modules";
         }
 
