@@ -1,9 +1,6 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -13,6 +10,7 @@ public class APIKey extends SingleIdEntity<Long>{
     private long keyId;
     @OneToOne
     private Developer developer;
+    @Column(name="key_string")
     private String key;
     private Date expirationDate;
 
