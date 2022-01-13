@@ -6,5 +6,6 @@ import sw.laux.Studentrack.persistence.entities.Major;
 
 @Repository
 public interface MajorRepository extends CrudRepository<Major, Long> {
+
 }
 

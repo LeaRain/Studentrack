@@ -13,6 +13,7 @@ import sw.laux.Studentrack.application.DTO.APIKeyDTO;
 import sw.laux.Studentrack.application.DTO.StudentDTO;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.FacultyRepository;
+import sw.laux.Studentrack.persistence.repository.MajorRepository;
 import sw.laux.Studentrack.persistence.repository.UserRepository;
 
 import java.util.*;
@@ -29,20 +30,31 @@ public class UserService implements IUserService {
     private FacultyRepository facultyRepo;
 
     @Autowired
+    private MajorRepository majorRepo;
+
+    @Autowired
     private IModuleService moduleService;
 
     @Override
     public User registerUser(User user) throws StudentrackObjectAlreadyExistsException {
         var mailAddressUser = userRepo.findByMailAddress(user.getMailAddress());
 
-        if (mailAddressUser.isEmpty()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepo.save(user);
-        }
-
-        else {
+        if (mailAddressUser.isPresent()) {
             throw new StudentrackObjectAlreadyExistsException(user.getClass(), user);
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user instanceof Student student) {
+            var major = student.getMajor();
+            if (major != null) {
+                major.setStudentNumber(major.getStudentNumber() + 1);
+                student.setMajor(major);
+                majorRepo.save(major);
+            }
+        }
+
+        return userRepo.save(user);
     }
 
     @Override
@@ -204,6 +216,11 @@ public class UserService implements IUserService {
 
     @Override
     public void deleteStudent(Student student) throws StudentrackObjectNotFoundException {
+        var major = student.getMajor();
+        if (major != null) {
+            major.setStudentNumber(major.getStudentNumber() - 1);
+            majorRepo.save(major);
+        }
         // Edge case: Student has ModuleResults for Module without Lecturer, because Lecturer has deleted their account before
         moduleService.deleteModulesWithoutLecturerAndModuleResults();
     }
