@@ -75,6 +75,12 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.8</version>
 		</dependency>
+
+		<dependency>
+			<groupId>sw.helblingd</groupId >
+			<artifactId>terminportal-backend</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
