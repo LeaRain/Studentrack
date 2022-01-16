@@ -17,7 +17,7 @@ function registerLecturerModuleEventListener() {
 function checkForCorrectNumericValues() {
     let ectsInput = document.getElementById("inputEcts");
     let creditHoursInput = document.getElementById("inputCreditHours");
-    let submitButton = document.getElementById("submitButtonModule");
+    let submitButton = document.getElementById("submitButton");
 
     submitButton.disabled = !!(Number(ectsInput.value) < 1 || Number(creditHoursInput.value < 1));
 }

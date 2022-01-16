@@ -77,9 +77,19 @@
 		</dependency>
 
 		<dependency>
-			<groupId>sw.helblingd</groupId >
+			<groupId>sw.helblingd</groupId>
 			<artifactId>terminportal-backend</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
 		</dependency>
 	</dependencies>
 

@@ -21,14 +21,22 @@
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputCreditHours">Credit Hours</label>
-                            <input type="number" min="1" class="form-control" id="inputCreditHours" placeholder="Enter Module Credit Hours" th:field="*{creditHours}" required>
+                            <input type="number" min="1" max="10" class="form-control" id="inputCreditHours" placeholder="Enter Module Credit Hours" th:field="*{creditHours}" required>
                         </div>
                         <div class="form-group">
                             <label for="inputDescription" class="form-label mt-4">Description</label>
                             <textarea class="form-control" id="inputDescription" rows="3" th:field="*{description}"></textarea>
                         </div>
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputStart">Start Date</label>
+                            <input type="datetime-local" class="form-control" id="inputStart" placeholder="Enter Module Start" th:field="*{startDate}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputEnd">Appointment Count</label>
+                            <input type="number" min="1" class="form-control" id="inputEnd" placeholder="Enter Module End" th:field="*{appointmentCount}" required>
+                        </div>
                     </fieldset>
-                    <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButtonModule">Add!</button>
+                    <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButton">Add!</button>
                 </form>
             </div>
         </div>

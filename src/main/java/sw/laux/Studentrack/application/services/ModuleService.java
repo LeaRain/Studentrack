@@ -1,16 +1,15 @@
 package sw.laux.Studentrack.application.services;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.*;
-import sw.laux.Studentrack.application.services.interfaces.IModuleService;
-import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
-import sw.laux.Studentrack.application.services.interfaces.ITimeService;
-import sw.laux.Studentrack.application.services.interfaces.IUserService;
+import sw.laux.Studentrack.application.services.interfaces.*;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.repository.*;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -25,6 +24,10 @@ public class ModuleService implements IModuleService {
     private ITimeService timeService;
     @Autowired
     private IStatisticsService statisticsService;
+    @Autowired
+    private IAppointmentService appointmentService;
+    @Autowired
+    private Logger logger;
 
     @Override
     public Module saveModule(Module module) {
@@ -38,6 +41,22 @@ public class ModuleService implements IModuleService {
             throw new StudentrackObjectAlreadyExistsException(module.getClass(), module);
         } catch (StudentrackObjectNotFoundException ignored) {
 
+        }
+
+        if (module.getStartDate() == null) {
+            // Date not given -> start is right now
+            module.setStartDate(new Date());
+        }
+
+        if (module.getAppointmentCount() == 0) {
+            module.setAppointmentCount(1);
+        }
+
+        try {
+            var schedule = appointmentService.createScheduleBasedOnModule(module);
+            module.setScheduleId(schedule.getUuid());
+        } catch (StudentrackObjectNotFoundException e) {
+            logger.info(e.getMessage());
         }
 
         return saveModule(module);
@@ -121,6 +140,11 @@ public class ModuleService implements IModuleService {
 
         student.addModule(module);
         userService.updateUser(student);
+        try {
+            appointmentService.createTimeOrdersForEnrolling(module, student);
+        } catch (IOException e) {
+            logger.info(e.getMessage());
+        }
         return module;
     }
 

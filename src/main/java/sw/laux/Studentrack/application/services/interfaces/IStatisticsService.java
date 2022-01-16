@@ -65,6 +65,7 @@ public interface IStatisticsService {
     ModuleDTO getModuleDTOBasedOnModuleId(long moduleId) throws StudentrackObjectNotFoundException;
     GradeDTO getAverageGradeDTOForModule(long moduleId) throws StudentrackObjectNotFoundException;
     TimeDurationDTO getAverageTimeDurationDTOForModule(long moduleId) throws StudentrackObjectNotFoundException;
+    // Utility functions
     Date[] getWeekStartAndEnd();
     Date[] getMonthStartAndEnd();
     Date[] getYearStartAndEnd();

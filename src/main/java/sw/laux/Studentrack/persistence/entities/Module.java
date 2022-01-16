@@ -1,10 +1,9 @@
 package sw.laux.Studentrack.persistence.entities;
 
+import sw.helblingd.terminportalbackend.repository.entity.Schedule;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Module extends SingleIdEntity<Long>{
@@ -22,6 +21,41 @@ public class Module extends SingleIdEntity<Long>{
     private Collection<ModuleResults> moduleResults;
     @ManyToMany(mappedBy="modules")
     private Collection<Student> students;
+    private long scheduleId;
+    /*
+    Start date and appointment count are mainly used for the API to the Appointment Service Termeen.io
+    It would be possible to use the dates for further checking regarding enrolling and withdrawing for a module.
+    In this case, this is not implemented, because someone could join a module regardless of existing lecturers.
+    This could be the case for students taking the exam in a semester without courses/lecturers.
+    So the start and end dates are information for the system contacting the Appointment Service API.
+     */
+    private Date startDate;
+
+    private int appointmentCount;
+
+    public long getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(long scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public int getAppointmentCount() {
+        return appointmentCount;
+    }
+
+    public void setAppointmentCount(int appointmentCount) {
+        this.appointmentCount = appointmentCount;
+    }
 
     @Override
     public String toString() {

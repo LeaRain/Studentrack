@@ -12,14 +12,12 @@ import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExists
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.exceptions.StudentrackAuthenticationException;
-import sw.laux.Studentrack.application.services.interfaces.IModuleService;
-import sw.laux.Studentrack.application.services.interfaces.IStatisticsService;
-import sw.laux.Studentrack.application.services.interfaces.ITimeService;
-import sw.laux.Studentrack.application.services.interfaces.IUserService;
+import sw.laux.Studentrack.application.services.interfaces.*;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.presentation.WebShell.PasswordWebShell;
 
+import java.io.IOException;
 import java.security.Principal;
 
 @Controller
@@ -34,6 +32,8 @@ public class UserController {
     private ITimeService timeService;
     @Autowired
     private IStatisticsService statisticsService;
+    @Autowired
+    private IAppointmentService appointmentService;
 
     @GetMapping("home")
     public String home(Model model, Principal principal) {
@@ -102,6 +102,23 @@ public class UserController {
 
         else {
             model.addAttribute("isPremium", false);
+        }
+
+        if (user instanceof Lecturer lecturer) {
+            model.addAttribute("isLecturer", true);
+            var key = lecturer.getAppointmentServiceApiKey();
+
+            if (key == null) {
+                model.addAttribute("isAuthenticated", false);
+            }
+
+            else {
+                model.addAttribute("isAuthenticated", true);
+            }
+        }
+
+        else {
+            model.addAttribute("isLecturer", false);
         }
 
         model.addAttribute("user", user);
@@ -233,5 +250,41 @@ public class UserController {
         }
 
         return "redirect:/home";
+    }
+
+    @GetMapping("change/appointment")
+    public String authenticateAppointmentService(Model model,
+                                                 Principal principal,
+                                                 RedirectAttributes redirectAttributes) {
+        var user = (User) userService.loadUserByUsername(principal.getName());
+
+        if (!(user instanceof Lecturer lecturer)) {
+            var errorMessage = "Wrong user type for " + user;
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/home";
+        }
+
+        if (user.getAppointmentServiceApiKey() != null) {
+            user.setAppointmentServiceApiKey(null);
+            user = userService.updateUser(user);
+            var successMessage = "Successfully revoked authentication for appoinment service for " + user;
+            logger.info(successMessage);
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+            return "redirect:/home";
+        }
+
+        try {
+            var key = appointmentService.getAuthenticationKey();
+            user.setAppointmentServiceApiKey(key);
+            userService.updateUser(user);
+            // TODO: deployment server path
+            return "redirect:http://localhost:7000/login/api?apiKey=" + key;
+        } catch (StudentrackObjectNotFoundException e) {
+            var errorMessage = "Authentication for appointment service failed: " + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/home";
+        }
     }
 }
