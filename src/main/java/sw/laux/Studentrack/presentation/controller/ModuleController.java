@@ -15,9 +15,13 @@ import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.*;
 import sw.laux.Studentrack.presentation.WebShell.ModuleResultsListShell;
 import sw.laux.Studentrack.persistence.entities.Module;
+import sw.laux.Studentrack.presentation.WebShell.ModuleShell;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Date;
 
 @Controller
 public class ModuleController {
@@ -101,30 +105,33 @@ public class ModuleController {
             model.addAttribute("faculty", user.getFaculty());
         }
 
-        var module = new Module();
-        model.addAttribute("moduleShell", module);
+        var moduleShell = new ModuleShell();
+        model.addAttribute("moduleShell", moduleShell);
+
         return "newmodule";
     }
 
     @PostMapping("modules/new/check")
     public String doNewModule(Model model,
                               Principal principal,
-                              @ModelAttribute("moduleShell") Module moduleShell,
+                              @ModelAttribute("moduleShell") ModuleShell moduleShell,
                               RedirectAttributes redirectAttributes) {
+        var module = moduleShell.getModule();
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
         if (user instanceof Lecturer lecturer) {
-            moduleShell.setResponsibleLecturer(lecturer);
+            module.setResponsibleLecturer(lecturer);
+            module.setStartDate(frontendDateStringToDate(moduleShell.getStartString()));
             try {
-                moduleService.saveNewModule(moduleShell);
-                var successMessage = "Successfully saved module " + moduleShell;
+                moduleService.saveNewModule(module);
+                var successMessage = "Successfully saved module " + module;
                 redirectAttributes.addFlashAttribute("successMessage", successMessage);
                 logger.info(successMessage);
             }
 
             catch (StudentrackObjectAlreadyExistsException exception) {
-                var errorMessage = "New module cannot be created, because a module with name " + moduleShell.getName() + " already exists: " + exception.getMessage();
+                var errorMessage = "New module cannot be created, because a module with name " + module.getName() + " already exists: " + exception.getMessage();
                 redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
                 logger.info(errorMessage);
             }
@@ -132,20 +139,20 @@ public class ModuleController {
 
         if (user instanceof Student student) {
             try {
-                var module = moduleService.enrollInModule(student, moduleShell);
+                module = moduleService.enrollInModule(student, module);
                 var successMessage = "Successfully enrolled " + student + " in module " + module;
                 redirectAttributes.addFlashAttribute("successMessage", successMessage);
                 logger.info(successMessage);
 
             }
             catch (StudentrackObjectAlreadyExistsException e) {
-                var errorMessage = "You are already enrolled in " + moduleShell.getName() + ": " + e.getMessage();
+                var errorMessage = "You are already enrolled in " + module.getName() + ": " + e.getMessage();
                 redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
                 logger.info(errorMessage);
             }
 
             catch (StudentrackObjectNotFoundException e) {
-                var errorMessage = "Student cannot be found: " + e.getMessage();
+                var errorMessage = "Student or external schedule cannot be found: " + e.getMessage();
                 redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
                 logger.info(errorMessage);
             }
@@ -369,4 +376,12 @@ public class ModuleController {
         return "redirect:/modules";
     }
 
+    // Inspiration by https://www.baeldung.com/java-date-to-localdate-and-localdatetime
+    public Date frontendDateStringToDate(String dateString) {
+        return Date.from(
+                LocalDateTime.parse(dateString)
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+        );
+    }
 }

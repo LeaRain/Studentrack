@@ -13,27 +13,27 @@
                     <fieldset>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputModuleName">Module Name</label>
-                            <input type="text" class="form-control" id="inputModuleName" placeholder="Enter Module Name" th:field="*{name}" required>
+                            <input type="text" class="form-control" id="inputModuleName" placeholder="Enter Module Name" th:field="*{module.name}" required>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputEcts">Module ECTS</label>
-                            <input type="number" min="1" class="form-control" id="inputEcts" placeholder="Enter Module ECTS" th:field="*{ects}" required>
+                            <input type="number" min="1" class="form-control" id="inputEcts" placeholder="Enter Module ECTS" th:field="*{module.ects}" required>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputCreditHours">Credit Hours</label>
-                            <input type="number" min="1" max="10" class="form-control" id="inputCreditHours" placeholder="Enter Module Credit Hours" th:field="*{creditHours}" required>
+                            <input type="number" min="1" max="10" class="form-control" id="inputCreditHours" placeholder="Enter Module Credit Hours" th:field="*{module.creditHours}" required>
                         </div>
                         <div class="form-group">
                             <label for="inputDescription" class="form-label mt-4">Description</label>
-                            <textarea class="form-control" id="inputDescription" rows="3" th:field="*{description}"></textarea>
+                            <textarea class="form-control" id="inputDescription" rows="3" th:field="*{module.description}"></textarea>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputStart">Start Date</label>
-                            <input type="datetime-local" class="form-control" id="inputStart" placeholder="Enter Module Start" th:field="*{startDate}" required>
+                            <input type="datetime-local" class="form-control" id="inputStart" placeholder="Enter Module Start" th:field="*{startString}" required>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="inputEnd">Appointment Count</label>
-                            <input type="number" min="1" class="form-control" id="inputEnd" placeholder="Enter Module End" th:field="*{appointmentCount}" required>
+                            <input type="number" min="1" class="form-control" id="inputEnd" placeholder="Enter Module End" th:field="*{module.appointmentCount}" required>
                         </div>
                     </fieldset>
                     <button type="submit" class="btn btn-info btn-lg col-12 mt-5" id="submitButton">Add!</button>

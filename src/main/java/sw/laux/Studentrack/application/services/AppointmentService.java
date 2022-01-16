@@ -100,7 +100,7 @@ public class AppointmentService implements IAppointmentService {
         headers.add("Content-Type", "application/json");
         var entity = new org.springframework.http.HttpEntity<>(parameterMap, headers);
 
-        var schedule = restServiceClient.postForObject("localhost:7000/restapi/v1/schedules", entity, Schedule.class);
+        var schedule = restServiceClient.postForObject("http://localhost:7000/restapi/v1/schedules", entity, Schedule.class);
 
         if (schedule == null) {
             throw new StudentrackObjectNotFoundException(Schedule.class, appointments);
