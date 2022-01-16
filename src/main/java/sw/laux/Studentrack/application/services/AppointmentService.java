@@ -216,6 +216,10 @@ public class AppointmentService implements IAppointmentService {
         return timeOrder;
     }
 
+    /*
+    Is it smart to use a GET request with a request body?
+    Well, it is definitely a corner case, so Studentrack uses an own HTTP client for some requests, because this cannot be achieved (easily) with REST templates.
+     */
     @Override
     public HttpEntityEnclosingRequestBase getHttpGetRequestWithBody(URI uri, HttpEntity entity) {
         var request = new HttpEntityEnclosingRequestBase() {

@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import sw.laux.Studentrack.application.exceptions.StudentrackAuthenticationException;
+import sw.laux.Studentrack.application.exceptions.StudentrackObjectAlreadyExistsException;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
+import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 
 @RestControllerAdvice
 public class RestControllerExceptionHandler {
@@ -18,6 +20,18 @@ public class RestControllerExceptionHandler {
     @ExceptionHandler(value={StudentrackAuthenticationException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String studentrackAuthenticationException(StudentrackAuthenticationException exception) {
+        return exception.getMessage();
+    }
+
+    @ExceptionHandler(value={StudentrackObjectAlreadyExistsException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String studentrackObjectAlreadyExistsException(StudentrackObjectAlreadyExistsException exception) {
+        return exception.getMessage();
+    }
+
+    @ExceptionHandler(value={StudentrackOperationNotAllowedException.class})
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public String studentrackOperationNotAllowedException(StudentrackOperationNotAllowedException exception) {
         return exception.getMessage();
     }
 }
