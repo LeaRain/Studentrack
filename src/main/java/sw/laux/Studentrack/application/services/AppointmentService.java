@@ -9,23 +9,16 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
-import org.springframework.boot.autoconfigure.influx.InfluxDbOkHttpClientBuilderProvider;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.thymeleaf.standard.expression.GreaterOrEqualToExpression;
-import org.w3c.dom.Text;
-import sw.helblingd.terminportalbackend.repository.entity.*;
+import sw.helblingd.terminportalbackend.repository.entity.persistent.*;
+import sw.helblingd.terminportalbackend.repository.entity.dto.*;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.services.interfaces.IAppointmentService;
@@ -33,15 +26,9 @@ import sw.laux.Studentrack.application.services.interfaces.ITimeService;
 import sw.laux.Studentrack.persistence.entities.Module;
 import sw.laux.Studentrack.persistence.entities.Student;
 import sw.laux.Studentrack.persistence.entities.TimeOrder;
-import sw.laux.Studentrack.persistence.entities.User;
 
 import java.io.IOException;
-import java.io.ObjectStreamException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.sql.Time;
 import java.util.*;
 
 @Service
@@ -77,52 +64,30 @@ public class AppointmentService implements IAppointmentService {
         var lecturer = module.getResponsibleLecturer();
         var creditHours = module.getCreditHours();
 
-        var recurringAppointment = new RecurringAppointment();
-        var startingAppointment = new SingleAppointment();
+        var recurringAppointment = new AppointmentDTO();
+        var startingAppointment = new AppointmentDTO();
 
         startingAppointment.setStart(module.getStartDate());
         // calculate to milliseconds
         startingAppointment.setDuration(creditHours * 3600000L);
+        startingAppointment.setSingleAppointment(true);
+        startingAppointment.setAppointmentGroup(new AppointmentGroupDTO());
         recurringAppointment.setFirstOccurrence(startingAppointment);
         // one week in milliseconds
         recurringAppointment.setRecurrenceOffset(604800000L);
-        recurringAppointment.setOccurrenceCount(module.getAppointmentCount());
-        Appointment[] appointments = new Appointment[1];
+        recurringAppointment.setOccurrenceCount((long) module.getAppointmentCount());
+        recurringAppointment.setSingleAppointment(false);
+        recurringAppointment.setAppointmentGroup(new AppointmentGroupDTO());
+        AppointmentDTO[] appointments = new AppointmentDTO[1];
         appointments[0] = recurringAppointment;
         return saveScheduleBasedOnModule(appointments, lecturer.getAppointmentServiceApiKey());
     }
 
     @Override
-    public Schedule saveScheduleBasedOnModule(Appointment[] appointments, String apiKey) throws StudentrackObjectNotFoundException, HttpServerErrorException {
+    public Schedule saveScheduleBasedOnModule(AppointmentDTO[] appointments, String apiKey) throws StudentrackObjectNotFoundException, HttpServerErrorException {
         var parameters = new ApiKeyAndAppointmentArray();
         parameters.setApiKey(apiKey);
-
-        var singleAppointments = new ArrayList<SingleAppointment>();
-        var recurringAppointments = new ArrayList<RecurringAppointment>();
-
-        for (var appointment : appointments) {
-            if (appointment instanceof SingleAppointment) {
-                singleAppointments.add((SingleAppointment) appointment);
-            }
-
-            if (appointment instanceof RecurringAppointment) {
-                recurringAppointments.add((RecurringAppointment) appointment);
-            }
-        }
-
-        SingleAppointment[] singleAppointmentsArray = new SingleAppointment[singleAppointments.size()];
-        RecurringAppointment[] recurringAppointmentsArray = new RecurringAppointment[recurringAppointments.size()];
-
-        for (var i = 0; i < singleAppointments.size(); i++) {
-            singleAppointmentsArray[i] = singleAppointments.get(i);
-        }
-
-        for (var i = 0; i < recurringAppointments.size(); i++) {
-            recurringAppointmentsArray[i] = recurringAppointments.get(i);
-        }
-
-        parameters.setSingleAppointments(singleAppointmentsArray);
-        parameters.setRecurringAppointments(recurringAppointmentsArray);
+        parameters.setAppointments(appointments);
 
         var headers = new org.springframework.http.HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -268,6 +233,53 @@ public class AppointmentService implements IAppointmentService {
     public Schedule parseHttpGetResponseToSchedule(HttpEntity response) throws IOException {
         var stringResult = EntityUtils.toString(response);
         var parser = new Gson();
-        return parser.fromJson(stringResult, Schedule.class);
+        var scheduleDTO = parser.fromJson(stringResult, ScheduleDTO.class);
+        return parseScheduleDTOToSchedule(scheduleDTO);
+    }
+
+    @Override
+    public Schedule parseScheduleDTOToSchedule(ScheduleDTO scheduleDTO) {
+        var schedule = new Schedule();
+        schedule.setName(scheduleDTO.getName());
+        schedule.setDescription(scheduleDTO.getDescription());
+        schedule.setViewType(scheduleDTO.getViewType());
+        var categoryDTO = scheduleDTO.getCategory();
+        var category = new ScheduleCategory();
+        category.setName(categoryDTO.getName());
+        category.setDescription(categoryDTO.getDescription());
+        schedule.setCategory(category);
+        var appointmentsDTO = scheduleDTO.getAppointments();
+        var appointments = new HashSet<Appointment>();
+
+        for (var appointmentDTO : appointmentsDTO) {
+            var appointment = parseAppointmentDTOToAppointment(appointmentDTO);
+            appointments.add(appointment);
+        }
+
+        schedule.setAppointments(appointments);
+
+        return schedule;
+    }
+
+    @Override
+    public Appointment parseAppointmentDTOToAppointment(AppointmentDTO appointmentDTO) {
+        Appointment appointment;
+        if (appointmentDTO.isSingleAppointment()) {
+            appointment = new SingleAppointment();
+            ((SingleAppointment) appointment).setDuration(appointmentDTO.getDuration());
+            ((SingleAppointment) appointment).setStart(appointmentDTO.getStart());
+        }
+
+        else {
+            appointment = new RecurringAppointment();
+            ((RecurringAppointment) appointment).setRecurrenceOffset(appointmentDTO.getRecurrenceOffset());
+            ((RecurringAppointment) appointment).setOccurrenceCount(appointmentDTO.getOccurrenceCount());
+            ((RecurringAppointment) appointment).setFirstOccurrence(parseAppointmentDTOToAppointment(appointmentDTO.getFirstOccurrence()));
+        }
+
+        appointment.setViewType(appointmentDTO.getViewType());
+        appointment.setJoinType(appointmentDTO.getJoinType());
+
+        return appointment;
     }
 }

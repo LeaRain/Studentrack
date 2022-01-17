@@ -1,7 +1,5 @@
 package sw.laux.Studentrack.persistence.entities;
 
-import sw.helblingd.terminportalbackend.repository.entity.Schedule;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -22,6 +20,7 @@ public class Module extends SingleIdEntity<Long>{
     @ManyToMany(mappedBy="modules")
     private Collection<Student> students;
     private long scheduleId;
+
     /*
     Start date and appointment count are mainly used for the API to the Appointment Service Termeen.io
     It would be possible to use the dates for further checking regarding enrolling and withdrawing for a module.
