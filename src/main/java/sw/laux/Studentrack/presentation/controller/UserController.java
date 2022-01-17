@@ -39,11 +39,12 @@ public class UserController {
     public String home(Model model, Principal principal) {
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (user instanceof Student student) {
+        if (user instanceof Student) {
+            var student = (Student) user;
             model.addAttribute("modules", (moduleService.findCurrentlyNotPassedModulesForStudent(student)));
             model.addAttribute("moduleShell", new Module());
             try {
-                var timeOrder = timeService.findOpenTimeOrderForStudent((Student) user);
+                var timeOrder = timeService.findOpenTimeOrderForStudent(student);
                 model.addAttribute("timeOrder", timeOrder);
             } catch (StudentrackObjectNotFoundException ignored) {
             }
@@ -70,7 +71,8 @@ public class UserController {
             }
         }
 
-        if (user instanceof Lecturer lecturer) {
+        if (user instanceof Lecturer) {
+            var lecturer = (Lecturer) user;
             var modulesWithTimeDuration = statisticsService.getTimeDurationForLecturerModules(lecturer);
             model.addAttribute("modulesWithTimeDuration", modulesWithTimeDuration);
 
@@ -104,7 +106,8 @@ public class UserController {
             model.addAttribute("isPremium", false);
         }
 
-        if (user instanceof Lecturer lecturer) {
+        if (user instanceof Lecturer) {
+            var lecturer = (Lecturer) user;
             model.addAttribute("isLecturer", true);
             var key = lecturer.getAppointmentServiceApiKey();
 
@@ -214,14 +217,14 @@ public class UserController {
                           RedirectAttributes redirectAttributes) {
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (!(user instanceof Student student)) {
+        if (!(user instanceof Student)) {
             var errorMessage = "Wrong user type for " + user;
             logger.info(errorMessage);
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/home";
         }
 
-        model.addAttribute("isPremium", student.isPremiumUser());
+        model.addAttribute("isPremium", ((Student) user).isPremiumUser());
         return "premium";
     }
 
@@ -258,7 +261,7 @@ public class UserController {
                                                  RedirectAttributes redirectAttributes) {
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (!(user instanceof Lecturer lecturer)) {
+        if (!(user instanceof Lecturer)) {
             var errorMessage = "Wrong user type for " + user;
             logger.info(errorMessage);
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);

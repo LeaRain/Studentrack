@@ -47,7 +47,8 @@ public class ModuleController {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (user instanceof Student student) {
+        if (user instanceof Student) {
+            var student = (Student) user;
             // Also failed modules for withdrawing -> 5.0 makes withdraw possible, for example in case of choosing another module for an exam
             model.addAttribute("modules", moduleService.findCurrentlyNotPassedModulesForStudent(student));
             try {
@@ -66,7 +67,8 @@ public class ModuleController {
             model.addAttribute("durationStatistics", statisticsService.getCurrentProgressOfStudentInAllModules(student));
         }
 
-        if (user instanceof Lecturer lecturer) {
+        if (user instanceof Lecturer) {
+            var lecturer = (Lecturer) user;
             Iterable<Module> modules = null;
             try {
                 // Harmless case, because instance is checked.
@@ -91,7 +93,8 @@ public class ModuleController {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (user instanceof Student student) {
+        if (user instanceof Student) {
+            var student = (Student) user;
             var modules = moduleService.getNonTakenAndAvailableModulesByStudent(student);
 
             if (!(modules.iterator().hasNext())) {
@@ -120,7 +123,8 @@ public class ModuleController {
 
         var user = (User) userService.loadUserByUsername(principal.getName());
 
-        if (user instanceof Lecturer lecturer) {
+        if (user instanceof Lecturer) {
+            var lecturer = (Lecturer) user;
             module.setResponsibleLecturer(lecturer);
             module.setStartDate(frontendDateStringToDate(moduleShell.getStartString()));
             try {
@@ -137,7 +141,8 @@ public class ModuleController {
             }
         }
 
-        if (user instanceof Student student) {
+        if (user instanceof Student) {
+            var student = (Student) user;
             try {
                 module = moduleService.enrollInModule(student, module);
                 var successMessage = "Successfully enrolled " + student + " in module " + module;

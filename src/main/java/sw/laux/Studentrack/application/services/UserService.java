@@ -45,7 +45,8 @@ public class UserService implements IUserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        if (user instanceof Student student) {
+        if (user instanceof Student) {
+            var student = (Student) user;
             var major = student.getMajor();
             if (major != null) {
                 major.setStudentNumber(major.getStudentNumber() + 1);
@@ -152,11 +153,11 @@ public class UserService implements IUserService {
     public StudentDTO findStudentDTOByMailAddress(String mailAddress) throws StudentrackObjectNotFoundException {
         var user = findUserByMailAddress(mailAddress);
 
-        if (!(user instanceof Student student)) {
+        if (!(user instanceof Student)) {
             throw new StudentrackObjectNotFoundException(StudentDTO.class, mailAddress);
         }
 
-        return buildStudentDTOBasedOnStudent(student);
+        return buildStudentDTOBasedOnStudent((Student) user);
 
     }
 
@@ -202,15 +203,15 @@ public class UserService implements IUserService {
         findUserByMailAddress(user);
 
         // Prepare deletion, so clean up before deleting lecturer
-        if (user instanceof Lecturer lecturer) {
-            deleteLecturer(lecturer);
+        if (user instanceof Lecturer) {
+            deleteLecturer((Lecturer) user);
         }
 
         userRepo.delete(user);
 
         // Clean up after deleting student
-        if (user instanceof Student student) {
-            deleteStudent(student);
+        if (user instanceof Student) {
+            deleteStudent((Student) user);
         }
     }
 
@@ -297,10 +298,11 @@ public class UserService implements IUserService {
     public void validateAPIKey(APIKeyDTO apiKeyDTO) throws StudentrackObjectNotFoundException, StudentrackAuthenticationException {
         var user = findUserByMailAddress(apiKeyDTO.getMailAddress());
 
-        if (!(user instanceof Developer developer)) {
+        if (!(user instanceof Developer)) {
             throw new StudentrackObjectNotFoundException(Developer.class, apiKeyDTO);
         }
 
+        var developer = (Developer) user;
         var developerKey = developer.getKey();
         // Exception if key is expired
         validateKeyExpirationDate(developer, apiKeyDTO);

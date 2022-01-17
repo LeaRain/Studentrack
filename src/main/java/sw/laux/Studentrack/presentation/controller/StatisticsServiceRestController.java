@@ -130,10 +130,11 @@ public class StatisticsServiceRestController {
     public void createTimeOrderForStudent(@RequestBody TimeOrderDTO timeOrderDTO) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
         var user = userService.findUserByMailAddress(timeOrderDTO.getUserMailAddress());
 
-        if (!(user instanceof Student student)) {
+        if (!(user instanceof Student)) {
             throw new StudentrackOperationNotAllowedException(TimeOrder.class, user);
         }
 
+        var student = (Student) user;
         var module = moduleService.findModuleByName(timeOrderDTO.getModuleName());
         var startDate = frontendDateStringToDate(timeOrderDTO.getStartString());
         var endDate = frontendDateStringToDate(timeOrderDTO.getEndString());

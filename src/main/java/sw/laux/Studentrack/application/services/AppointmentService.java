@@ -101,12 +101,12 @@ public class AppointmentService implements IAppointmentService {
         var recurringAppointments = new ArrayList<RecurringAppointment>();
 
         for (var appointment : appointments) {
-            if (appointment instanceof SingleAppointment singleAppointment) {
-                singleAppointments.add(singleAppointment);
+            if (appointment instanceof SingleAppointment) {
+                singleAppointments.add((SingleAppointment) appointment);
             }
 
-            if (appointment instanceof RecurringAppointment recurringAppointment) {
-                recurringAppointments.add(recurringAppointment);
+            if (appointment instanceof RecurringAppointment) {
+                recurringAppointments.add((RecurringAppointment) appointment);
             }
         }
 
@@ -190,11 +190,11 @@ public class AppointmentService implements IAppointmentService {
     public List<TimeOrder> createTimeOrderBasedOnAppointment(Appointment appointment) {
         var timeOrders = new ArrayList<TimeOrder>();
 
-        if (appointment instanceof RecurringAppointment recurringAppointment) {
-            timeOrders.addAll(createTimeOrderBasedOnRecurringAppointment(recurringAppointment));
+        if (appointment instanceof RecurringAppointment) {
+            timeOrders.addAll(createTimeOrderBasedOnRecurringAppointment((RecurringAppointment) appointment));
         }
 
-        if (appointment instanceof SingleAppointment singleAppointment) {
+        if (appointment instanceof SingleAppointment) {
             timeOrders.add(createTimeOrderBasedOnSingleAppointment((SingleAppointment) appointment));
         }
 
@@ -211,11 +211,12 @@ public class AppointmentService implements IAppointmentService {
         var timeOrders = new ArrayList<TimeOrder>();
         var firstAppointment = recurringAppointment.getFirstOccurrence();
 
-        if (!(firstAppointment instanceof SingleAppointment singleAppointment)) {
+        if (!(firstAppointment instanceof SingleAppointment)) {
             // Return an empty list, because modules should be based on single appointments
             return timeOrders;
         }
 
+        var singleAppointment = (SingleAppointment) firstAppointment;
         var duration = singleAppointment.getDuration();
         var count = recurringAppointment.getOccurrenceCount();
         var calendar = new GregorianCalendar();

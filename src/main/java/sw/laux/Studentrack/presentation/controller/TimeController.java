@@ -103,7 +103,7 @@ public class TimeController {
 
         var user = userService.loadUserByUsername(principal.getName());
 
-        if (!(user instanceof Student student)) {
+        if (!(user instanceof Student)) {
             var errorMessage = "Wrong user type for " + user;
             logger.info(errorMessage);
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
@@ -113,7 +113,7 @@ public class TimeController {
         timeOrder.setEnd(getCurrentDateTime());
 
         try {
-            timeOrder = timeService.closeOpenTimeOrderForStudent(timeOrder, student);
+            timeOrder = timeService.closeOpenTimeOrderForStudent(timeOrder, (Student) user);
             var successMessage = "Successfully updated Time Order " + timeOrder + " for " + timeOrder.getModule() + " for student " + user;
             logger.info(successMessage);
             redirectAttributes.addFlashAttribute("successMessage", successMessage);

@@ -43,12 +43,13 @@ public class StatisticsController {
             overallAccess = true;
         }
         else {
-            if (user instanceof Student student && student.isPremiumUser()) {
+            if (user instanceof Student && ((Student) user).isPremiumUser()) {
                 overallAccess = true;
             }
         }
 
-        if (user instanceof Lecturer lecturer) {
+        if (user instanceof Lecturer) {
+            var lecturer = (Lecturer) user;
             Iterable<ModuleStatisticsShell> moduleStatisticsLecturerShells = null;
             try {
                 moduleStatisticsLecturerShells = statisticsService.getModuleStatisticsShellsForLecturer(lecturer);
@@ -76,7 +77,8 @@ public class StatisticsController {
             model.addAttribute("moduleTimeStatisticsOverviewLecturer", moduleTimeStatisticsOverviewLecturer);
         }
 
-        if (user instanceof Student student) {
+        if (user instanceof Student) {
+            var student = (Student) user;
             try {
                 var moduleResults = moduleService.collectResultsForAllModulesOfStudent(student);
                 model.addAttribute("moduleResults", moduleResults);

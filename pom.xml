@@ -14,7 +14,7 @@
 	<name>Studentrack</name>
 	<description>track your studies</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>14</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
