@@ -21,6 +21,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.standard.expression.GreaterOrEqualToExpression;
 import org.w3c.dom.Text;
@@ -92,13 +93,40 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public Schedule saveScheduleBasedOnModule(Appointment[] appointments, String apiKey) throws StudentrackObjectNotFoundException {
-        var parameterMap = new LinkedMultiValueMap<String, Object>();
-        parameterMap.add("apiKey", apiKey);
-        parameterMap.add("appointments", appointments);
+    public Schedule saveScheduleBasedOnModule(Appointment[] appointments, String apiKey) throws StudentrackObjectNotFoundException, HttpServerErrorException {
+        var parameters = new ApiKeyAndAppointmentArray();
+        parameters.setApiKey(apiKey);
+
+        var singleAppointments = new ArrayList<SingleAppointment>();
+        var recurringAppointments = new ArrayList<RecurringAppointment>();
+
+        for (var appointment : appointments) {
+            if (appointment instanceof SingleAppointment singleAppointment) {
+                singleAppointments.add(singleAppointment);
+            }
+
+            if (appointment instanceof RecurringAppointment recurringAppointment) {
+                recurringAppointments.add(recurringAppointment);
+            }
+        }
+
+        SingleAppointment[] singleAppointmentsArray = new SingleAppointment[singleAppointments.size()];
+        RecurringAppointment[] recurringAppointmentsArray = new RecurringAppointment[recurringAppointments.size()];
+
+        for (var i = 0; i < singleAppointments.size(); i++) {
+            singleAppointmentsArray[i] = singleAppointments.get(i);
+        }
+
+        for (var i = 0; i < recurringAppointments.size(); i++) {
+            recurringAppointmentsArray[i] = recurringAppointments.get(i);
+        }
+
+        parameters.setSingleAppointments(singleAppointmentsArray);
+        parameters.setRecurringAppointments(recurringAppointmentsArray);
+
         var headers = new org.springframework.http.HttpHeaders();
         headers.add("Content-Type", "application/json");
-        var entity = new org.springframework.http.HttpEntity<>(parameterMap, headers);
+        var entity = new org.springframework.http.HttpEntity<>(parameters, headers);
 
         var schedule = restServiceClient.postForObject("http://localhost:7000/restapi/v1/schedules", entity, Schedule.class);
 

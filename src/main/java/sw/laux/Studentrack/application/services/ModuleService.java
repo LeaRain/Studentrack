@@ -55,7 +55,7 @@ public class ModuleService implements IModuleService {
         try {
             var schedule = appointmentService.createScheduleBasedOnModule(module);
             module.setScheduleId(schedule.getUuid());
-        } catch (StudentrackObjectNotFoundException e) {
+        } catch (Exception | StudentrackObjectNotFoundException e) {
             logger.info(e.getMessage());
         }
 
