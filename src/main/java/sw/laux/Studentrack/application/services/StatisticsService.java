@@ -602,26 +602,26 @@ public class StatisticsService implements IStatisticsService {
     public ModuleEstimationStatisticsShell getCurrentProgressOfStudentInModule(Student student, Module module) throws StudentrackObjectNotFoundException {
         var shell = new ModuleEstimationStatisticsShell();
         shell.setModule(module);
-        // Module passed -> student done
-        if (moduleService.hasStudentPassedModule(student, module)) {
-            shell.setCurrentPercentage(1);
-        }
-
         var timeOrders = timeService.findTimeOrdersForModuleAndStudent(module, student);
         var timeDuration = calculateTimeDuration(timeOrders);
         shell.setCurrentDuration(timeDuration);
         var estimatedTimeDuration = calculateEstimatedTimeDurationForModule(module);
         shell.setEstimatedDuration(estimatedTimeDuration);
 
-        var percentage = (double) timeDuration.getDuration() / estimatedTimeDuration.getDuration();
-        percentage = Math.round(percentage * 10000.0) / 10000.0;
-
-        // More time than currently planned -> set to 1
-        if (percentage > 1) {
-            percentage = 1;
+        // Module passed -> student done
+        if (moduleService.hasStudentPassedModule(student, module)) {
+            shell.setCurrentPercentage(1);
         }
 
-        shell.setCurrentPercentage(percentage);
+        else {
+            var percentage = (double) timeDuration.getDuration() / estimatedTimeDuration.getDuration();
+            percentage = Math.round(percentage * 10000.0) / 10000.0;
+            // More time than currently planned -> set to 1
+            if (percentage > 1) {
+                percentage = 1;
+            }
+            shell.setCurrentPercentage(percentage);
+        }
 
         return shell;
     }

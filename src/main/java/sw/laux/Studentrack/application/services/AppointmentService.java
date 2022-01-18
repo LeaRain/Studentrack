@@ -71,15 +71,24 @@ public class AppointmentService implements IAppointmentService {
         // calculate to milliseconds
         startingAppointment.setDuration(creditHours * 3600000L);
         startingAppointment.setSingleAppointment(true);
-        startingAppointment.setAppointmentGroup(new AppointmentGroupDTO());
+        var appointmentGroupDTO = new AppointmentGroupDTO();
+        appointmentGroupDTO.setDescription(module.getDescription());
+        appointmentGroupDTO.setName(module.getName());
+        appointmentGroupDTO.setMaxMembers(100);
+        appointmentGroupDTO.setLocation("Starfleet Academy");
+        startingAppointment.setAppointmentGroup(appointmentGroupDTO);
+
         recurringAppointment.setFirstOccurrence(startingAppointment);
         // one week in milliseconds
         recurringAppointment.setRecurrenceOffset(604800000L);
         recurringAppointment.setOccurrenceCount((long) module.getAppointmentCount());
         recurringAppointment.setSingleAppointment(false);
-        recurringAppointment.setAppointmentGroup(new AppointmentGroupDTO());
+        recurringAppointment.setDuration(startingAppointment.getDuration());
+        recurringAppointment.setStart(startingAppointment.getStart());
+        recurringAppointment.setAppointmentGroup(appointmentGroupDTO);
+
         AppointmentDTO[] appointments = new AppointmentDTO[1];
-        appointments[0] = recurringAppointment;
+        appointments[0] = startingAppointment;
         return saveScheduleBasedOnModule(appointments, lecturer.getAppointmentServiceApiKey());
     }
 
@@ -93,13 +102,13 @@ public class AppointmentService implements IAppointmentService {
         headers.add("Content-Type", "application/json");
         var entity = new org.springframework.http.HttpEntity<>(parameters, headers);
 
-        var schedule = restServiceClient.postForObject("http://localhost:7000/restapi/v1/schedules", entity, Schedule.class);
+        var scheduleDTO = restServiceClient.postForObject("http://localhost:7000/restapi/v1/schedules", entity, ScheduleDTO.class);
 
-        if (schedule == null) {
+        if (scheduleDTO == null) {
             throw new StudentrackObjectNotFoundException(Schedule.class, appointments);
         }
 
-        return schedule;
+        return parseScheduleDTOToSchedule(scheduleDTO);
     }
 
     @Override
