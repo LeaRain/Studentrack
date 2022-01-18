@@ -26,6 +26,7 @@ import sw.laux.Studentrack.persistence.entities.Student;
 import sw.laux.Studentrack.persistence.entities.TimeOrder;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.util.*;
 
@@ -58,7 +59,7 @@ public class AppointmentService implements IAppointmentService {
     So this functionality shows only the glimpse of the idea of interaction, as example of usage.
      */
     @Override
-    public Schedule createScheduleBasedOnModule(Module module) throws StudentrackObjectNotFoundException {
+    public Schedule createScheduleBasedOnModule(Module module) throws StudentrackObjectNotFoundException, Exception {
         var lecturer = module.getResponsibleLecturer();
         var creditHours = module.getCreditHours();
         // calculate in milliseconds
@@ -79,7 +80,7 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public Schedule saveScheduleBasedOnModule(List<StudentrackAppointmentDTO> appointments, String apiKey) throws StudentrackObjectNotFoundException, HttpServerErrorException {
+    public Schedule saveScheduleBasedOnModule(List<StudentrackAppointmentDTO> appointments, String apiKey) throws StudentrackObjectNotFoundException, HttpServerErrorException, Exception, ConnectException {
 
         var parser = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")

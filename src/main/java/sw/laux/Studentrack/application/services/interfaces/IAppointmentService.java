@@ -18,8 +18,8 @@ import java.util.List;
 
 public interface IAppointmentService {
     String getAuthenticationKey() throws StudentrackObjectNotFoundException;
-    Schedule createScheduleBasedOnModule(Module module) throws StudentrackObjectNotFoundException;
-    Schedule saveScheduleBasedOnModule(List<StudentrackAppointmentDTO> appointments, String apiKey) throws StudentrackObjectNotFoundException;
+    Schedule createScheduleBasedOnModule(Module module) throws StudentrackObjectNotFoundException, Exception;
+    Schedule saveScheduleBasedOnModule(List<StudentrackAppointmentDTO> appointments, String apiKey) throws StudentrackObjectNotFoundException, Exception;
     void createTimeOrdersForEnrolling(Module module, Student student) throws StudentrackObjectNotFoundException, IOException;
     Schedule findScheduleForModule(Module module) throws StudentrackObjectNotFoundException, IOException;
     void createTimeOrdersBasedOnSchedule(Schedule schedule, Student student, Module module);
