@@ -1,11 +1,8 @@
 package sw.laux.Studentrack.application.services;
 
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.fasterxml.jackson.databind.util.JSONWrappedObject;
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
-import org.apache.http.Header;
+import com.google.gson.GsonBuilder;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -19,6 +16,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import sw.helblingd.terminportalbackend.repository.entity.persistent.*;
 import sw.helblingd.terminportalbackend.repository.entity.dto.*;
+import sw.laux.Studentrack.application.DTO.StudentrackAppointmentDTO;
 import sw.laux.Studentrack.application.exceptions.StudentrackObjectNotFoundException;
 import sw.laux.Studentrack.application.exceptions.StudentrackOperationNotAllowedException;
 import sw.laux.Studentrack.application.services.interfaces.IAppointmentService;
@@ -63,44 +61,39 @@ public class AppointmentService implements IAppointmentService {
     public Schedule createScheduleBasedOnModule(Module module) throws StudentrackObjectNotFoundException {
         var lecturer = module.getResponsibleLecturer();
         var creditHours = module.getCreditHours();
-
-        var recurringAppointment = new AppointmentDTO();
-        var startingAppointment = new AppointmentDTO();
-
-        startingAppointment.setStart(module.getStartDate());
-        // calculate to milliseconds
-        startingAppointment.setDuration(creditHours * 3600000L);
-        startingAppointment.setSingleAppointment(true);
-        var appointmentGroupDTO = new AppointmentGroupDTO();
-        appointmentGroupDTO.setDescription(module.getDescription());
-        appointmentGroupDTO.setName(module.getName());
-        appointmentGroupDTO.setMaxMembers(100);
-        appointmentGroupDTO.setLocation("Starfleet Academy");
-        startingAppointment.setAppointmentGroup(appointmentGroupDTO);
-
-        recurringAppointment.setFirstOccurrence(startingAppointment);
+        // calculate in milliseconds
+        var duration = creditHours * 3600000L;
         // one week in milliseconds
-        recurringAppointment.setRecurrenceOffset(604800000L);
-        recurringAppointment.setOccurrenceCount((long) module.getAppointmentCount());
-        recurringAppointment.setSingleAppointment(false);
-        recurringAppointment.setDuration(startingAppointment.getDuration());
-        recurringAppointment.setStart(startingAppointment.getStart());
-        recurringAppointment.setAppointmentGroup(appointmentGroupDTO);
+        var offset = 604800000;
+        var calendar = new GregorianCalendar();
+        calendar.setTime(module.getStartDate());
+        var appointments = new ArrayList<StudentrackAppointmentDTO>();
 
-        AppointmentDTO[] appointments = new AppointmentDTO[1];
-        appointments[0] = startingAppointment;
+        for (var i = 0; i < module.getAppointmentCount(); i++) {
+            var appointment = new StudentrackAppointmentDTO(true, calendar.getTime(), duration);
+            appointments.add(appointment);
+            calendar.add(Calendar.MILLISECOND, offset);
+        }
+
         return saveScheduleBasedOnModule(appointments, lecturer.getAppointmentServiceApiKey());
     }
 
     @Override
-    public Schedule saveScheduleBasedOnModule(AppointmentDTO[] appointments, String apiKey) throws StudentrackObjectNotFoundException, HttpServerErrorException {
-        var parameters = new ApiKeyAndAppointmentArray();
-        parameters.setApiKey(apiKey);
-        parameters.setAppointments(appointments);
+    public Schedule saveScheduleBasedOnModule(List<StudentrackAppointmentDTO> appointments, String apiKey) throws StudentrackObjectNotFoundException, HttpServerErrorException {
+
+        var parser = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+                .create();
+
+        var parameters = new HashMap<String, Object>();
+        parameters.put("apiKey", apiKey);
+        parameters.put("appointments", appointments);
+
+        var json = parser.toJson(parameters);
 
         var headers = new org.springframework.http.HttpHeaders();
         headers.add("Content-Type", "application/json");
-        var entity = new org.springframework.http.HttpEntity<>(parameters, headers);
+        var entity = new org.springframework.http.HttpEntity<>(json, headers);
 
         var scheduleDTO = restServiceClient.postForObject("http://localhost:7000/restapi/v1/schedules", entity, ScheduleDTO.class);
 
@@ -133,7 +126,7 @@ public class AppointmentService implements IAppointmentService {
 
         var client = HttpClientBuilder.create().build();
         var entity = new StringEntity('"' + lecturer.getAppointmentServiceApiKey() + '"');
-        var uriString = "http://localhost:7000/restapi/v1/schedules" + module.getScheduleId();
+        var uriString = "http://localhost:7000/restapi/v1/schedules/" + module.getScheduleId();
         var request = getHttpGetRequestWithBody(URI.create(uriString), entity);
         var response = client.execute(request);
         var responseEntity = response.getEntity();
@@ -241,7 +234,7 @@ public class AppointmentService implements IAppointmentService {
     @Override
     public Schedule parseHttpGetResponseToSchedule(HttpEntity response) throws IOException {
         var stringResult = EntityUtils.toString(response);
-        var parser = new Gson();
+        var parser = new GsonBuilder().create();
         var scheduleDTO = parser.fromJson(stringResult, ScheduleDTO.class);
         return parseScheduleDTOToSchedule(scheduleDTO);
     }
@@ -249,6 +242,7 @@ public class AppointmentService implements IAppointmentService {
     @Override
     public Schedule parseScheduleDTOToSchedule(ScheduleDTO scheduleDTO) {
         var schedule = new Schedule();
+        schedule.setUuid(scheduleDTO.getUuid());
         schedule.setName(scheduleDTO.getName());
         schedule.setDescription(scheduleDTO.getDescription());
         schedule.setViewType(scheduleDTO.getViewType());

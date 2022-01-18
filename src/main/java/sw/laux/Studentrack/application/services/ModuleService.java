@@ -164,6 +164,7 @@ public class ModuleService implements IModuleService {
             var results = findModuleResultsForStudentAndModule(module, student);
             student.removeModuleResults(results);
             moduleResultsRepo.delete(results);
+            timeService.deleteAllTimeOrdersForModuleAndStudent(module, student);
         }
 
         catch (StudentrackObjectNotFoundException ignored) {}

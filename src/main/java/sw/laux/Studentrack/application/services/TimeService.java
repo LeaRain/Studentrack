@@ -121,6 +121,20 @@ public class TimeService implements ITimeService {
     }
 
     @Override
+    public void deleteAllTimeOrdersForModuleAndStudent(Module module, Student student) throws StudentrackObjectNotFoundException {
+        var timeOrdersOptional = timeRepo.findAllByOwnerAndModule(student, module);
+        if (timeOrdersOptional.isEmpty()) {
+            throw new StudentrackObjectNotFoundException(TimeOrder.class, module);
+        }
+
+        var timeOrders = timeOrdersOptional.get();
+
+        for (var timeOrder : timeOrders) {
+            deleteTimeOrder(timeOrder);
+        }
+    }
+
+    @Override
     public Iterable<TimeOrder> findTimeOrdersForModuleAndStudent(Module module, Student student) throws StudentrackObjectNotFoundException {
         var timeOrderOptional = timeRepo.findAllByOwnerAndModule(student, module);
 
