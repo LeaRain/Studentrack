@@ -81,6 +81,11 @@
 			<artifactId>terminportal-backend</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>de.daniilgutin</groupId>
+			<artifactId>bank4you_ain</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>

@@ -18,7 +18,7 @@ public interface IUserService extends UserDetailsService {
     User updateUser(User user);
     Student findStudent(Student student) throws StudentrackObjectNotFoundException;
     Student findStudent(Long userId) throws StudentrackObjectNotFoundException;
-    Student upgradeStudentToPremium(Student student) throws StudentrackAuthenticationException, StudentrackObjectNotFoundException;
+    Student upgradeStudentToPremium(Student student) throws StudentrackAuthenticationException, StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     Collection<Faculty> getAllFaculties();
     User updateUserWithNamesAndMailAddress(User user) throws StudentrackObjectNotFoundException, StudentrackObjectAlreadyExistsException;
     User findUserByMailAddress(User user) throws StudentrackObjectNotFoundException;
@@ -35,6 +35,7 @@ public interface IUserService extends UserDetailsService {
     void deleteLecturer(Lecturer lecturer) throws StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException;
     Faculty findFaculty(Faculty faculty) throws StudentrackObjectNotFoundException;
     Student calculateCurrentECTSOfStudent(Student student) throws StudentrackObjectNotFoundException;
+    void registerUserAtBankingService(User user) throws StudentrackOperationNotAllowedException, StudentrackObjectNotFoundException;
     Developer preregisterDeveloper(Developer developer) throws StudentrackObjectAlreadyExistsException;
     Developer commitRegisterDeveloper(Developer developer);
     APIKey generateAPIKeyForDeveloper(Developer developer);

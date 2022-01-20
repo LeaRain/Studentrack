@@ -25,8 +25,16 @@ public abstract class User extends SingleIdEntity<Long> implements UserDetails {
     private Date membershipStart;
     @ManyToOne
     private Faculty faculty;
-
     private String appointmentServiceApiKey;
+    private String bankingServiceApiKey;
+
+    public String getBankingServiceApiKey() {
+        return bankingServiceApiKey;
+    }
+
+    public void setBankingServiceApiKey(String bankingServiceApiKey) {
+        this.bankingServiceApiKey = bankingServiceApiKey;
+    }
 
     public String getAppointmentServiceApiKey() {
         return appointmentServiceApiKey;

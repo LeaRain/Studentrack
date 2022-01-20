@@ -124,6 +124,8 @@ public class UserController {
             model.addAttribute("isLecturer", false);
         }
 
+        var bankingAuthenticated = user.getBankingServiceApiKey() != null;
+        model.addAttribute("bankingAuthenticated", bankingAuthenticated);
         model.addAttribute("user", user);
         return "change";
     }
@@ -252,6 +254,12 @@ public class UserController {
             logger.info(errorMessage);
         }
 
+        catch (StudentrackOperationNotAllowedException e) {
+            var errorMessage = "Not enough money for transaction: " + e.getMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            logger.info(errorMessage);
+        }
+
         return "redirect:/home";
     }
 
@@ -289,5 +297,33 @@ public class UserController {
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/home";
         }
+    }
+
+    @GetMapping("change/banking")
+    public String authenticateBankingService(Model model,
+                                                 Principal principal,
+                                                 RedirectAttributes redirectAttributes) {
+        var user = (User) userService.loadUserByUsername(principal.getName());
+
+        if (user.getBankingServiceApiKey() != null) {
+            var errorMessage = "User " + user + " already authenticated at bank!";
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/home";
+        }
+
+        try {
+            userService.registerUserAtBankingService(user);
+        } catch (StudentrackOperationNotAllowedException | StudentrackObjectNotFoundException e) {
+            var errorMessage = "User " + user + " could not be authenticated:" + e.getMessage();
+            logger.info(errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+        }
+
+        var successMessage = "Successfully authenticated " + user;
+        logger.info(successMessage);
+        redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+        return "redirect:/home";
     }
 }

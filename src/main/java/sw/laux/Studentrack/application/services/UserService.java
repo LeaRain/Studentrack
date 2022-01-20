@@ -1,11 +1,13 @@
 package sw.laux.Studentrack.application.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import sw.laux.Studentrack.application.exceptions.*;
+import sw.laux.Studentrack.application.services.interfaces.IBankingService;
 import sw.laux.Studentrack.application.services.interfaces.IModuleService;
 import sw.laux.Studentrack.application.services.interfaces.IUserService;
 import sw.laux.Studentrack.persistence.entities.*;
@@ -34,6 +36,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private IModuleService moduleService;
+
+    @Autowired
+    private IBankingService bankingService;
 
     @Override
     public User registerUser(User user) throws StudentrackObjectAlreadyExistsException {
@@ -80,19 +85,15 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Student upgradeStudentToPremium(Student student) throws StudentrackAuthenticationException, StudentrackObjectNotFoundException {
+    public Student upgradeStudentToPremium(Student student) throws StudentrackAuthenticationException, StudentrackObjectNotFoundException, StudentrackOperationNotAllowedException {
         student = findStudent(student);
 
         if (student.isPremiumUser()) {
             return student;
         }
 
-        // TODO: Call Banking Service
-        var bankingSuccess = new Random().nextBoolean();
-
-        if (!bankingSuccess) {
-            throw new StudentrackAuthenticationException(student.getClass(), student);
-        }
+        // For failure -> exception
+        bankingService.payPremiumAccount(student);
 
         student.setPremiumUser(true);
         return userRepo.save(student);
@@ -259,6 +260,14 @@ public class UserService implements IUserService {
         var ects = moduleService.calculateECTSOfStudent(student);
         student.setEcts(ects);
         return userRepo.save(student);
+    }
+
+    @Override
+    public void registerUserAtBankingService(User user) throws StudentrackOperationNotAllowedException, StudentrackObjectNotFoundException {
+        user = findUserByMailAddress(user);
+        var key = bankingService.registerUserForBankingService(user);
+        user.setBankingServiceApiKey(key);
+        userRepo.save(user);
     }
 
     @Override
