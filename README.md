@@ -28,9 +28,12 @@ In more detail (obviously only if you have installed Docker and the user you are
 ### Without Docker, run it on bare metal
 Please use a database like described in `application.properties` or update it accordingly. 
 
-Just use maven for building and make sure to install `terminportal-backend-0.0.1-SNAPSHOT.jar` In more detail:
+Just use maven for building and make sure to install `terminportal-backend-0.0.1-SNAPSHOT.jar` and `softwaretechnik2021_bank.jar` In more detail:
 
 ``mvn install:install-file -Dfile=terminportal-backend.jar -DgroupId=sw.helblingd -DartifactId=terminportal-backend -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DgeneratePom=true``
+
+``mvn install:install-file -Dfile=softwaretechnik2021_bank.jar -DgroupId=de.daniilgutin -DartifactId=bank4you_ain -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DgeneratePom=true``
+
 
 ``mvn clean package``
 

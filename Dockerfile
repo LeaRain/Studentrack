@@ -7,6 +7,9 @@ COPY . /studentrack
 
 RUN mvn install:install-file -Dfile=terminportal-backend.jar -DgroupId=sw.helblingd -DartifactId=terminportal-backend -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
 
+RUN mvn install:install-file -Dfile=softwaretechnik2021_bank.jar -DgroupId=de.daniilgutin -DartifactId=bank4you_ain -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
+
+
 
 RUN mvn clean package -DskipTests
 
