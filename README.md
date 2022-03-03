@@ -1,3 +1,8 @@
+# General Information
+This is a project for the module "Softwareentwicklung" at OTH Regensburg. 
+It is not actively maintained, so at the current state, it is just an example project.
+But feel free to take a look at it and be inspired.
+
 # Studentrack
 
 Studentrack is an application for time tracking for students and lecturers. 
